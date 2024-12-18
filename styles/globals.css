@@ -1,0 +1,420 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Agbalumo&family=Caveat:wght@400..700&family=Roboto&display=swap');
+
+.gameTitle {
+  font-family: "Caveat", cursive;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #222;
+  text-align: center;
+  margin: 0; /* Remove any default margins */
+  line-height: 1; /* Ensure it vertically aligns well */
+}
+
+.navContainer {
+  background-color: #a2c579;
+  color: #222;
+  font-size: 2.5rem;
+  font-family: "Caveat", cursive;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10; /* Ensure it's above other content */
+  height: 4rem; /* Fixed height */
+  display: flex;
+  align-items: center; /* Center content vertically */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional shadow for visibility */
+}
+
+.content-container {
+  padding-top: 4.5rem; /* Adjust padding to ensure no overlap */
+}
+
+
+.relative.mt-6.text-center {
+  border: 2px solid red;
+}
+
+.highScore {
+  background-color: #d2de32;
+  color: black;
+  font-variant: small-caps;
+  font-size: 1.3rem;
+  font-weight: 900;
+  width: fit-content;
+  margin-inline: auto;
+  margin: 0.3rem 0; /* Reduced margin above and below */
+  padding: 0.5rem 1.5rem;
+  border-radius: 1rem;
+  text-align: center; /* Ensure text is centered */
+  margin: 0.5rem auto; /* Center horizontally with margin */
+}
+
+.score {
+  text-align: center;
+  font-size: 1.5em;
+  font-weight: 900;
+  margin: 0.3rem 0; /* Reduced spacing above and below */
+  width: fit-content;
+  margin-inline: auto;
+}
+
+.score > span:first-child {
+  background-color: #61a3ba;
+  color: white;
+  padding-block: 0.5rem;
+  padding-inline: 1rem 0.3rem;
+  border-top-left-radius: 1rem;
+  border-bottom-left-radius: 1rem;
+}
+
+.score > span:last-child {
+  background-color: #d2de32;
+  color: #222;
+  padding-block: 0.5rem;
+  padding-inline: 0.8rem 1rem;
+  border-top-right-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+}
+
+.newGameHint {
+  text-align: center;
+  color: black;
+  font-weight: 900;
+  font-size: 1.5rem;
+  animation: teeter 2s linear infinite;
+  margin-top: 2rem;
+}
+
+@keyframes teeter {
+  0%, 50%, 100% {
+    transform: rotateZ(0deg);
+  }
+  25% {
+    transform: rotateZ(-5deg);
+  }
+  75% {
+    transform: rotateZ(5deg);
+  }
+}
+
+.pauseHint {
+  text-align: center;
+  font-style: italic;
+  color: #333;
+}
+
+.pauseHint kbd {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  background-color: #333;
+  color: salmon;
+  border-radius: 0.5rem;
+}
+
+.gameOverModalContainer {
+  position: fixed;
+  inset: 0;
+  outline: 1px solid red;
+  background-color: #a2c579;
+  cursor: pointer;
+  
+}
+
+.gameOverModal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  width: 700px;
+  height: 300px;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  border-radius: 10px;
+  box-shadow: 0 0 10px 5px black, 0 0 100px 10px black;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+    height: 100%; /* Ensure consistent sizing */
+  }
+
+.gameOverModal > h2 {
+  font-size: 4em;
+}
+
+.finalScore {
+  font-size: 1.3em;
+}
+
+.finalScore > span {
+  font-weight: 900;
+  font-size: 2rem;
+}
+
+.congratulate {
+  margin-block: 0.5rem;
+  font-size: 1.5rem;
+  background-color: #61a3ba;
+  color: white;
+  padding-inline: 0.5rem;
+  font-weight: 900;
+  border-radius: 1rem;
+}
+
+.pausedModalContainer {
+  position: fixed;
+  inset: 0;
+  background-color: hsla(0, 0%, 10%, 0.7);
+  cursor: pointer;
+}
+
+.pausedModal {
+  width: 500px;
+  height: 300px;
+  background-color: #61a3ba;
+  color: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-content: center;
+  border-radius: 1rem;
+  text-align: center;
+}
+
+.pausedModal > h2 {
+  font-size: 3rem;
+}
+
+.pausedModal > .clickDir {
+  color: white;
+}
+
+.clickDir {
+  color: hsl(0, 0%, 30%);
+  font-style: italic;
+  font-size: 1.3rem;
+}
+
+
+/* Using your existing font and colors, adding subtle effects */
+
+.page-link {
+  font-family: "Caveat", cursive;
+  color: #222; /* Neutral link color */
+  text-decoration: none;
+  font-size: 1.1rem; /* Increased font size */
+  font-weight: 600;
+  position: relative;
+  padding: 0.4rem 0.6rem; /* Increased padding for better click area */
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+  
+.page-link:hover {
+  color: #61a3ba; /* Highlight color */
+  text-shadow: 0 1px 2px rgba(97, 163, 186, 0.5);
+}
+
+ .page-link::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #61a3ba;
+  transition: width 0.3s ease;
+}
+  
+  .page-link:hover::after {
+    width: 100%;
+  }
+  
+/* Buttons retain their pretty styles as before */
+.btn {
+  font-family: "Caveat", cursive;
+    font-weight: 600;
+    text-align: center;
+    border-radius: 0.5rem;
+    padding: 0.4rem 0.6rem;
+    font-size: 1.1rem; /* text-sm */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Hover and focus states for buttons */
+  .btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+  }
+  
+  /* Claim Tokens button (blue variant) */
+  .btn-claim {
+    background-color: #61a3ba; /* Using a project color */
+    color: #fff;
+  }
+  .btn-claim:hover {
+    background-color: #4f8a9c; /* Slightly darker shade on hover */
+  }
+  
+  /* Connect Wallet button (green variant) */
+  .btn-connect {
+    background-color: #3ba25f; /* A darker shade of green complementing #a2c579 */
+    color: #fff;
+  }
+  .btn-connect:hover {
+    background-color: #348e54; /* Slightly darker on hover */
+  }
+  
+  /* Cancel button in modal (red variant) */
+  .btn-cancel {
+    background-color: #e53e3e; /* Tailwind red-600 equivalent */
+    color: #fff;
+  }
+  .btn-cancel:hover {
+    background-color: #c53030; /* Slightly darker red */
+  }
+  
+  /* Wallet connector buttons */
+  .wallet-list button {
+    font-family: "Caveat", cursive;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .wallet-list button:hover {
+    background-color: #f0f0f0;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+  }
+
+  /* Wallet card styles */
+.wallet-card {
+    border: 1px solid #e0e0e0;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .wallet-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Wallet grid container */
+  .wallet-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 1rem;
+  }
+  
+  /* Error message */
+  .wallet-connector p {
+    font-family: "Caveat", cursive;
+    font-size: 0.875rem;
+  }
+
+  /* Dim and blur out unavailable wallets */
+.unavailable {
+  opacity: 0.5;
+  filter: blur(1px);
+  pointer-events: none; /* Prevent clicking on unavailable wallets */
+}
+
+.unavailable:hover {
+  box-shadow: none;
+  transform: none; /* No hover effects if not available */
+}
+
+/* Wallet Bubble Styling */
+.navContainer .wallet-bubble {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 0.5rem 0.75rem;
+  border-radius: 9999px; /* Fully rounded */
+  border: 1px solid #e0e0e0; /* Light border */
+  background-color: #a2c579; /* Light blue background */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.navContainer .wallet-bubble:hover {
+  background-color: #e6f2ff; /* Slightly darker blue on hover */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.navContainer .wallet-bubble img {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+}
+
+.navContainer .wallet-bubble span {
+  font-size: 0.875rem; /* Tailwind text-sm */
+  color: #4a4a4a; /* Neutral gray text */
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #ffffdd; /* match the container background */
+}
+
+.game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* Align items from the top */
+  width: 100vw;
+  height: 100vh;
+  background-color: #ffffdd;
+  cursor: pointer;
+  overflow: hidden;
+  padding-top: 4rem; /* Adjust based on NavBar height */
+}
+
+.blurred-button {
+  opacity: 0.5; /* Reduce visibility */
+  filter: blur(1px); /* Add a blur effect */
+  pointer-events: none; /* Prevent interaction */
+  cursor: not-allowed; /* Show "not-allowed" cursor */
+}
+
+.game-info {
+  margin: 0; /* Remove any default margin */
+  padding: 0.2rem 0; /* Small padding for spacing */
+  text-align: center;
+}
+
+.highScore, .score {
+  margin: 0.5rem 0; /* Add small spacing above and below */
+}
+
+.content-container {
+  padding-top: 4rem; /* Ensure content starts below NavBar */
+}
+
+#root, #__next {
+  height: 100%;
+}
+
+#canvas-container {
+  position: relative;
+  width: 360px;
+  height: 640px;
+  border: 1px solid #000;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  background-color: #ffffdd;
+}
