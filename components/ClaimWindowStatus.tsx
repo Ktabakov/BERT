@@ -11,24 +11,20 @@ const ClaimWindowStatus: React.FC<ClaimWindowStatusProps> = ({ isInClaimWindow, 
     .substr(14, 5);
 
   return (
-    <div style={{ textAlign: "center", margin: "1rem 0" }}>
+    <div
+      className="claim-window-status-container"
+    >
       <h2
-        style={{
-          color: isInClaimWindow ? "green" : "red",
-          fontSize: "1.5rem",
-          fontWeight: "bold",
-          marginBottom: "0.5rem",
-        }}
+        className={`claim-window-status-title ${
+          isInClaimWindow ? "inside-window" : "outside-window"
+        }`}
       >
         {isInClaimWindow ? "Inside Claim Window" : "Outside Claim Window"}
       </h2>
       <p
-        style={{
-          fontSize: "1.5rem",
-          color: isInClaimWindow ? "green" : "red",
-          fontWeight: "bold",
-          margin: 0,
-        }}
+        className={`claim-window-status-time ${
+          isInClaimWindow ? "inside-window" : "outside-window"
+        }`}
       >
         {isInClaimWindow
           ? `${formattedTime} remaining`

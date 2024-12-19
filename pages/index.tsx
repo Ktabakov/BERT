@@ -93,10 +93,10 @@ const Home: NextPage = () => {
       )}
   
       {/* Main Content */}
-      <main>
+      <main className="flex-grow overflow-hidden flex flex-col">
         {/* Flappy Bird Game */}
-        <div>
-        <FlappyBirdGame             onClaimWindowStatusChange={(isInWindow) => setIsInClaimWindow(isInWindow)}/>
+        <div className="flex-grow flex justify-center items-center">
+          <FlappyBirdGame onClaimWindowStatusChange={(isInWindow) => setIsInClaimWindow(isInWindow)} />
         </div>
         {/* Transaction Success Message */}
         {tx.txId && walletAPI && (
@@ -120,6 +120,15 @@ const Home: NextPage = () => {
           </div>
         )}
       </main>
+     {/* Footer */}
+    <footer className="footer bg-gray-800 text-white text-center py-4">
+      <p className="text-sm">
+        ADA donation Address:
+      </p>
+      <p className="text-xs">
+        [Insert Address here]
+      </p>
+    </footer>
     </div>
   );
   };

@@ -11,7 +11,6 @@ const containerStyle: CSSProperties = {
   position: "relative",
   width: "360px",
   height: "640px",
-  margin: "0 auto",
   border: "1px solid #000",
   borderRadius: "8px",
   boxShadow: "0 4px 10px rgba(0,0,0,0.3)",
@@ -20,10 +19,13 @@ const containerStyle: CSSProperties = {
 
 interface FlappyBirdGameProps {
   autoStart?: boolean;
-  onClaimWindowStatusChange: (isInWindow: boolean) => void; // Callback to inform parent of status
+  onClaimWindowStatusChange: (isInWindow: boolean) => void;
 }
 
-const FlappyBirdGame: React.FC<FlappyBirdGameProps> = ({ autoStart = true, onClaimWindowStatusChange }) => {
+const FlappyBirdGame: React.FC<FlappyBirdGameProps> = ({
+  autoStart = true,
+  onClaimWindowStatusChange
+}) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isPaused, setIsPaused] = useState(false);
   const { highScore, currentScore } = useFlappyBirdGame(canvasRef, isPaused, autoStart);
@@ -40,15 +42,12 @@ const FlappyBirdGame: React.FC<FlappyBirdGameProps> = ({ autoStart = true, onCla
       const insideWindow = position < CLAIM_WINDOW;
       setIsInClaimWindow(insideWindow);
 
-      // Calculate the time remaining inside or until the next claim window
       const remaining = insideWindow
         ? CLAIM_WINDOW - position
         : CYCLE_DURATION - position;
       setTimeRemaining(remaining);
 
-      // Inform parent of the current window status
       onClaimWindowStatusChange(insideWindow);
-
     }, 1000);
 
     return () => clearInterval(interval);
@@ -57,31 +56,37 @@ const FlappyBirdGame: React.FC<FlappyBirdGameProps> = ({ autoStart = true, onCla
   const togglePause = () => setIsPaused((prev) => !prev);
 
   return (
-    <div className="game-container flex flex-col items-center">
-      {/* Game Info */}
-      <div className="game-info flex justify-center items-center w-full relative my-2">
-          {/* BERT Image - Left Side */}
-        <div className="absolute left-0 top-1/2 transform -translate-y-1/2 ml-4">
+    <div className="content-container h-[calc(100vh-4rem)] overflow-auto" >
+      {/* 
+        Create a grid with 3 columns and 8 rows.
+        We'll place all elements in row 4 to center them vertically:
+        - BERT (left) at col 1, row 4
+        - Score + Canvas (middle) at col 2, row 4
+        - Claim Window (right) at col 3, row 4
+      */}
+      <div className="grid grid-cols-3 grid-rows-6 w-full h-full">
+        {/* BERT Image in the left column, row 4 */}
+        <div className="col-start-1 row-start-4 flex justify-center items-center">
           <img
-            src="/logos/bert.png"
+            src="/logos/TransparentTestBertBubble.png"
             alt="BERT Mascot"
-            className="w-20 h-20 object-contain"
+            className="w-65 h-65 object-contain"
           />
         </div>
-        <div className="text-center">
+
+        {/* Scores and Canvas in the middle column, row 4 */}
+        <div className="col-start-2 row-start-1 flex flex-col items-center space-y-2">
           <p className="highScore">High Score: {highScore}</p>
           <p className="score">Current Score: {currentScore}</p>
+          <div id="canvas-container" style={containerStyle}>
+            <canvas ref={canvasRef} style={{ width: "100%", height: "100%" }}></canvas>
+          </div>
         </div>
 
-        {/* Claim Window Status on the right */}
-        <div className="absolute right-12">
+        {/* Claim Window Status in the right column, row 4 */}
+        <div className="col-start-3 row-start-2 flex justify-end items-end">
           <ClaimWindowStatus isInClaimWindow={isInClaimWindow} timeRemaining={timeRemaining} />
         </div>
-      </div>
-
-      {/* Canvas Container */}
-      <div id="canvas-container" style={containerStyle}>
-        <canvas ref={canvasRef} style={{ width: "100%", height: "100%" }}></canvas>
       </div>
     </div>
   );

@@ -111,16 +111,25 @@ const Whitepaper: React.FC = () => {
           </div>
         </div>
       )}
-        <main className="content-container flex-grow flex justify-center items-center p-4">
-        <div className="w-full max-w-screen-2xl h-[90vh] bg-white shadow-lg border rounded-lg overflow-hidden">
-            <iframe
-            src="/Whitepaper/Whitepaper.pdf#zoom=130"
-            className="w-full h-full"
-            style={{ border: "none" }}
-            title="Whitepaper PDF"
-            />
-        </div>
-        </main>
+       <main className="content-container flex-grow flex flex-col justify-between p-5">
+    <div className="w-full max-w-screen-1x1 flex-grow h-[80vh] bg-white shadow-lg border rounded-lg overflow-hidden">
+        <iframe
+        src="/Whitepaper/Whitepaper.pdf#zoom=120"
+        className="w-full h-full"
+        style={{ border: "none" }}
+        title="Whitepaper PDF"
+        />
+    </div>
+</main>
+     {/* Footer */}
+        <footer className="footer bg-gray-800 text-white text-center py-4">
+      <p className="text-sm">
+        ADA donation Address:
+      </p>
+      <p className="text-xs">
+        [Insert Address here]
+      </p>
+    </footer>
     </div>
   );
 };
