@@ -64,8 +64,8 @@ const Home: NextPage = () => {
   };
 
   return (
-    <div>
-      {/* Navigation Bar */}
+<div className="flex flex-col min-h-screen">
+    {/* Navigation Bar */}
       <NavBar
         isConnected={!!walletAPI}
         walletAddress={walletAddress || ""}
@@ -93,42 +93,41 @@ const Home: NextPage = () => {
       )}
   
       {/* Main Content */}
-      <main className="flex-grow overflow-hidden flex flex-col">
+      <main className="flex-grow flex flex-col">
         {/* Flappy Bird Game */}
         <div className="flex-grow flex justify-center items-center">
           <FlappyBirdGame onClaimWindowStatusChange={(isInWindow) => setIsInClaimWindow(isInWindow)} />
         </div>
-        {/* Transaction Success Message */}
-        {tx.txId && walletAPI && (
-          <div className="border border-gray-400 p-4 rounded mb-4 bg-white shadow">
-            <h4 className="font-bold text-green-600">Transaction Success!</h4>
-            <p className="text-sm">
-              <span className="font-semibold">TxId:</span>&nbsp;
-              <a
-                href={`https://${network === "mainnet" ? "" : network + "."}cexplorer.io/tx/${tx.txId}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-500 underline break-all"
-              >
-                {tx.txId}
-              </a>
-            </p>
-            <p className="mt-2 text-gray-600 text-xs">
-              Please wait until the transaction is confirmed on the blockchain
-              and reload this page before performing another transaction.
-            </p>
-          </div>
-        )}
       </main>
-     {/* Footer */}
-    <footer className="footer bg-gray-800 text-white text-center py-4">
-      <p className="text-sm">
-        ADA donation Address:
-      </p>
-      <p className="text-xs">
-        [Insert Address here]
-      </p>
-    </footer>
+       {/* Footer */}
+       <footer className="footer bg-gray-800 text-white py-4 mt-auto">
+  <div className=" mx-auto flex flex-wrap md:flex-nowrap justify-between items-center">
+    {/* Left Container: Transaction Success Message */}
+    <div className="flex-1 text-left pl-4 md:pl-8">
+      {tx.txId && walletAPI && (
+        <>
+          <h4 className="font-bold text-green-400">Transaction Success!</h4>
+          <p className="text-sm">
+            <span className="font-semibold">TxId:</span>&nbsp;
+            <a
+              href={`https://${network === "mainnet" ? "" : network + "."}cexplorer.io/tx/${tx.txId}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-400 underline break-all"
+            >
+              {tx.txId}
+            </a>
+          </p>
+        </>
+      )}
+    </div>
+    {/* Right Container: ADA Donation Address */}
+    <div className="flex-none text-right mt-4 md:mt-0 md:pr-8">
+      <p className="text-sm mb-1">ADA Donation Address:</p>
+      <p className="text-xs break-all text-center">addr_test1qrarqhmklnhwcw3q0zm6sgm3g3l7pua0y36sql9k5ru8dsucglsked5f5yrcf9e9xgxjgmt7xk52knh8h0dgayc00arqlh7g60</p>
+    </div>
+  </div>
+</footer>
     </div>
   );
   };

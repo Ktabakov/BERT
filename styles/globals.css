@@ -34,6 +34,8 @@
   background: url('../public/logos/backgroundCrypto4.png') no-repeat center center fixed;
   background-size: cover; /* Adjust to 'contain' or 'auto' if needed */
   padding-top: 6rem;
+  flex-grow: 1; /* Allow the container to grow within the layout */
+  overflow-y: auto; /* Enable scrolling if content overflows */
 }
 
 .relative.mt-6.text-center {
@@ -171,6 +173,10 @@ main {
   display: flex;
   flex-direction: column;
   justify-content: space-between; /* Ensure footer stays at the bottom */
+}
+
+footer {
+  margin-top: auto;
 }
 
 .congratulate {
@@ -428,9 +434,7 @@ html, body {
   background-color: #ffffdd;
 }
 
-.footer {
-  margin-top: auto;
-}
+
 
 .content-container iframe {
   flex-grow: 1; 

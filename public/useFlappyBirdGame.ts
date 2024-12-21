@@ -71,6 +71,16 @@ export function useFlappyBirdGame(canvasRef: React.RefObject<HTMLCanvasElement>,
     coinImage = new Image();
     coinImage.src = "/assets/Coin.png";
   }
+  
+  // Load high score from localStorage after mount
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedHighScore = localStorage.getItem("highScore");
+      if (storedHighScore) {
+        setHighScore(parseInt(storedHighScore, 10));
+      }
+    }
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -344,11 +354,18 @@ export function useFlappyBirdGame(canvasRef: React.RefObject<HTMLCanvasElement>,
     function updateScore() {
       for (const pipe of pipesRef.current) {
         if (!pipe.scored && pipe.x + PIPE_WIDTH < 100) {
-          setCurrentScore((prevScore) => {
-            const newScore = prevScore + 1;      
-            setHighScore((prevHighScore) => Math.max(prevHighScore, newScore));       
-            return newScore;
-          });
+            setCurrentScore((prevScore) => {
+                const newScore = prevScore + 1;
+                setHighScore((prevHighScore) => {
+                  const updatedHighScore = Math.max(prevHighScore, newScore);
+      
+                  if (typeof window !== "undefined") {
+                    localStorage.setItem("highScore", updatedHighScore.toString());
+                  }
+                  return updatedHighScore;
+                });
+                return newScore;
+              });
           pipe.scored = true;
         }
       }

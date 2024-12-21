@@ -1,4 +1,3 @@
-// walletActions.ts
 import { 
     NetworkParams,
     Value,
@@ -9,16 +8,18 @@ import {
     Datum,
     Assets,
     BlockfrostV0,
+    UplcData,
     WalletHelper,
     MintingPolicyHash,
     AssetClass,
-    Address
+    Address,
+    TxOutputId
   } from "@hyperionbt/helios";
   import { network, getNetworkParams } from '../common/network';
   import GameReward from '../contracts/vesting.hl'; // Ensure correct path to your contract
+import { TxIn } from "@blockfrost/blockfrost-js/lib/types/api/utils/txs";
   
   const optimize = false;
-  const API_KEY = 'preprodJExO0MAMRgfpXz9Il4IqB2u9ddoylZBT'; // Replace with your key
  
 function getTokenAmountFromUtxos(utxos: TxInput[], assetClass: AssetClass): bigint {
     let totalAmount = BigInt(0);
@@ -109,17 +110,13 @@ function getTokenAmountFromUtxos(utxos: TxInput[], assetClass: AssetClass): bigi
   
   export function calculateCountdown(TimeBeginContract: number): number {
   
-    console.log("TimeBeginContract" + TimeBeginContract);
     const TimeNow: number = Math.floor(Date.now()); 
-    console.log("TIME now in MS" + TimeNow)
     const CYCLE_DURATION = 540 // 9 minutes 
     const offsetInMs = 89680;
     const elapsedTime = TimeNow - (offsetInMs) - TimeBeginContract;
-    console.log("elapesedTime" + elapsedTime)
     const elapsedTimeInSeconds = elapsedTime / 1000;
     const positionInCycle = elapsedTimeInSeconds % CYCLE_DURATION;
   
-    console.log(positionInCycle);
     return positionInCycle;
   }
   
@@ -174,8 +171,6 @@ function getTokenAmountFromUtxos(utxos: TxInput[], assetClass: AssetClass): bigi
     try {
       const cip30WalletAPI = new Cip30Wallet(walletAPI);
 
-      const bfrost = new BlockfrostV0(network, API_KEY);
-
       const walletHelper = new WalletHelper(cip30WalletAPI);
       // Read in the network parameter file
       const networkParamsJson = await getNetworkParams(network);
@@ -210,21 +205,18 @@ function getTokenAmountFromUtxos(utxos: TxInput[], assetClass: AssetClass): bigi
       console.log("Wallet address: " + benefitiary)
       const scriptAddress = Address.fromHashes(compiledProgram.validatorHash)
     
-        //remove
       console.log(scriptAddress.toBech32());
       console.log("Script Address:" + scriptAddress)
       
       console.dir(scriptAddress, { depth: null });
 
-
-      const txInputs: TxInput[] = await bfrost.getUtxos(scriptAddress);
-      var filteredUtxos = txInputs.filter(x => x.value.assets.getTokens(assetClass.mintingPolicyHash));
-
+      const filteredUtxos = await fetchUtxos(scriptAddress.toBech32())
+   
       // const BASE_REWARD: number = 1000;  // Base reward
       // const TOTAL_SUPPLY = 10000; // Total token supply
       const CLAIM_WINDOW = 60; // 1 minute 
 
-      console.log("filtereduTXOs" + filteredUtxos)
+      console.log("filteredUtxos" + filteredUtxos)
       const TimeBeginContract: number = Math.floor(new Date(Date.UTC(2024, 11, 8, 13, 45, 0)).getTime());
       //const remainingSupply = getTokenAmountFromUtxos(filteredUtxos, assetClass);
       const dynamicReward = calculateRewardInTime(TimeBeginContract)
@@ -251,7 +243,7 @@ function getTokenAmountFromUtxos(utxos: TxInput[], assetClass: AssetClass): bigi
           console.log(element)
       });
       //const totalAmountUtxo = getTokenAmountFromUtxos(sortedUtxos.selected, assetClass);
-      const amountToSendBack = sortedUtxos.totalAmount - BigInt(dynamicReward);
+      const amountToSendBack = BigInt(sortedUtxos.totalAmount) - BigInt(dynamicReward);
 
       const firstPartToSendBack = amountToSendBack / 2n; // First part is half of the total amount
       const secondPartToSendBack = amountToSendBack - firstPartToSendBack; // Second part is the remainder
@@ -348,7 +340,7 @@ function getTokenAmountFromUtxos(utxos: TxInput[], assetClass: AssetClass): bigi
       //   network: network,
       //   projectId: "preprodJExO0MAMRgfpXz9Il4IqB2u9ddoylZBT",
       // });
-      const bfrost = new BlockfrostV0(network, API_KEY);
+      console.log("gmmm")
 
       const walletHelper = new WalletHelper(cip30WalletAPI);
 
@@ -440,5 +432,20 @@ function getTokenAmountFromUtxos(utxos: TxInput[], assetClass: AssetClass): bigi
         setIsLoading(false);
         throw console.error("submit tx failed", err);
     }
+  }
+    
+  async function fetchUtxos(scriptAddress: string): Promise<TxInput[]> {
+    const response = await fetch("http://localhost:3001/api/getUtxos", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ scriptAddress }),
+    });
+  
+    const data = await response.json(); // Raw JSON array from backend
+  
+    // `Convert JSON back to TxInput objects
+    const filteredUtxos = data.map((utxo: any) => TxInput.fromFullCbor(utxo));
+
+    return filteredUtxos;
   }
   

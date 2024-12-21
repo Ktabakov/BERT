@@ -56,7 +56,7 @@ const FlappyBirdGame: React.FC<FlappyBirdGameProps> = ({
   const togglePause = () => setIsPaused((prev) => !prev);
 
   return (
-    <div className="content-container h-[calc(100vh-4rem)] overflow-auto" >
+    <div className="content-container h-[calc(100vh-4rem)] flex-grow flex flex-col" >
       {/* 
         Create a grid with 3 columns and 8 rows.
         We'll place all elements in row 4 to center them vertically:
@@ -64,9 +64,9 @@ const FlappyBirdGame: React.FC<FlappyBirdGameProps> = ({
         - Score + Canvas (middle) at col 2, row 4
         - Claim Window (right) at col 3, row 4
       */}
-      <div className="grid grid-cols-3 grid-rows-6 w-full h-full">
+     <div className="grid grid-cols-3 grid-rows-6 w-full h-full flex-grow">
         {/* BERT Image in the left column, row 4 */}
-        <div className="col-start-1 row-start-4 flex justify-center items-center">
+        <div className="col-start-1 row-start-4 flex justify-center flex-grow items-center">
           <img
             src="/logos/TransparentTestBertBubble.png"
             alt="BERT Mascot"
