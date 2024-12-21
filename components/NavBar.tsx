@@ -27,17 +27,18 @@ const NavBar: React.FC<NavBarProps> = ({ isConnected, walletAddress, onConnect, 
       <a href="/whitepaper" className="page-link text-base md:text-lg font-medium">Whitepaper</a>
     </div>
 
-    {/* Centered Title */}
-    <div className="absolute left-1/2 transform -translate-x-1/2">
-      <h1 className="gameTitle text-lg md:text-2xl">Bert</h1>
-    </div>
+  {/* Centered Title */}
+  <div className="absolute left-1/2 transform -translate-x-1/2">
+    <h1 className="gameTitle">Bert</h1>
+   </div>
+
 
     {/* Right Buttons */}
     <div className="flex items-center space-x-3">
       <button
         onClick={onClaimTokens}
-        // className={`btn btn-claim ${isButtonDisabled ? "blurred-button" : ""}`}
-        // disabled={isButtonDisabled}
+        className={`btn btn-claim ${isButtonDisabled ? "blurred-button" : ""}`}
+        disabled={isButtonDisabled}
       >
         Claim Tokens
       </button>

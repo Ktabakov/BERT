@@ -64,12 +64,22 @@ const Home: NextPage = () => {
       if (err.info === 'User declined to sign the transaction.') {
         console.log("Transaction was canceled by the user.");
         // You can choose to show a toast notification or simply do nothing
+      } else if (err.message && err.message.includes('wallet returned 0 utxos')) {
+        console.log("Insufficient ADA in the user's wallet.");
+        setError("Your wallet does not have enough ADA to claim tokens. Please add some ADA to your wallet and try again.");
+      } else if (err.message && err.message.includes('Wallet API is not set.')) {
+        console.log("No wallet connected");
+        setError("Connect a wallet before claiming tokens.");
+      } else if (err.message && err.message.includes('No more tokens to claim. Game Over!')) {
+        console.log("No more tokens to claim. Game Over!");
+        setError("No more tokens to claim. Game Over!");
       } else {
         // For all other errors, display the error popup
         setError("Something went wrong. Please try again.");
       }
     }
   };
+
   const closeErrorPopup = () => {
     setError(null);
   };

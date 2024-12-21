@@ -211,6 +211,9 @@ function getTokenAmountFromUtxos(utxos: TxInput[], assetClass: AssetClass): bigi
       console.dir(scriptAddress, { depth: null });
 
       const filteredUtxos = await fetchUtxos(scriptAddress.toBech32())
+
+      if (filteredUtxos.length == 0)
+        throw new Error("No more tokens to claim. Game Over!");
    
       // const BASE_REWARD: number = 1000;  // Base reward
       // const TOTAL_SUPPLY = 10000; // Total token supply

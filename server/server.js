@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import cors from 'cors';
 import express from 'express';
-import { BlockfrostV0, Address, AssetClass, MintingPolicyHash, TxInput } from '@hyperionbt/helios';
+import { BlockfrostV0, Address, AssetClass, MintingPolicyHash } from '@hyperionbt/helios';
 
 dotenv.config();
 

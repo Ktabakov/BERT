@@ -151,10 +151,7 @@ func main(datum: Datum, redeemer: Redeemer, ctx: ScriptContext) -> Bool {
             tokens_to_give: Int = if (dynamic_reward > total_tokens_begin) { total_tokens_begin } else { dynamic_reward };
 
             assert(total_tokens_begin - tokens_to_give == total_tokens_in_script, "Not enough tokens sent back to script");
-
-              // Ensure no ADA leaves the contract
-            //assert(total_ada_in_script >= total_ada_begin, "No ADA can leave the contract");
-
+            
               // Check that the user receives exactly tokens_to_give
             assert(tx.value_sent_to(red.recepiant).get_safe(asset_class) == tokens_to_give, "Incorrect token payout");
             assert(isClaimWindow == true, "Not in claim window");
