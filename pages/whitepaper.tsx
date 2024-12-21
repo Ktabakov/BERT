@@ -4,6 +4,10 @@ import NavBar from "../components/NavBar";
 import { claimTokens } from "../public/walletActions"; 
 import WalletConnector from '../components/WalletConnector';
 import { calculateCountdown } from "../public/walletActions";
+import ErrorPopup from '../components/ErrorPopup'; 
+import { 
+    network 
+  } from '../common/network';
 
 const CLAIM_WINDOW = 60; // 1 minute claim window
 const CYCLE_DURATION = 540; // 9 minutes cycle duration
@@ -18,6 +22,7 @@ const Whitepaper: React.FC = () => {
   const [connectedWallet, setConnectedWallet] = useState<string | null>(null); // Track connected wallet name
   const [isInClaimWindow, setIsInClaimWindow] = useState<boolean>(false);
   const [countdown, setCountdown] = useState<number>(0);
+  const [error, setError] = useState<string | null>(null); // New state for error messages
 
   useEffect(() => {
     const reconnectWallet = async () => {
@@ -73,9 +78,24 @@ const Whitepaper: React.FC = () => {
     setIsWalletModalOpen(!isWalletModalOpen);
   };
 
-  const handleClaimTokens = () => {
-    claimTokens(walletAPI, setIsLoading, setTx);
+  const handleClaimTokens = async () => {
+    try {
+      await claimTokens(walletAPI, setIsLoading, setTx);
+    } catch (err: any) { 
+      if (err.info === 'User declined to sign the transaction.') {
+        console.log("Transaction was canceled by the user.");
+        // You can choose to show a toast notification or simply do nothing
+      } else {
+        // For all other errors, display the error popup
+        setError("Something went wrong. Please try again.");
+      }
+    }
   };
+  
+  const closeErrorPopup = () => {
+    setError(null);
+  };
+
 
   const handleConnect = () => {
     setIsWalletModalOpen(true);
@@ -111,6 +131,10 @@ const Whitepaper: React.FC = () => {
           </div>
         </div>
       )}
+       {/* Error Popup */}
+       {error && (
+        <ErrorPopup message={error} onClose={closeErrorPopup} />
+      )}
        <main className="content-container flex-grow flex flex-col justify-between p-5">
     <div className="w-full max-w-screen-1x1 flex-grow h-[80vh] bg-white shadow-lg border rounded-lg overflow-hidden">
         <iframe
@@ -120,16 +144,36 @@ const Whitepaper: React.FC = () => {
         title="Whitepaper PDF"
         />
     </div>
-</main>
-     {/* Footer */}
-        <footer className="footer bg-gray-800 text-white text-center py-4">
-      <p className="text-sm">
-        ADA donation Address:
-      </p>
-      <p className="text-xs">
-        [Insert Address here]
-      </p>
-    </footer>
+   </main>
+       {/* Footer */}
+       <footer className="footer bg-gray-800 text-white py-4 mt-auto">
+  <div className=" mx-auto flex flex-wrap md:flex-nowrap justify-between items-center">
+    {/* Left Container: Transaction Success Message */}
+    <div className="flex-1 text-left pl-4 md:pl-8">
+      {tx.txId && walletAPI && (
+        <>
+          <h4 className="font-bold text-green-400">Transaction Success!</h4>
+          <p className="text-sm">
+            <span className="font-semibold">TxId:</span>&nbsp;
+            <a
+              href={`https://${network === "mainnet" ? "" : network + "."}cexplorer.io/tx/${tx.txId}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-400 underline break-all"
+            >
+              {tx.txId}
+            </a>
+          </p>
+        </>
+      )}
+    </div>
+    {/* Right Container: ADA Donation Address */}
+    <div className="flex-none text-right mt-4 md:mt-0 md:pr-8">
+      <p className="text-sm mb-1">ADA Donation Address:</p>
+      <p className="text-xs break-all text-center"> CHANGE IT FOR PROD! addr_test1qrarqhmklnhwcw3q0zm6sgm3g3l7pua0y36sql9k5ru8dsucglsked5f5yrcf9e9xgxjgmt7xk52knh8h0dgayc00arqlh7g60</p>
+    </div>
+  </div>
+</footer>
     </div>
   );
 };

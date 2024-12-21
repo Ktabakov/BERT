@@ -8,6 +8,7 @@ import {
   network 
 } from '../common/network';
 import WalletConnector from '../components/WalletConnector'
+import ErrorPopup from '../components/ErrorPopup'; 
 
 const Home: NextPage = () => {
  
@@ -18,7 +19,8 @@ const Home: NextPage = () => {
   const [connectedWallet, setConnectedWallet] = useState<string | null>(null); // Track connected wallet name
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
   const [isInClaimWindow, setIsInClaimWindow] = useState<boolean>(false);
-  
+  const [error, setError] = useState<string | null>(null); // New state for error messages
+
   useEffect(() => {
     const reconnectWallet = async () => {
       const savedWallet = localStorage.getItem("connectedWallet");
@@ -55,8 +57,21 @@ const Home: NextPage = () => {
     setIsWalletModalOpen(!isWalletModalOpen);
   };
 
-  const handleClaimTokens = () => {
-    claimTokens(walletAPI, setIsLoading, setTx);
+  const handleClaimTokens = async () => {
+    try {
+      await claimTokens(walletAPI, setIsLoading, setTx);
+    } catch (err: any) { 
+      if (err.info === 'User declined to sign the transaction.') {
+        console.log("Transaction was canceled by the user.");
+        // You can choose to show a toast notification or simply do nothing
+      } else {
+        // For all other errors, display the error popup
+        setError("Something went wrong. Please try again.");
+      }
+    }
+  };
+  const closeErrorPopup = () => {
+    setError(null);
   };
 
   const handleConnect = () => {
@@ -92,6 +107,10 @@ const Home: NextPage = () => {
         </div>
       )}
   
+       {/* Error Popup */}
+      {error && (
+        <ErrorPopup message={error} onClose={closeErrorPopup} />
+      )}
       {/* Main Content */}
       <main className="flex-grow flex flex-col">
         {/* Flappy Bird Game */}
@@ -124,7 +143,7 @@ const Home: NextPage = () => {
     {/* Right Container: ADA Donation Address */}
     <div className="flex-none text-right mt-4 md:mt-0 md:pr-8">
       <p className="text-sm mb-1">ADA Donation Address:</p>
-      <p className="text-xs break-all text-center">addr_test1qrarqhmklnhwcw3q0zm6sgm3g3l7pua0y36sql9k5ru8dsucglsked5f5yrcf9e9xgxjgmt7xk52knh8h0dgayc00arqlh7g60</p>
+      <p className="text-xs break-all text-center"> CHANGE IT FOR PROD! addr_test1qrarqhmklnhwcw3q0zm6sgm3g3l7pua0y36sql9k5ru8dsucglsked5f5yrcf9e9xgxjgmt7xk52knh8h0dgayc00arqlh7g60</p>
     </div>
   </div>
 </footer>

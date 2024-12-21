@@ -36,8 +36,8 @@ const NavBar: React.FC<NavBarProps> = ({ isConnected, walletAddress, onConnect, 
     <div className="flex items-center space-x-3">
       <button
         onClick={onClaimTokens}
-        className={`btn btn-claim ${isButtonDisabled ? "blurred-button" : ""}`}
-        disabled={isButtonDisabled}
+        // className={`btn btn-claim ${isButtonDisabled ? "blurred-button" : ""}`}
+        // disabled={isButtonDisabled}
       >
         Claim Tokens
       </button>

@@ -26,7 +26,7 @@ const FlappyBirdGame: React.FC<FlappyBirdGameProps> = ({
   autoStart = true,
   onClaimWindowStatusChange
 }) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [isPaused, setIsPaused] = useState(false);
   const { highScore, currentScore } = useFlappyBirdGame(canvasRef, isPaused, autoStart);
 

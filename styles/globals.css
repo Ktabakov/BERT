@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 @import url('https://fonts.googleapis.com/css2?family=Agbalumo&family=Caveat:wght@400..700&family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
 .gameTitle {
   font-family: "Caveat", cursive;
@@ -28,6 +29,72 @@
   display: flex;
   align-items: center; /* Center content vertically */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional shadow for visibility */
+}
+
+/* Error Popup Container */
+.error-popup-container {
+  background-color: #ffcccb; /* Light red background for error */
+  border: 4px solid #ff0000; /* Solid red border */
+  border-radius: 8px;
+  padding: 2rem;
+  position: relative;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  font-family: 'Press Start 2P', cursive; /* Pixelated font */
+  color: #333;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  animation: pop-in 0.3s ease-out;
+}
+
+/* Close Button */
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  color: #ff0000;
+  transition: transform 0.2s ease;
+}
+
+.close-button:hover {
+  transform: scale(1.2);
+}
+
+/* Bert Image */
+.bert-image {
+  width: 100px;
+  height: 100px;
+  image-rendering: pixelated; /* Ensure the image remains pixelated */
+  margin-bottom: 1rem;
+}
+
+/* Error Title */
+.error-title {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: #ff0000;
+}
+
+/* Error Message */
+.error-message {
+  font-size: 1rem;
+  color: #333;
+}
+
+/* Pop-in Animation */
+@keyframes pop-in {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .content-container {

@@ -166,7 +166,7 @@ function getTokenAmountFromUtxos(utxos: TxInput[], assetClass: AssetClass): bigi
     setIsLoading(true);
 
     if (!walletAPI) {
-      throw console.error("walletAPI is not set");
+        throw new Error("Wallet API is not set.");
     }
     try {
       const cip30WalletAPI = new Cip30Wallet(walletAPI);
@@ -259,8 +259,6 @@ function getTokenAmountFromUtxos(utxos: TxInput[], assetClass: AssetClass): bigi
         benefitiary.pubKeyHash,
       )
 
-      console.log("We have a datum!" + gameDatum)
-
        // Create the vesting claim redeemer
        const redeember = (new gameReward.types.Redeemer.Claim(benefitiary.pubKeyHash))
        ._toUplcData();
@@ -287,11 +285,19 @@ function getTokenAmountFromUtxos(utxos: TxInput[], assetClass: AssetClass): bigi
     //   new Value(undefined, testValueContract) // The amount being claimed
     // ));
     
+    // Calculate total ADA in the selected script inputs
+    let totalAdaInInputs = BigInt(0);
+    sortedUtxos.selected.forEach(utxo => {
+        totalAdaInInputs += BigInt(utxo.output.value.lovelace);
+    });
+
+    // Distribute ADA equally (or as required) among script outputs
+    const adaPerScriptOutput = totalAdaInInputs / 2n; // Assuming two script outputs
 
     if (amountToSendBack != BigInt(0)){
       var scriptUtxo1 =new TxOutput(
         scriptAddress,
-        new Value(undefined, valueContract1),  // Remaining treasury tokens
+        new Value(adaPerScriptOutput, valueContract1),  // Remaining treasury tokens
         Datum.inline(gameDatum) // Contract requires datum
        );
 
@@ -299,7 +305,7 @@ function getTokenAmountFromUtxos(utxos: TxInput[], assetClass: AssetClass): bigi
 
       var scriptUtxo2 = new TxOutput(
         scriptAddress,
-        new Value(undefined, valueContract2),  // Remaining treasury tokens
+        new Value(totalAdaInInputs - adaPerScriptOutput, valueContract2),  // Remaining treasury tokens
         Datum.inline(gameDatum) // Contract requires datum
        );
     
@@ -324,7 +330,8 @@ function getTokenAmountFromUtxos(utxos: TxInput[], assetClass: AssetClass): bigi
 
     } catch (err) {
         setIsLoading(false);
-        throw console.error("submit tx failed", err);
+        console.error("submit tx failed", err);
+        throw err; 
     }
   }
   
@@ -367,7 +374,7 @@ function getTokenAmountFromUtxos(utxos: TxInput[], assetClass: AssetClass): bigi
       // ]))
 
 
-      const testValueScript = new Assets([[assetClass, BigInt(5000)]]);
+      const testValueScript = new Assets([[assetClass, BigInt(10000)]]);
 
 
       // Get wallet UTXOs

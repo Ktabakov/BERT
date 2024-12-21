@@ -32,7 +32,7 @@ const ROTATION_SPEED = 0.005;
 const PIPE_SPAWN_FRAMES = 100;
 
 export function useFlappyBirdGame(canvasRef: React.RefObject<HTMLCanvasElement>, isPaused: boolean, autoStart: boolean) {
-  const requestIdRef = useRef<number>();
+    const requestIdRef = useRef<number | null>(null);
   
   // State refs
   const [highScore, setHighScore] = useState(0);
