@@ -55,8 +55,8 @@ func calculate_reward(current_time: Time) -> Int {
 
 }
 
-const CLAIM_WINDOW: Int = 540 
-const CYCLE_DURATION: Int = 540 
+const CLAIM_WINDOW: Int = 30 
+const CYCLE_DURATION: Int = 570 
 
 func IsClaimWindow(current_time: Time) -> Bool {
     // Start contract 
@@ -128,10 +128,6 @@ func main(datum: Datum, redeemer: Redeemer, ctx: ScriptContext) -> Bool {
             }
         }, 0);
 
-    print(total_ada_begin.show());
-    print(total_ada_in_script.show());
-
-
     current_time: Time = tx.time_range.start;  // Get current time as POSIXTime (seconds since Unix epoch)
     // Calculate dynamic reward based on the remaining supply
     dynamic_reward: Int = calculate_reward(current_time);
@@ -147,7 +143,7 @@ func main(datum: Datum, redeemer: Redeemer, ctx: ScriptContext) -> Bool {
         },
         red: Claim => {
 
-                        // Determine how many tokens to give
+            // Determine how many tokens to give
             tokens_to_give: Int = if (dynamic_reward > total_tokens_begin) { total_tokens_begin } else { dynamic_reward };
 
             assert(total_tokens_begin - tokens_to_give == total_tokens_in_script, "Not enough tokens sent back to script");

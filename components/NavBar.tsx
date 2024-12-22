@@ -1,4 +1,5 @@
 import React from "react";
+import Image from 'next/image'
 
 interface NavBarProps {
   isConnected: boolean;
@@ -48,10 +49,12 @@ const NavBar: React.FC<NavBarProps> = ({ isConnected, walletAddress, onConnect, 
         </button>
       ) : (
         <div className="wallet-bubble flex items-center space-x-2 rounded-full border border-gray-300 p-1 pr-2 shadow hover:bg-gray-100">
-          <img
-            src="/logos/bert.png"
+          <Image
+            src="/logos/transparentTestBertBubbleTiny(1).png"
             alt="wallet avatar"
-            className="w-6 h-6 rounded-full"
+            className="rounded-full"
+            width={65}
+            height={65}
           />
           <span className="text-sm text-gray-700">
             {truncateAddress(walletAddress || "Unknown")}

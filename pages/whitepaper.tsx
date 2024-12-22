@@ -179,7 +179,7 @@ const Whitepaper: React.FC = () => {
     {/* Right Container: ADA Donation Address */}
     <div className="flex-none text-right mt-4 md:mt-0 md:pr-8">
       <p className="text-sm mb-1">ADA Donation Address:</p>
-      <p className="text-xs break-all text-center"> CHANGE IT FOR PROD! addr_test1qrarqhmklnhwcw3q0zm6sgm3g3l7pua0y36sql9k5ru8dsucglsked5f5yrcf9e9xgxjgmt7xk52knh8h0dgayc00arqlh7g60</p>
+      <p className="text-xs break-all text-center">addr1q9muvfmvxaxnhsm9ekek86jj4n7pan0n3038rv9cnjgg0cxwrmddhxvxma08n5gnke2g3c2wtvy6mske29sp78jw5a8qfdt3ze</p>
     </div>
   </div>
 </footer>

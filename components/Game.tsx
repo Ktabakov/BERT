@@ -2,9 +2,10 @@ import React, { useRef, CSSProperties, useState, useEffect } from "react";
 import { useFlappyBirdGame } from "../public/useFlappyBirdGame";
 import ClaimWindowStatus from "./ClaimWindowStatus";
 import { calculateCountdown } from "../public/walletActions";
+import Image from 'next/image'
 
-const CLAIM_WINDOW = 60;
-const CYCLE_DURATION = 540;
+const CLAIM_WINDOW = 30;
+const CYCLE_DURATION = 570;
 const TimeBeginContract = Math.floor(new Date(Date.UTC(2024, 11, 8, 13, 45, 0)).getTime());
 
 const containerStyle: CSSProperties = {
@@ -67,10 +68,12 @@ const canvasRef = useRef<HTMLCanvasElement | null>(null);
      <div className="grid grid-cols-3 grid-rows-6 w-full h-full flex-grow">
         {/* BERT Image in the left column, row 4 */}
         <div className="col-start-1 row-start-4 flex justify-center flex-grow items-center">
-          <img
-            src="/logos/TransparentTestBertBubble.png"
+          <Image
+            src="/logos/transparentTestBertBubbleTiny(1).png"
             alt="BERT Mascot"
             className="w-65 h-65 object-contain"
+            width={650}
+            height={650}
           />
         </div>
 

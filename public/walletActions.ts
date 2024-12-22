@@ -111,7 +111,7 @@ function getTokenAmountFromUtxos(utxos: TxInput[], assetClass: AssetClass): bigi
   export function calculateCountdown(TimeBeginContract: number): number {
   
     const TimeNow: number = Math.floor(Date.now()); 
-    const CYCLE_DURATION = 540 // 9 minutes 
+    const CYCLE_DURATION = 570 // 9 minutes and 30 seconds 
     const offsetInMs = 89680;
     const elapsedTime = TimeNow - (offsetInMs) - TimeBeginContract;
     const elapsedTimeInSeconds = elapsedTime / 1000;
@@ -217,14 +217,14 @@ function getTokenAmountFromUtxos(utxos: TxInput[], assetClass: AssetClass): bigi
    
       // const BASE_REWARD: number = 1000;  // Base reward
       // const TOTAL_SUPPLY = 10000; // Total token supply
-      const CLAIM_WINDOW = 60; // 1 minute 
+      const CLAIM_WINDOW = 30; // 30 seconds 
 
       console.log("filteredUtxos" + filteredUtxos)
       const TimeBeginContract: number = Math.floor(new Date(Date.UTC(2024, 11, 8, 13, 45, 0)).getTime());
       //const remainingSupply = getTokenAmountFromUtxos(filteredUtxos, assetClass);
       const dynamicReward = calculateRewardInTime(TimeBeginContract)
       const positionInCycle = calculateCountdown(TimeBeginContract);
-      console.log(positionInCycle);
+      console.log("positionInCycle" + positionInCycle);
       window.onerror = () => positionInCycle < CLAIM_WINDOW;
       //const dynamicReward = calculateReward(Number(remainingSupply), TOTAL_SUPPLY, BASE_REWARD);
       const testValueBenefitiary= new Assets([[assetClass, BigInt(dynamicReward)]]);

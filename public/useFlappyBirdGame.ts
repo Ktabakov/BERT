@@ -1,4 +1,9 @@
 import { useEffect, useRef, useState } from "react";
+import flappybirdTiny from '../public/assets/flappybirdTiny.png';
+import TopTiny from '../public/assets/TopTiny.png';
+import BottomTiny from '../public/assets/BottomTiny.png';
+import flappybirdbg1Tiny from '../public/assets/flappybirdbg1Tiny.jpg';
+import CoinTiny from '../public/assets/CoinTiny.png';
 
 // Types for game objects
 interface Pipe {
@@ -57,19 +62,19 @@ export function useFlappyBirdGame(canvasRef: React.RefObject<HTMLCanvasElement>,
 
   if (typeof window !== "undefined") {
     birdImage = new Image();
-    birdImage.src = "/assets/flappybird.png";
+    birdImage.src = "/assets/flappybirdTiny.png";
 
     pipeTop = new Image();
-    pipeTop.src = "/assets/top.png";
+    pipeTop.src = "/assets/TopTiny.png";
 
     pipeBottom = new Image();
-    pipeBottom.src = "/assets/bottom.png";
+    pipeBottom.src = "/assets/BottomTiny.png";
 
     background = new Image();
-    background.src = "/assets/flappybirdbg1.png";
+    background.src = "/assets/flappybirdbg1Tiny.jpg";
 
     coinImage = new Image();
-    coinImage.src = "/assets/Coin.png";
+    coinImage.src = "/assets/CoinTiny.png";
   }
   
   // Load high score from localStorage after mount

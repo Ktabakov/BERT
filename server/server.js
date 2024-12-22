@@ -12,7 +12,6 @@ const NETWORK = process.env.NETWORK;
 
 app.use(cors({
     origin: 'http://localhost:3000',
-    methods: ['POST', 'GET', 'OPTIONS'], // Include allowed methods
     allowedHeaders: ['Content-Type']    // Allow headers needed for your request
   }));
 
