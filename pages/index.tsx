@@ -89,7 +89,7 @@ const Home: NextPage = () => {
   };
 
   return (
-<div className="flex flex-col min-h-screen">
+<div className="flex flex-col h-screen">
     {/* Navigation Bar */}
       <NavBar
         isConnected={!!walletAPI}
@@ -122,15 +122,13 @@ const Home: NextPage = () => {
         <ErrorPopup message={error} onClose={closeErrorPopup} />
       )}
       {/* Main Content */}
-      <main className="flex-grow flex flex-col">
-        {/* Flappy Bird Game */}
-        <div className="flex-grow flex justify-center items-center">
-          <FlappyBirdGame onClaimWindowStatusChange={(isInWindow) => setIsInClaimWindow(isInWindow)} />
-        </div>
-      </main>
+      <main className="flex-grow flex flex-col items-center justify-center">
+      <FlappyBirdGame
+        onClaimWindowStatusChange={(isInWindow) => setIsInClaimWindow(isInWindow)}/>
+    </main>
        {/* Footer */}
-       <footer className="footer bg-gray-800 text-white py-4 mt-auto">
-  <div className=" mx-auto flex flex-wrap md:flex-nowrap justify-between items-center">
+     <footer className="footer">
+     <div className="flex justify-between items-center w-full px-4">
     {/* Left Container: Transaction Success Message */}
     <div className="flex-1 text-left pl-4 md:pl-8">
       {tx.txId && walletAPI && (

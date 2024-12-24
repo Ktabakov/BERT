@@ -55,8 +55,8 @@ func calculate_reward(current_time: Time) -> Int {
 
 }
 
-const CLAIM_WINDOW: Int = 30 
-const CYCLE_DURATION: Int = 570 
+const CLAIM_WINDOW: Int = 20 
+const CYCLE_DURATION: Int = 580 
 
 func IsClaimWindow(current_time: Time) -> Bool {
     // Start contract 

@@ -4,8 +4,8 @@ import ClaimWindowStatus from "./ClaimWindowStatus";
 import { calculateCountdown } from "../public/walletActions";
 import Image from 'next/image'
 
-const CLAIM_WINDOW = 30;
-const CYCLE_DURATION = 570;
+const CLAIM_WINDOW = 20;
+const CYCLE_DURATION = 580;
 const TimeBeginContract = Math.floor(new Date(Date.UTC(2024, 11, 8, 13, 45, 0)).getTime());
 
 const containerStyle: CSSProperties = {

@@ -1,9 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import flappybirdTiny from '../public/assets/flappybirdTiny.png';
-import TopTiny from '../public/assets/TopTiny.png';
-import BottomTiny from '../public/assets/BottomTiny.png';
-import flappybirdbg1Tiny from '../public/assets/flappybirdbg1Tiny.jpg';
-import CoinTiny from '../public/assets/CoinTiny.png';
 
 // Types for game objects
 interface Pipe {
@@ -36,9 +31,13 @@ const ROTATION_SPEED = 0.005;
 // ~100 frames at ~60fps is ~1.66 seconds. Adjust as needed
 const PIPE_SPAWN_FRAMES = 100;
 
-export function useFlappyBirdGame(canvasRef: React.RefObject<HTMLCanvasElement>, isPaused: boolean, autoStart: boolean) {
-    const requestIdRef = useRef<number | null>(null);
-  
+export function useFlappyBirdGame(
+  canvasRef: React.RefObject<HTMLCanvasElement>,
+  isPaused: boolean,
+  autoStart: boolean
+) {
+  const requestIdRef = useRef<number | null>(null);
+
   // State refs
   const [highScore, setHighScore] = useState(0);
   const [currentScore, setCurrentScore] = useState(0);
@@ -54,15 +53,23 @@ export function useFlappyBirdGame(canvasRef: React.RefObject<HTMLCanvasElement>,
   const framesRef = useRef<number>(0); // Count frames
 
   // Assets
-  let birdImage: HTMLImageElement;
+  let birdImages: HTMLImageElement[] = [];
   let pipeTop: HTMLImageElement;
   let pipeBottom: HTMLImageElement;
   let background: HTMLImageElement;
   let coinImage: HTMLImageElement;
 
   if (typeof window !== "undefined") {
-    birdImage = new Image();
-    birdImage.src = "/assets/flappybirdTiny.png";
+    const birdUp = new Image();
+    birdUp.src = "/assets/redbird-upflap.png";
+
+    const birdMid = new Image();
+    birdMid.src = "/assets/redbird-midflap.png";
+
+    const birdDown = new Image();
+    birdDown.src = "/assets/redbird-downflap.png";
+
+    birdImages = [birdUp, birdMid, birdDown];
 
     pipeTop = new Image();
     pipeTop.src = "/assets/TopTiny.png";
@@ -71,12 +78,18 @@ export function useFlappyBirdGame(canvasRef: React.RefObject<HTMLCanvasElement>,
     pipeBottom.src = "/assets/BottomTiny.png";
 
     background = new Image();
-    background.src = "/assets/flappybirdbg1Tiny.jpg";
+    background.src = "/assets/background-day.png";
 
     coinImage = new Image();
     coinImage.src = "/assets/CoinTiny.png";
   }
-  
+
+  // Reference to track current bird frame
+  const currentBirdFrameRef = useRef<number>(0);
+
+  // Reference for continuous animation (optional)
+  const animationFrameRef = useRef<number>(0);
+
   // Load high score from localStorage after mount
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -94,6 +107,37 @@ export function useFlappyBirdGame(canvasRef: React.RefObject<HTMLCanvasElement>,
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    // Helper function to load images
+    const loadImage = (img: HTMLImageElement): Promise<void> => {
+      return new Promise((resolve, reject) => {
+        if (img.complete) {
+          resolve();
+        } else {
+          img.onload = () => resolve();
+          img.onerror = () => reject(new Error(`Failed to load image: ${img.src}`));
+        }
+      });
+    };
+
+    // Load all assets before initializing the game
+    const loadAssets = async () => {
+      try {
+        await Promise.all([
+          ...birdImages.map((img) => loadImage(img)),
+          loadImage(pipeTop),
+          loadImage(pipeBottom),
+          loadImage(background),
+          loadImage(coinImage),
+        ]);
+        console.log("All assets loaded successfully!");
+        initializeGame();
+      } catch (error) {
+        console.error("Error loading assets:", error);
+      }
+    };
+
+    loadAssets();
+
     function resetGame() {
       const c = canvasRef.current;
       if (!c) return;
@@ -108,6 +152,7 @@ export function useFlappyBirdGame(canvasRef: React.RefObject<HTMLCanvasElement>,
       gameStartedRef.current = false;
       coinRotationStepRef.current = 0;
       framesRef.current = 0;
+      currentBirdFrameRef.current = 0; // Reset bird frame
     }
 
     function handleKeyDown(e: KeyboardEvent) {
@@ -118,18 +163,10 @@ export function useFlappyBirdGame(canvasRef: React.RefObject<HTMLCanvasElement>,
           startGame();
         } else {
           birdVelocityRef.current = FLAP;
+          flap(); // Trigger flap animation
         }
       }
     }
-
-    background.onload = () => {
-        console.log("Background image loaded!");
-        const canvas = canvasRef.current;
-        if (canvas) {
-          const ctx = canvas.getContext("2d");
-          if (ctx) initializeGame();
-        }
-      };
 
     window.addEventListener("keydown", handleKeyDown);
 
@@ -147,9 +184,10 @@ export function useFlappyBirdGame(canvasRef: React.RefObject<HTMLCanvasElement>,
 
     // Initialize the game
     const initializeGame = () => {
-        canvas.width = 360;
-        canvas.height = 640;
-        drawStartScreen(ctx, canvas);
+      if (!canvas) return;
+      canvas.width = 360;
+      canvas.height = 640;
+      drawStartScreen(ctx, canvas);
     };
 
     initializeGame();
@@ -159,6 +197,17 @@ export function useFlappyBirdGame(canvasRef: React.RefObject<HTMLCanvasElement>,
       gameStartedRef.current = true;
       animate(); // Start the loop
     }
+
+    // Flap animation sequence
+    const flap = () => {
+      currentBirdFrameRef.current = 1; 
+      setTimeout(() => {
+        currentBirdFrameRef.current = 2; 
+        setTimeout(() => {
+          currentBirdFrameRef.current = 0; 
+        }, 170); 
+      }, 170);
+    };
 
     function animate() {
       if (isPaused || !gameStartedRef.current) {
@@ -174,6 +223,14 @@ export function useFlappyBirdGame(canvasRef: React.RefObject<HTMLCanvasElement>,
 
       updateGameState(c);
       draw(context, c);
+
+      // Optional: Continuous wing flapping
+      /*
+      animationFrameRef.current++;
+      if (animationFrameRef.current % 10 === 0) { // Adjust the modulo value for speed
+        currentBirdFrameRef.current = (currentBirdFrameRef.current + 1) % birdImages.length;
+      }
+      */
 
       if (!gameOverRef.current) {
         requestIdRef.current = requestAnimationFrame(animate);
@@ -223,28 +280,28 @@ export function useFlappyBirdGame(canvasRef: React.RefObject<HTMLCanvasElement>,
       drawBackground(ctx, canvas);
       ctx.font = "bold 30px Arial";
       ctx.textAlign = "center";
-      ctx.fillStyle = '#ffffff';
-      ctx.shadowColor = 'black';
-      ctx.textBaseline = 'middle';
+      ctx.fillStyle = "#ffffff";
+      ctx.shadowColor = "black";
+      ctx.textBaseline = "middle";
       ctx.fillText("Press Space to Start", canvas.width / 2, canvas.height / 2);
     }
 
     function drawGameOverScreen(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) {
-      ctx.fillStyle = '#ffcc00';
-      ctx.font = 'bold 50px Arial';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.shadowColor = 'black';
+      ctx.fillStyle = "#ffcc00";
+      ctx.font = "bold 50px Arial";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.shadowColor = "black";
       ctx.shadowBlur = 10;
 
-      ctx.fillText('Game Over!', canvas.width / 2, canvas.height / 2 - 40);
+      ctx.fillText("Game Over!", canvas.width / 2, canvas.height / 2 - 40);
 
-      ctx.fillStyle = '#ffffff';
-      ctx.font = 'bold 30px Arial';
-      ctx.fillText('Press Space to Restart', canvas.width / 2, canvas.height / 2 + 20);
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 30px Arial";
+      ctx.fillText("Press Space to Restart", canvas.width / 2, canvas.height / 2 + 20);
 
-      ctx.fillStyle = '#ffff00';
-      ctx.font = '30px Arial';
+      ctx.fillStyle = "#ffff00";
+      ctx.font = "30px Arial";
     }
 
     function drawBackground(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) {
@@ -252,7 +309,12 @@ export function useFlappyBirdGame(canvasRef: React.RefObject<HTMLCanvasElement>,
     }
 
     function drawBird(ctx: CanvasRenderingContext2D) {
-      ctx.drawImage(birdImage, 100, birdYRef.current, BIRD_WIDTH, BIRD_HEIGHT);
+      const currentImage = birdImages[currentBirdFrameRef.current];
+      if (currentImage.complete) {
+        ctx.drawImage(currentImage, 100, birdYRef.current, BIRD_WIDTH, BIRD_HEIGHT);
+      } else {
+        console.warn(`Bird image at index ${currentBirdFrameRef.current} not loaded yet.`);
+      }
     }
 
     function drawPipes(ctx: CanvasRenderingContext2D) {
@@ -278,14 +340,15 @@ export function useFlappyBirdGame(canvasRef: React.RefObject<HTMLCanvasElement>,
     }
 
     function createPipe(canvas: HTMLCanvasElement) {
-      const pipeHeight = Math.random() * (canvas.height - PIPE_SPACING - 100) + 50;
+      const pipeHeight =
+        Math.random() * (canvas.height - PIPE_SPACING - 100) + 50;
       const bottomY = pipeHeight + PIPE_SPACING;
       pipesRef.current.push({
         x: canvas.width,
         topHeight: pipeHeight,
         bottomY,
         bottomHeight: canvas.height - bottomY,
-        scored: false
+        scored: false,
       });
 
       // 50% chance to spawn a coin
@@ -295,7 +358,7 @@ export function useFlappyBirdGame(canvasRef: React.RefObject<HTMLCanvasElement>,
           y: pipeHeight + PIPE_SPACING / 2 - COIN_SIZE / 2,
           width: COIN_SIZE,
           height: COIN_SIZE,
-          collected: false
+          collected: false,
         });
       }
     }
@@ -304,12 +367,16 @@ export function useFlappyBirdGame(canvasRef: React.RefObject<HTMLCanvasElement>,
       for (const pipe of pipesRef.current) {
         pipe.x -= 2;
       }
-      pipesRef.current = pipesRef.current.filter(pipe => pipe.x + PIPE_WIDTH > 0);
+      pipesRef.current = pipesRef.current.filter(
+        (pipe) => pipe.x + PIPE_WIDTH > 0
+      );
 
       for (const coin of coinsRef.current) {
         coin.x -= 2;
       }
-      coinsRef.current = coinsRef.current.filter(coin => coin.x + coin.width > 0 && !coin.collected);
+      coinsRef.current = coinsRef.current.filter(
+        (coin) => coin.x + coin.width > 0 && !coin.collected
+      );
     }
 
     function checkCollisions(canvas: HTMLCanvasElement): boolean {
@@ -323,8 +390,10 @@ export function useFlappyBirdGame(canvasRef: React.RefObject<HTMLCanvasElement>,
       const birdBottom = birdYRef.current + BIRD_HEIGHT;
 
       for (const pipe of pipesRef.current) {
-        const withinPipeX = birdRight > pipe.x && birdLeft < pipe.x + PIPE_WIDTH;
-        const withinPipeY = birdTop < pipe.topHeight || birdBottom > pipe.bottomY;
+        const withinPipeX =
+          birdRight > pipe.x && birdLeft < pipe.x + PIPE_WIDTH;
+        const withinPipeY =
+          birdTop < pipe.topHeight || birdBottom > pipe.bottomY;
         if (withinPipeX && withinPipeY) return true;
       }
 
@@ -344,11 +413,18 @@ export function useFlappyBirdGame(canvasRef: React.RefObject<HTMLCanvasElement>,
           const coinTop = coin.y;
           const coinBottom = coin.y + coin.height;
 
-          if (birdRight > coinLeft && birdLeft < coinRight && birdBottom > coinTop && birdTop < coinBottom) {
+          if (
+            birdRight > coinLeft &&
+            birdLeft < coinRight &&
+            birdBottom > coinTop &&
+            birdTop < coinBottom
+          ) {
             coin.collected = true;
             setCurrentScore((prevScore) => {
-              const newScore = prevScore + 5;      
-              setHighScore((prevHighScore) => Math.max(prevHighScore, newScore));       
+              const newScore = prevScore + 5;
+              setHighScore((prevHighScore) =>
+                Math.max(prevHighScore, newScore)
+              );
               return newScore;
             });
           }
@@ -359,18 +435,18 @@ export function useFlappyBirdGame(canvasRef: React.RefObject<HTMLCanvasElement>,
     function updateScore() {
       for (const pipe of pipesRef.current) {
         if (!pipe.scored && pipe.x + PIPE_WIDTH < 100) {
-            setCurrentScore((prevScore) => {
-                const newScore = prevScore + 1;
-                setHighScore((prevHighScore) => {
-                  const updatedHighScore = Math.max(prevHighScore, newScore);
-      
-                  if (typeof window !== "undefined") {
-                    localStorage.setItem("highScore", updatedHighScore.toString());
-                  }
-                  return updatedHighScore;
-                });
-                return newScore;
-              });
+          setCurrentScore((prevScore) => {
+            const newScore = prevScore + 1;
+            setHighScore((prevHighScore) => {
+              const updatedHighScore = Math.max(prevHighScore, newScore);
+
+              if (typeof window !== "undefined") {
+                localStorage.setItem("highScore", updatedHighScore.toString());
+              }
+              return updatedHighScore;
+            });
+            return newScore;
+          });
           pipe.scored = true;
         }
       }

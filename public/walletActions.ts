@@ -111,7 +111,7 @@ function getTokenAmountFromUtxos(utxos: TxInput[], assetClass: AssetClass): bigi
   export function calculateCountdown(TimeBeginContract: number): number {
   
     const TimeNow: number = Math.floor(Date.now()); 
-    const CYCLE_DURATION = 570 // 9 minutes and 30 seconds 
+    const CYCLE_DURATION = 580 // 9 minutes and 20 seconds 
     const offsetInMs = 89680;
     const elapsedTime = TimeNow - (offsetInMs) - TimeBeginContract;
     const elapsedTimeInSeconds = elapsedTime / 1000;
@@ -217,7 +217,7 @@ function getTokenAmountFromUtxos(utxos: TxInput[], assetClass: AssetClass): bigi
    
       // const BASE_REWARD: number = 1000;  // Base reward
       // const TOTAL_SUPPLY = 10000; // Total token supply
-      const CLAIM_WINDOW = 30; // 30 seconds 
+      const CLAIM_WINDOW = 20; // 20 seconds 
 
       console.log("filteredUtxos" + filteredUtxos)
       const TimeBeginContract: number = Math.floor(new Date(Date.UTC(2024, 11, 8, 13, 45, 0)).getTime());
