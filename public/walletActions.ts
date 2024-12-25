@@ -7,46 +7,15 @@ import {
     Cip30Wallet,
     Datum,
     Assets,
-    BlockfrostV0,
-    UplcData,
     WalletHelper,
     MintingPolicyHash,
     AssetClass,
     Address,
-    TxOutputId
   } from "@hyperionbt/helios";
   import { network, getNetworkParams } from '../common/network';
-  import GameReward from '../contracts/vesting.hl'; // Ensure correct path to your contract
-import { TxIn } from "@blockfrost/blockfrost-js/lib/types/api/utils/txs";
+  import GameReward from '../contracts/GameReward.hl'; // Ensure correct path to your contract
   
   const optimize = false;
- 
-function getTokenAmountFromUtxos(utxos: TxInput[], assetClass: AssetClass): bigint {
-    let totalAmount = BigInt(0);
-  
-    utxos.forEach((utxo: TxInput) => {
-        // Assuming utxo.value is in the right format
-        const tokens = utxo.value.assets.getTokens(assetClass.mintingPolicyHash);
-        tokens.forEach(([tokenName, amount]) => {
-          totalAmount += BigInt(amount.value); // Add the amount to the total
-          });
-    });
-  
-    return totalAmount;
-  }
-  
-  function calculateReward(remainingSupply: number, totalSupply: number, baseReward: number): number {
-    const halvingThreshold = totalSupply * 0.1; // 10% of total supply as the halving threshold
-  
-    // Determine the number of halving steps
-    const halvingSteps = Math.floor((totalSupply - remainingSupply) / halvingThreshold);
-  
-    // Calculate the reward after applying halving steps
-    const reward = Math.floor(baseReward / (1 + halvingSteps));
-  
-    // Ensure the reward doesn't drop below 1
-    return reward < 1 ? 1 : reward;
-  }
   
   function pickUtxos(utxos: TxInput[], targetAmount: bigint, assetClass: AssetClass): { selected: TxInput[]; totalAmount: bigint } {
     const selected: TxInput[] = [];
@@ -85,7 +54,7 @@ function getTokenAmountFromUtxos(utxos: TxInput[], assetClass: AssetClass): bigi
   // Calculate the reward based on the time elapsed since contract deployment
   function calculateRewardInTime(TimeBeginContract: number): number {
     TimeBeginContract = TimeBeginContract / 1000;
-    const HALVING_PERIOD: number = 2592000; // 1 month in seconds (60 * 60 * 24 * 30)
+    const HALVING_PERIOD: number = 5184000; // 2 months in seconds 
     const MAX_HALVINGS: number = 5; // Limit halvings to 5 times
     const BASE_REWARD: number = 1000; // Initial reward in tokens
   
@@ -111,56 +80,14 @@ function getTokenAmountFromUtxos(utxos: TxInput[], assetClass: AssetClass): bigi
   export function calculateCountdown(TimeBeginContract: number): number {
   
     const TimeNow: number = Math.floor(Date.now()); 
-    const CYCLE_DURATION = 580 // 9 minutes and 20 seconds 
+    const CYCLE_DURATION = 580 // 9 minutes 
     const offsetInMs = 89680;
     const elapsedTime = TimeNow - (offsetInMs) - TimeBeginContract;
     const elapsedTimeInSeconds = elapsedTime / 1000;
     const positionInCycle = elapsedTimeInSeconds % CYCLE_DURATION;
   
     return positionInCycle;
-  }
-  
-  // Function to filter and pick a random TxInput with sufficient value
-  function pickRandomTxInputWithSufficientValue(
-    txInputs: TxInput[],
-    dynamicReward: bigint,
-    assetClass: AssetClass
-  ): { txInput: TxInput; tokenAmount: bigint, remainingUtxos: TxInput[] } {
-    // Filter TxInputs that have sufficient token value
-    const eligibleTxInputs = txInputs.filter((txInput: TxInput) => {
-      // Extract the tokens and check their value
-      const tokens = txInput.output.value.assets.getTokens(assetClass.mintingPolicyHash);
-      let tokenAmount = BigInt(0);
-  
-      tokens.forEach(([tokenName, amount]) => {
-        tokenAmount += BigInt(amount.value); // Add the amount to the token total
-      });
-  
-      return tokenAmount >= dynamicReward; // Check if the total token value meets or exceeds the reward
-    });
-  
-    // If there are no eligible TxInputs, throw an error
-    if (eligibleTxInputs.length === 0) {
-      throw new Error("No eligible TxInput found with sufficient token value.");
-    }
-  
-    // Pick a random TxInput from the eligible list
-    const randomIndex = Math.floor(Math.random() * eligibleTxInputs.length);
-    const selectedTxInput = eligibleTxInputs[randomIndex];
-  
-    // Calculate the token value of the selected TxInput
-    const tokens = selectedTxInput.output.value.assets.getTokens(assetClass.mintingPolicyHash);
-    let tokenAmount = BigInt(0);
-  
-    tokens.forEach(([tokenName, amount]) => {
-      tokenAmount += BigInt(amount.value); // Add the amount to the token total
-    });
-  
-    const remainingUtxos = txInputs.filter((txInput) => txInput !== selectedTxInput);
-  
-    // Return the selected TxInput and its token value
-    return { txInput: selectedTxInput, tokenAmount, remainingUtxos };
-  }
+  } 
   
   export async function claimTokens(walletAPI: any, setIsLoading: (val: boolean) => void, setTx: (val: {txId: string}) => void) {
     setIsLoading(true);
@@ -220,7 +147,8 @@ function getTokenAmountFromUtxos(utxos: TxInput[], assetClass: AssetClass): bigi
       const CLAIM_WINDOW = 20; // 20 seconds 
 
       console.log("filteredUtxos" + filteredUtxos)
-      const TimeBeginContract: number = Math.floor(new Date(Date.UTC(2024, 11, 8, 13, 45, 0)).getTime());
+      const TimeBeginContract = Math.floor(new Date(Date.UTC(2024, 11, 25, 13, 45, 0)).getTime());
+      console.log("TimeBeginContract" + TimeBeginContract)
       //const remainingSupply = getTokenAmountFromUtxos(filteredUtxos, assetClass);
       const dynamicReward = calculateRewardInTime(TimeBeginContract)
       const positionInCycle = calculateCountdown(TimeBeginContract);

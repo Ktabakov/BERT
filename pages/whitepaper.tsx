@@ -9,10 +9,10 @@ import {
     network 
   } from '../common/network';
 
-const CLAIM_WINDOW = 60; // 1 minute claim window
-const CYCLE_DURATION = 540; // 9 minutes cycle duration
-const TimeBeginContract = Math.floor(new Date(Date.UTC(2024, 11, 8, 13, 45, 0)).getTime()); 
-const Whitepaper: React.FC = () => {
+  const CLAIM_WINDOW = 20; // 1 minute claim window
+  const CYCLE_DURATION = 580; // 9 minutes cycle duration
+  const TimeBeginContract = Math.floor(new Date(Date.UTC(2024, 11, 25, 13, 45, 0)).getTime());
+  const Whitepaper: React.FC = () => {
   const [isConnected, setIsConnected] = useState(false);
   const [walletAPI, setWalletAPI] = useState<undefined | any>(undefined);
   const [walletAddress, setWalletAddress] = useState<string | null>(null);

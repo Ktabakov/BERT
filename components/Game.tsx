@@ -3,10 +3,11 @@ import { useFlappyBirdGame } from "../public/useFlappyBirdGame";
 import ClaimWindowStatus from "./ClaimWindowStatus";
 import { calculateCountdown } from "../public/walletActions";
 import Image from 'next/image'
+import { isMobile } from 'react-device-detect'; // Import isMobile
 
 const CLAIM_WINDOW = 20;
 const CYCLE_DURATION = 580;
-const TimeBeginContract = Math.floor(new Date(Date.UTC(2024, 11, 8, 13, 45, 0)).getTime());
+const TimeBeginContract = Math.floor(new Date(Date.UTC(2024, 11, 25, 13, 45, 0)).getTime());
 
 const containerStyle: CSSProperties = {
   position: "relative",
@@ -56,6 +57,18 @@ const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   const togglePause = () => setIsPaused((prev) => !prev);
 
+    // If on mobile, render only the game container
+    if (isMobile) {
+      return (
+        <div className="items-center">
+           <h1 className="highScore" >Please open Bert in the browser</h1>
+          <div id="canvas-container items-center" style={containerStyle}>
+            <canvas ref={canvasRef} style={{ width: "100%", height: "100%" }}></canvas>
+          </div>
+        </div>
+      );
+    }
+    
   return (
     <div className="content-container h-[calc(100vh-4rem)] flex-grow flex flex-col" >
       {/* 

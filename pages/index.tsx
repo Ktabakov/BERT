@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import NavBar from '../components/NavBar';  
 import FlappyBirdGame from "../components/Game";
 import { claimTokens, send } from '../public/walletActions'; 
+import { isMobile } from 'react-device-detect'; // Import isMobile
 
 import { 
   network 
@@ -25,7 +26,7 @@ const Home: NextPage = () => {
     const reconnectWallet = async () => {
       const savedWallet = localStorage.getItem("connectedWallet");
   
-      if (savedWallet && window.cardano?.[savedWallet]) {
+      if (!isMobile && savedWallet && window.cardano?.[savedWallet]) {
         try {
           const walletAPI = await window.cardano[savedWallet].enable();
           const address = await walletAPI.getChangeAddress(); // Get wallet address
@@ -91,16 +92,18 @@ const Home: NextPage = () => {
   return (
 <div className="flex flex-col h-screen">
     {/* Navigation Bar */}
-      <NavBar
-        isConnected={!!walletAPI}
-        walletAddress={walletAddress || ""}
-        onConnect={handleConnect}
-        onClaimTokens={handleClaimTokens} 
-        isInClaimWindow={isInClaimWindow}
-      />
+    {!isMobile && (
+        <NavBar
+          isConnected={!!walletAPI}
+          walletAddress={walletAddress || ""}
+          onConnect={handleConnect}
+          onClaimTokens={handleClaimTokens} 
+          isInClaimWindow={isInClaimWindow}
+        />
+      )}
   
       {/* Wallet Modal */}
-      {isWalletModalOpen && (
+      {!isMobile  && isWalletModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
             <h3 className="text-lg font-semibold text-center mb-4">
@@ -127,6 +130,7 @@ const Home: NextPage = () => {
         onClaimWindowStatusChange={(isInWindow) => setIsInClaimWindow(isInWindow)}/>
     </main>
        {/* Footer */}
+      {!isMobile && (
      <footer className="footer">
      <div className="flex justify-between items-center w-full px-4">
     {/* Left Container: Transaction Success Message */}
@@ -155,6 +159,7 @@ const Home: NextPage = () => {
     </div>
   </div>
 </footer>
+ )}
     </div>
   );
   };
