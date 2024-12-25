@@ -10,10 +10,18 @@ const app = express();
 const API_KEY = process.env.API_KEY;
 const NETWORK = process.env.NETWORK;
 
+const domainName = "localhost";
+const Ip = "192.168.1.101";
+
+const allowedOrigins = [
+  `http://${domainName}:3000`,
+  `http://${Ip}:3000`
+];
+
 app.use(cors({
-    origin: 'http://localhost:3000',
-    allowedHeaders: ['Content-Type']    // Allow headers needed for your request
-  }));
+    origin: allowedOrigins, // Allow both localhost and network IP
+    allowedHeaders: ['Content-Type'] // Allow headers needed for your request
+}));
 
   const policyId = "e16c2dc8ae937e8d3790c7fd7168d7b994621ba14ca11415f39fed72";
   const name = Buffer.from("MIN", 'utf8').toString('hex');
