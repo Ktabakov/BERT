@@ -122,12 +122,6 @@ const FlappyBirdGame: React.FC<FlappyBirdGameProps> = ({
           >
             <canvas ref={canvasRef} style={{ width: "100%", height: "100%" }} />
           </div>
-          <button
-            onClick={togglePause}
-            className="p-2 mt-2 bg-gray-200 rounded hover:bg-gray-300 transition"
-          >
-            {isPaused ? "Resume" : "Pause"}
-          </button>
         </div>
 
         {/* Right Column: Claim Window Status */}

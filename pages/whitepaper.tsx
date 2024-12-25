@@ -5,6 +5,7 @@ import { claimTokens } from "../public/walletActions";
 import WalletConnector from '../components/WalletConnector';
 import { calculateCountdown } from "../public/walletActions";
 import ErrorPopup from '../components/ErrorPopup'; 
+import InstructionsWindow from "../components/InstructionsWindow"; 
 import { 
     network 
   } from '../common/network';
@@ -23,6 +24,8 @@ import {
   const [isInClaimWindow, setIsInClaimWindow] = useState<boolean>(false);
   const [countdown, setCountdown] = useState<number>(0);
   const [error, setError] = useState<string | null>(null); // New state for error messages
+  const [isInstructionsOpen, setIsInstructionsOpen] = useState<boolean>(false);
+
 
   useEffect(() => {
     const reconnectWallet = async () => {
@@ -110,6 +113,10 @@ import {
     setIsWalletModalOpen(true);
   };
 
+  const openInstructions = () => {
+    setIsInstructionsOpen(true);
+  };
+
   return (
     <div>
       <Head>
@@ -122,7 +129,13 @@ import {
         onConnect={handleConnect}
         onClaimTokens={handleClaimTokens}
         isInClaimWindow={isInClaimWindow}
+        onHowToPlay={openInstructions} // Pass a handler to NavBar if needed
       />
+
+     {/* Instructions Window */}
+     {isInstructionsOpen && (
+        <InstructionsWindow onClose={() => setIsInstructionsOpen(false)} />
+      )}
 
       {isWalletModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

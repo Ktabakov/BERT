@@ -322,7 +322,7 @@ export function useFlappyBirdGame(
       ctx.textBaseline = "middle";
 
       ctx.fillText(
-        "Press Space or Tap to Start",
+        "Press Space to Start",
         canvas.width / 2,
         canvas.height / 2
       );
@@ -341,7 +341,7 @@ export function useFlappyBirdGame(
       ctx.fillStyle = "#ffffff";
       ctx.font = "bold 30px Arial";
       ctx.fillText(
-        "Press Space or Tap to Restart",
+        "Press Space to Restart",
         canvas.width / 2,
         canvas.height / 2 + 20
       );
