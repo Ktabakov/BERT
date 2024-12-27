@@ -18,15 +18,19 @@ config.set({ ...config, IS_TESTNET: true });
 async function getNetworkParams(network: string) {
 
     var networkParamsUrl;
-    if (network === "preview") {
-        networkParamsUrl = `http://${Ip}:3000/params/preview.json`;
-    } else if (network === "preprod") {
-        networkParamsUrl = `http://${Ip}:3000/params/preprod.json`;
-    } else if (network === "mainnet") {
-        networkParamsUrl = `http://${Ip}:3000/params/mainnet.json`;
-    } else {
-        alert("Network not set");
-        throw console.error("getNetworkParams: network not set");
+    switch(network) {
+        case "preview":
+            networkParamsUrl = `/params/preview.json`;
+            break;
+        case "preprod":
+            networkParamsUrl = `/params/preprod.json`;
+            break;
+        case "mainnet":
+            networkParamsUrl = `/params/mainnet.json`;
+            break;
+        default:
+            alert("Network not set");
+            throw new Error("getNetworkParams: network not set");
     }
 
     try {

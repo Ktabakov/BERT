@@ -108,7 +108,7 @@
   align-items: center;
   overflow: hidden; /* Prevent scrollbars */
   box-sizing: border-box;
-  background: url('../public/logos/backgroundCrypto4Tiny.webp') no-repeat center center;
+  background: url('/logos/backgroundCrypto4Tiny.webp') no-repeat center center;
   background-size: cover;
 }
 
@@ -257,16 +257,6 @@ main {
   width: 100%;
 }
 
-footer {
-  height: auto;
-  padding: 1rem;
-  background-color: #242424;
-  color: #fff;
-  text-align: center;
-  width: 100%;
-  box-sizing: border-box;
-  flex-shrink: 0; /* Prevent shrinking */
-}
 
 .flappy-game-container {
   max-height: calc(100vh - 4rem - 2rem); /* Fit between navbar and footer */
@@ -384,9 +374,6 @@ footer {
   .btn-connect {
     background-color: #3ba25f; /* A darker shade of green complementing #a2c579 */
     color: #fff;
-  }
-  .btn-connect:hover {
-    background-color: #348e54; /* Slightly darker on hover */
   }
   
   /* Cancel button in modal (red variant) */
@@ -537,7 +524,6 @@ html, body {
   position: relative;
   margin: 1rem auto;
   padding: 1.8rem;
-  width: 300px;
   text-align: center;
   background: linear-gradient(135deg, #ffecb3, #ffd580);
   border: 4px solid #5c3c92;
@@ -628,4 +614,20 @@ html, body {
 .instructions-close-button:hover {
   background-color: #4f8a9c; /* Darker shade on hover */
   transform: translateY(-2px);
+}
+
+/* Slide-down Animation */
+@keyframes slide-down {
+  from {
+    transform: translateY(-10%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.slide-down {
+  animation: slide-down 0.3s ease-out forwards;
 }

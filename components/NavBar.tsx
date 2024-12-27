@@ -1,14 +1,18 @@
-// NavBar.tsx
-import React from "react";
-import Image from 'next/image'
+// components/NavBar.tsx
+
+import React, { useState } from "react";
+import Image from 'next/image';
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'; // Ensure Heroicons v2 is installed
 
 interface NavBarProps {
   isConnected: boolean;
-  walletAddress?: string; // Add wallet address as a prop
-  onConnect: () => void; // Now just toggles main.tsx's modal
+  walletAddress?: string; // Optional wallet address
+  onConnect: () => void;
   onClaimTokens: () => void;
   isInClaimWindow: boolean;
-  onHowToPlay: () => void; // New prop for opening InstructionsWindow
+  onHowToPlay: () => void;
+  highScore?: number; // Optional High Score
+  currentScore?: number; // Optional Current Score
 }
 
 const NavBar: React.FC<NavBarProps> = ({
@@ -18,7 +22,15 @@ const NavBar: React.FC<NavBarProps> = ({
   onClaimTokens,
   isInClaimWindow,
   onHowToPlay, 
+  highScore,
+  currentScore,
 }) => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
   const truncateAddress = (address: string) => {
     if (address.length > 10) {
       return `${address.slice(0, 6)}...${address.slice(-6)}`;
@@ -29,37 +41,52 @@ const NavBar: React.FC<NavBarProps> = ({
   const isButtonDisabled = !isConnected || !isInClaimWindow;
 
   return (
-    <nav className="navContainer bg-gray-800 text-white p-4">
-      <div className="flex items-center justify-between w-full relative">
-        {/* Left Links */}
-        <div className="flex items-center space-x-4">
-          <a href="/" className="page-link text-base md:text-lg font-medium hover:text-gray-400 transition">
+    <nav className="bg-gradient-to-r from-green-500 to-green-700 text-white fixed top-0 left-0 w-full z-50 shadow-lg rounded-b-lg">
+      <div className="flex justify-between items-center h-16 px-4 sm:px-6 lg:px-8">
+        {/* Left Section: Navigation Links (Hidden on Mobile) */}
+        <div className="hidden md:flex items-center space-x-4">
+          <a href="/" className="px-3 py-2 rounded-md text-sm font-medium hover:bg-green-600 hover:text-white transition-all duration-300 ease-in-out">
             Home
           </a>
-          <a href="/whitepaper" className="page-link text-base md:text-lg font-medium hover:text-gray-400 transition">
+          <a href="/whitepaper" className="px-3 py-2 rounded-md text-sm font-medium hover:bg-green-600 hover:text-white transition-all duration-300 ease-in-out">
             Whitepaper
           </a>
-          {/* How to Play Button */}
           <button
             onClick={onHowToPlay}
-            className="btn btn-instructions text-base md:text-lg font-medium bg-green-500 hover:bg-green-600 transition px-3 py-1 rounded"
+            className="px-3 py-2 rounded-md text-sm font-medium bg-green-600 hover:bg-green-700 text-white transition-all duration-300 ease-in-out"
           >
             How to Participate
           </button>
         </div>
 
-        {/* Centered Title */}
-        <div className="absolute left-1/2 transform -translate-x-1/2">
-          <h1 className="gameTitle text-xl md:text-2xl font-bold">Bert</h1>
+        {/* Center Section: Title and Optional Scores */}
+        <div className="flex flex-col items-center flex-grow">
+          <a href="/" className="flex items-center mb-1 md:mb-0">
+            {/* Optional: Add a smaller logo here if desired */}
+            <span className="text-xl md:text-2xl font-caveat">Bert</span>
+          </a>
+          {/* Conditionally Render Scores if Provided */}
+          {(highScore !== undefined && currentScore !== undefined) && (
+            <div className="flex space-x-4">
+              <div className="text-sm md:text-base">
+                <span className="font-semibold">High Score:</span> {highScore}
+              </div>
+              <div className="text-sm md:text-base">
+                <span className="font-semibold">Current Score:</span> {currentScore}
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* Right Buttons */}
-        <div className="flex items-center space-x-3">
+        {/* Right Section: Action Buttons (Hidden on Mobile) */}
+        <div className="hidden md:flex items-center space-x-3">
           <button
             onClick={onClaimTokens}
-            className={`btn btn-claim ${
-              isButtonDisabled ? "blurred-button cursor-not-allowed opacity-50" : "bg-blue-500 hover:bg-blue-600"
-            } text-white px-4 py-2 rounded transition`}
+            className={`px-4 py-2 rounded-md text-sm font-medium ${
+              isButtonDisabled
+                ? "bg-blue-500 cursor-not-allowed opacity-50"
+                : "bg-green-600 hover:bg-green-700"
+            } text-white transition-all duration-300 ease-in-out`}
             disabled={isButtonDisabled}
           >
             Claim Tokens
@@ -67,26 +94,104 @@ const NavBar: React.FC<NavBarProps> = ({
           {!isConnected ? (
             <button
               onClick={onConnect}
-              className="btn btn-connect bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded transition"
+              className="px-4 py-2 rounded-md text-sm font-medium bg-green-600 hover:bg-green-700 text-white transition-all duration-300 ease-in-out"
             >
               Connect Wallet
             </button>
           ) : (
-            <div className="wallet-bubble flex items-center space-x-2 rounded-full border border-gray-300 p-1 pr-2 shadow hover:bg-gray-700 transition">
+            <div className="flex items-center space-x-2 rounded-full border border-green-500 p-1 pr-2 shadow hover:bg-green-600 transition-all duration-300 ease-in-out">
               <Image
-                src="/logos/transparentTestBertBubbleTiny(1).png"
-                alt="wallet avatar"
+                src="/logos/transparentTestBertBubbleTiny(1).png" // Replace with your avatar path
+                alt="Wallet Avatar"
                 className="rounded-full"
                 width={40}
                 height={40}
               />
-              <span className="text-sm text-gray-200">
+              <span className="text-sm text-white font-roboto">
                 {truncateAddress(walletAddress || "Unknown")}
               </span>
             </div>
           )}
         </div>
+
+        {/* Mobile Menu Button */}
+        <div className="flex md:hidden">
+          <button
+            onClick={toggleMobileMenu}
+            className="text-white hover:text-gray-200 focus:outline-none focus:text-gray-200 transition-all duration-300 ease-in-out"
+            aria-label="Toggle navigation menu"
+            aria-expanded={isMobileMenuOpen}
+            aria-controls="mobile-menu"
+          >
+            {isMobileMenuOpen ? (
+              <XMarkIcon className="h-6 w-6" />
+            ) : (
+              <Bars3Icon className="h-6 w-6" />
+            )}
+          </button>
+        </div>
       </div>
+
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div id="mobile-menu" className="md:hidden bg-gradient-to-r from-green-500 to-green-700 shadow-md">
+          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+            <a href="/" onClick={toggleMobileMenu} className="block px-3 py-2 rounded-md text-base font-medium hover:bg-green-600 hover:text-white transition-all duration-300 ease-in-out">
+              Home
+            </a>
+            <a href="/whitepaper" onClick={toggleMobileMenu} className="block px-3 py-2 rounded-md text-base font-medium hover:bg-green-600 hover:text-white transition-all duration-300 ease-in-out">
+              Whitepaper
+            </a>
+            <button
+              onClick={() => {
+                onHowToPlay();
+                toggleMobileMenu();
+              }}
+              className="w-full text-left px-3 py-2 rounded-md text-base font-medium bg-green-600 hover:bg-green-700 text-white transition-all duration-300 ease-in-out"
+            >
+              How to Participate
+            </button>
+            <button
+              onClick={() => {
+                onClaimTokens();
+                toggleMobileMenu();
+              }}
+              className={`w-full text-left px-3 py-2 rounded-md text-base font-medium ${
+                isButtonDisabled
+                  ? "bg-blue-500 cursor-not-allowed opacity-50"
+                  : "bg-green-600 hover:bg-green-700"
+              } text-white transition-all duration-300 ease-in-out`}
+              disabled={isButtonDisabled}
+            >
+              Claim Tokens
+            </button>
+            {!isConnected ? (
+              <button
+                onClick={() => {
+                  onConnect();
+                  toggleMobileMenu();
+                }}
+                className="w-full text-left px-3 py-2 rounded-md text-base font-medium bg-green-600 hover:bg-green-700 text-white transition-all duration-300 ease-in-out"
+              >
+                Connect Wallet
+              </button>
+            ) : (
+              <div className="flex items-center space-x-2 rounded-full border border-green-500 p-2 shadow hover:bg-green-600 transition-all duration-300 ease-in-out">
+                <Image
+                  src="/logos/transparentTestBertBubbleTiny(1).png" // Replace with your avatar path
+                  alt="Wallet Avatar"
+                  className="rounded-full"
+                  width={40}
+                  height={40}
+                />
+                <span className="text-sm text-white font-roboto">
+                  {truncateAddress(walletAddress || "Unknown")}
+                </span>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </nav>
   );
 };
