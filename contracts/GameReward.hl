@@ -20,8 +20,8 @@ enum Redeemer {
 
 const TOKEN_POLICY_ID: MintingPolicyHash = MintingPolicyHash::new(#e16c2dc8ae937e8d3790c7fd7168d7b994621ba14ca11415f39fed72)
    
-const HALVING_PERIOD: Int = 5184000  // 2 months in seconds
-const MAX_HALVINGS: Int = 5
+const HALVING_PERIOD: Int = 7776000  // 3 months in seconds
+const MAX_HALVINGS: Int = 2
 const BASE_REWARD: Int = 1000  // Initial reward in tokens
 
 func calculate_reward(current_time: Time) -> Int {
@@ -45,12 +45,8 @@ func calculate_reward(current_time: Time) -> Int {
         BASE_REWARD / 2
     } else if (halving_steps == 2) {
         BASE_REWARD / 4
-    } else if (halving_steps == 3) {
-        BASE_REWARD / 8
-    } else if (halving_steps == 4) {
-        BASE_REWARD / 16
     } else {
-        BASE_REWARD / 32
+        BASE_REWARD / 4
     }
 
 }
@@ -128,7 +124,7 @@ func main(datum: Datum, redeemer: Redeemer, ctx: ScriptContext) -> Bool {
             }
         }, 0);
 
-    current_time: Time = tx.time_range.start;  // Get current time as POSIXTime (seconds since Unix epoch)
+    current_time: Time = tx.time_range.start; 
     // Calculate dynamic reward based on the remaining supply
     dynamic_reward: Int = calculate_reward(current_time);
 

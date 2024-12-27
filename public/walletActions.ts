@@ -57,8 +57,8 @@ import {
   // Calculate the reward based on the time elapsed since contract deployment
   function calculateRewardInTime(TimeBeginContract: number): number {
     TimeBeginContract = TimeBeginContract / 1000;
-    const HALVING_PERIOD: number = 5184000; // 2 months in seconds 
-    const MAX_HALVINGS: number = 5; // Limit halvings to 5 times
+    const HALVING_PERIOD: number = 7776000; // 3 months in seconds 
+    const MAX_HALVINGS: number = 2; // Limit halvings to 2 times
     const BASE_REWARD: number = 1000; // Initial reward in tokens
   
     // Get current time in seconds
@@ -121,9 +121,10 @@ import {
 
         console.log(assetClass)
 
-      const tokenAmount = BigInt(100);
-      const tokenVal = new Value(tokenAmount);
-      const utxos = await walletHelper.pickUtxos(tokenVal);
+      // const tokenAmount = BigInt(3000000);
+      // const tokenVal = new Value(tokenAmount);
+      const utxos = await walletHelper.getUtxos();
+      console.log("utxos" + utxos);
 
       // Get change address
       const benefitiary = await walletHelper.changeAddress;
@@ -251,7 +252,7 @@ import {
       //tx.addInputs(inputFees[0]);
       console.log("We attatched everything!")
 
-      await tx.finalize(networkParams, benefitiary, utxos[1]);
+      await tx.finalize(networkParams, benefitiary, utxos);
 
       // Sign the unsigned tx to get the witness
       const signatures = await cip30WalletAPI.signTx(tx);
