@@ -18,14 +18,14 @@ const ClaimWindowStatus: React.FC<ClaimWindowStatusProps> = ({
   return (
     <div className="claim-window-status-container">
       <h2
-        className={`claim-window-status-title text-base md:text-lg ${
+        className={`claim-window-status-title text-base md:text-x3 font-bold ${
           isInClaimWindow ? "inside-window" : "outside-window"
         }`}
       >
         {isInClaimWindow ? "Inside Claim Window" : "Outside Claim Window"}
       </h2>
       <p
-        className={`claim-window-status-time text-lg md:text-xl ${
+        className={`claim-window-status-time text-lg md:text-x2 ${
           isInClaimWindow ? "inside-window" : "outside-window"
         }`}
       >

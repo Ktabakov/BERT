@@ -8,17 +8,17 @@ interface InstructionsWindowProps {
 const InstructionsWindow: React.FC<InstructionsWindowProps> = ({ onClose }) => {
   return (
     <div
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 text-lg"
       onClick={onClose} // Close when clicking on the overlay
     >
       <div
-        className="instructions-window-container"
+        className="instructions-window-container text-lg"
         onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the modal
       >
-        <h3 className="instructions-title">
+        <h3 className="instructions-title text-lg font-bold mb-4">
           How to Get Started
         </h3>
-        <ol className="instructions-list">
+        <ol className="instructions-list text-lg">
           <li>Read the whitepaper to understand the project.</li>
           <li>
             Download a wallet -{' '}

@@ -25,6 +25,7 @@ const config: Config = {
         pressStart: ['"Press Start 2P"', 'cursive'],
         roboto: ['Roboto', 'sans-serif'],
         agbalumo: ['Agbalumo', 'cursive'],
+        orbitron: ['Orbitron', 'serif']
       },
       height: {
         '128': '32rem', // Adds h-128 class

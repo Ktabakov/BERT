@@ -175,10 +175,10 @@ const Home: NextPage = () => {
       {isWalletModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-            <h3 className="text-lg font-semibold text-center mb-4">
+            <h3 className="text-lg font-bold text-center mb-4">
               Select Your Wallet
             </h3>
-            <p className="text-center mb-4">Currently, only CIP-30-compatible browser wallets are supported.</p>
+            <p className="text-lg text-center">Currently, only CIP-30-compatible browser wallets are supported.</p>
             <WalletConnector onWalletAPI={handleWalletConnect} />
             <button
               onClick={toggleWalletModal}

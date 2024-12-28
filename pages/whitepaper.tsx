@@ -1,5 +1,3 @@
-// pages/Whitepaper.tsx
-
 import React, { useState, useEffect } from "react";
 import Head from "next/head";
 import NavBar from "../components/NavBar";
@@ -146,6 +144,7 @@ const Whitepaper: React.FC = () => {
             <h3 className="text-lg font-semibold text-center mb-4">
               Select Your Wallet
             </h3>
+            <p className="text-lg text-center">Currently, only CIP-30-compatible browser wallets are supported.</p>
             <WalletConnector onWalletAPI={handleWalletConnect} />
             <button
               onClick={toggleWalletModal}
@@ -165,8 +164,15 @@ const Whitepaper: React.FC = () => {
       {/* Main Content */}
       <main className="flex-grow mt-16 p-5"> {/* Added mt-16 to account for fixed navbar height */}
         <div className="w-full max-w-screen-xl mx-auto flex-grow h-[80vh] bg-white shadow-lg border rounded-lg overflow-hidden">
+        <div className="absolute left-1/3 transform -translate-x-1/2 bg-gray-800 bg-opacity-75 text-white px-4 py-2 rounded">
+        <a href="/Whitepaper/Whitepaper.pdf" download className="underline">
+        Download
+       </a>
+      </div>
           <iframe
             src="/Whitepaper/Whitepaper.pdf#zoom=120"
+            width="100%"
+            height="800px"
             className="w-full h-full"
             style={{ border: "none" }}
             title="Whitepaper PDF"
@@ -174,15 +180,17 @@ const Whitepaper: React.FC = () => {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="footer bg-gray-800 text-white py-4 mt-auto">
-        <div className="mx-auto flex flex-wrap md:flex-nowrap justify-between items-center px-4">
+       {/* Footer (Minimized on Mobile) */}
+      <footer className="footer bg-gray-900 text-white p-1 md:p-3 text-xs md:text-sm">
+        <div className="flex flex-col md:flex-row justify-between items-center w-full px-2 md:px-4">
           {/* Left Container: Transaction Success Message */}
-          <div className="flex-1 text-left pl-4 md:pl-8">
+          <div className="flex-1 text-left pl-2 md:pl-4">
             {tx.txId && walletAPI && (
               <>
-                <h4 className="font-bold text-green-400">Transaction Success!</h4>
-                <p className="text-sm">
+                <h4 className="font-bold text-green-400">
+                  Transaction Success!
+                </h4>
+                <p>
                   <span className="font-semibold">TxId:</span>&nbsp;
                   <a
                     href={`https://${network === "mainnet" ? "" : network + "."}cexplorer.io/tx/${tx.txId}`}
@@ -197,10 +205,10 @@ const Whitepaper: React.FC = () => {
             )}
           </div>
           {/* Right Container: ADA Donation Address */}
-          <div className="flex-none text-right mt-4 md:mt-0 md:pr-8">
-            <p className="text-sm mb-1">ADA Donation Address:</p>
-            <div className="flex items-center justify-end">
-              <p className="text-xs break-all mr-2">
+          <div className="flex-none text-center md:text-right mt-2 md:mt-0 md:pr-4">
+            <p className="mb-1">ADA Donation Address:</p>
+            <div className="flex items-center justify-center md:justify-end">
+              <p className="break-all mt-2">
                 addr1q9muvfmvxaxnhsm9ekek86jj4n7pan0n3038rv9cnjgg0cxwrmddhxvxma08n5gnke2g3c2wtvy6mske29sp78jw5a8qfdt3ze
               </p>
             </div>
