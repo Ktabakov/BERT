@@ -14,6 +14,8 @@ import {
   } from "@hyperionbt/helios";
   import { network, getNetworkParams } from '../common/network';
   import GameReward from '../contracts/GameReward.hl'; // Ensure correct path to your contract
+  import pkg from '@stricahq/bip32ed25519';
+  import { blake2b } from "blakejs";
 
   const domainName = "localhost";
   const Ip = "192.168.1.101"
@@ -252,11 +254,14 @@ import {
       //tx.addInputs(inputFees[0]);
       console.log("We attatched everything!")
 
-      await tx.finalize(networkParams, benefitiary, utxos);
+      
 
+      await tx.finalize(networkParams, benefitiary, utxos);
+      console.log("dali finalizirahme?")
       // Sign the unsigned tx to get the witness
       const signatures = await cip30WalletAPI.signTx(tx);
       tx.addSignatures(signatures);
+      console.log("Dali q signirahme?")
 
       const txHash = await cip30WalletAPI.submitTx(tx);
 

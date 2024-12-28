@@ -39,6 +39,15 @@ const InstructionsWindow: React.FC<InstructionsWindowProps> = ({ onClose }) => {
             >
               Yoroi
             </a>
+            ,{' '}
+            <a
+              href="https://atomicwallet.io/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 hover:underline"
+            >
+              Atomic
+            </a>
             , or{' '}
             <a
               href="https://eternl.io/"

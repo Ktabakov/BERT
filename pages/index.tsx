@@ -114,6 +114,7 @@ const Home: NextPage = () => {
         setError("No more tokens to claim. Game Over!");
       } else {
         setError("Something went wrong. Please try again.");
+        console.log(err.message);
       }
     }
   };
@@ -177,6 +178,7 @@ const Home: NextPage = () => {
             <h3 className="text-lg font-semibold text-center mb-4">
               Select Your Wallet
             </h3>
+            <p className="text-center mb-4">Currently, only CIP-30-compatible browser wallets are supported.</p>
             <WalletConnector onWalletAPI={handleWalletConnect} />
             <button
               onClick={toggleWalletModal}

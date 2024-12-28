@@ -8,9 +8,6 @@ export {
     network
 }
 
-const domainName = "localhost";
-const Ip = "192.168.1.101";
-
 // Define Cardano network
 const network = "preprod"
 config.set({ ...config, IS_TESTNET: true });

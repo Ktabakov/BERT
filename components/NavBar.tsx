@@ -45,15 +45,15 @@ const NavBar: React.FC<NavBarProps> = ({
       <div className="flex justify-between items-center h-16 px-4 sm:px-6 lg:px-8">
         {/* Left Section: Navigation Links (Hidden on Mobile) */}
         <div className="hidden md:flex items-center space-x-4">
-          <a href="/" className="px-3 py-2 rounded-md text-sm font-medium hover:bg-green-600 hover:text-white transition-all duration-300 ease-in-out">
+          <a href="/" className="px-3 py-2 rounded-md text-base font-medium hover:bg-green-600 hover:text-white transition-all duration-300 ease-in-out">
             Home
           </a>
-          <a href="/whitepaper" className="px-3 py-2 rounded-md text-sm font-medium hover:bg-green-600 hover:text-white transition-all duration-300 ease-in-out">
+          <a href="/whitepaper" className="px-3 py-2 rounded-md ttext-base font-medium hover:bg-green-600 hover:text-white transition-all duration-300 ease-in-out">
             Whitepaper
           </a>
           <button
             onClick={onHowToPlay}
-            className="px-3 py-2 rounded-md text-sm font-medium bg-green-600 hover:bg-green-700 text-white transition-all duration-300 ease-in-out"
+            className="px-3 py-2 rounded-md text-base font-medium bg-green-600 hover:bg-green-700 text-white transition-all duration-300 ease-in-out"
           >
             How to Participate
           </button>
@@ -63,15 +63,15 @@ const NavBar: React.FC<NavBarProps> = ({
         <div className="flex flex-col items-center flex-grow">
           <a href="/" className="flex items-center mb-1 md:mb-0">
             {/* Optional: Add a smaller logo here if desired */}
-            <span className="text-xl md:text-2xl font-caveat">Bert</span>
+            <span className="text-xl md:text-3xl">Bert</span>
           </a>
           {/* Conditionally Render Scores if Provided */}
           {(highScore !== undefined && currentScore !== undefined) && (
             <div className="flex space-x-4">
-              <div className="text-sm md:text-base">
+              <div className="text-base md:text-base">
                 <span className="font-semibold">High Score:</span> {highScore}
               </div>
-              <div className="text-sm md:text-base">
+              <div className="text-base md:text-base">
                 <span className="font-semibold">Current Score:</span> {currentScore}
               </div>
             </div>
@@ -82,7 +82,7 @@ const NavBar: React.FC<NavBarProps> = ({
         <div className="hidden md:flex items-center space-x-3">
           <button
             onClick={onClaimTokens}
-            className={`px-4 py-2 rounded-md text-sm font-medium ${
+            className={`px-4 py-2 rounded-md text-base font-medium ${
               isButtonDisabled
                 ? "bg-blue-500 cursor-not-allowed opacity-50"
                 : "bg-green-600 hover:bg-green-700"
@@ -94,7 +94,7 @@ const NavBar: React.FC<NavBarProps> = ({
           {!isConnected ? (
             <button
               onClick={onConnect}
-              className="px-4 py-2 rounded-md text-sm font-medium bg-green-600 hover:bg-green-700 text-white transition-all duration-300 ease-in-out"
+              className="px-4 py-2 rounded-md text-base font-medium bg-green-600 hover:bg-green-700 text-white transition-all duration-300 ease-in-out"
             >
               Connect Wallet
             </button>
@@ -107,7 +107,7 @@ const NavBar: React.FC<NavBarProps> = ({
                 width={40}
                 height={40}
               />
-              <span className="text-sm text-white font-roboto">
+              <span className="text-base text-white font-roboto">
                 {truncateAddress(walletAddress || "Unknown")}
               </span>
             </div>
@@ -172,7 +172,7 @@ const NavBar: React.FC<NavBarProps> = ({
                   toggleMobileMenu();
                 }}
                 className="w-full text-left px-3 py-2 rounded-md text-base font-medium bg-green-600 hover:bg-green-700 text-white transition-all duration-300 ease-in-out"
-              >
+              > 
                 Connect Wallet
               </button>
             ) : (
@@ -181,10 +181,10 @@ const NavBar: React.FC<NavBarProps> = ({
                   src="/logos/transparentTestBertBubbleTiny(1).png" // Replace with your avatar path
                   alt="Wallet Avatar"
                   className="rounded-full"
-                  width={40}
-                  height={40}
+                  width={25}
+                  height={25}
                 />
-                <span className="text-sm text-white font-roboto">
+                <span className="text-sm text-white">
                   {truncateAddress(walletAddress || "Unknown")}
                 </span>
               </div>
