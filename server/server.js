@@ -14,8 +14,8 @@ const domainName = "localhost";
 const Ip = "145.223.101.225";
 
 const allowedOrigins = [
-  `http://${domainName}:3000`,
-  `http://${Ip}:3000`
+  `https://claimbert.com/`,
+  `https://${Ip}:3000`
 ];
 
 app.use(cors({

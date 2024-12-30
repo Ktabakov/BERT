@@ -379,7 +379,7 @@ import {
   }
     
   async function fetchUtxos(scriptAddress: string): Promise<TxInput[]> {
-    const response = await fetch(`http://${Ip}:3001/api/getUtxos`, {
+    const response = await fetch(`https://claimbert.com/api/getUtxos`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ scriptAddress }),
