@@ -1,5 +1,4 @@
 import dotenv from 'dotenv';
-import cors from 'cors';
 import express from 'express';
 import { BlockfrostV0, Address, AssetClass, MintingPolicyHash } from '@hyperionbt/helios';
 
@@ -10,25 +9,12 @@ const app = express();
 const API_KEY = process.env.API_KEY;
 const NETWORK = process.env.NETWORK;
 
-const domainName = "localhost";
-const Ip = "145.223.101.225";
-
-const allowedOrigins = [
-  `https://claimbert.com/`,
-  `https://${Ip}:3000`
-];
-
-app.use(cors({
-    origin: allowedOrigins, // Allow both localhost and network IP
-    allowedHeaders: ['Content-Type'] // Allow headers needed for your request
-}));
-
   const policyId = "e16c2dc8ae937e8d3790c7fd7168d7b994621ba14ca11415f39fed72";
   const name = Buffer.from("MIN", 'utf8').toString('hex');
 
   // const policyId = "";
   // const name = Buffer.from("", 'utf8').toString('hex');
-  
+
   const mph = MintingPolicyHash.fromHex(policyId);
 
   const assetClass = new AssetClass({
