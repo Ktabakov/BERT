@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Image from 'next/image';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'; // Ensure Heroicons v2 is installed
+import Link from 'next/link';
 
 interface NavBarProps {
   isConnected: boolean;
@@ -45,12 +46,12 @@ const NavBar: React.FC<NavBarProps> = ({
       <div className="flex justify-between items-center h-16 px-4 sm:px-6 lg:px-8">
         {/* Left Section: Navigation Links (Hidden on Mobile) */}
         <div className="hidden md:flex items-center space-x-4">
-          <a href="/" className="px-3 py-2 rounded-md text-base font-medium hover:bg-green-600 hover:text-white transition-all duration-300 ease-in-out">
+          <Link href="/" className="px-3 py-2 rounded-md text-base font-medium hover:bg-green-600 hover:text-white transition-all duration-300 ease-in-out">
             Home
-          </a>
-          <a href="/whitepaper" className="px-3 py-2 rounded-md ttext-base font-medium hover:bg-green-600 hover:text-white transition-all duration-300 ease-in-out">
+          </Link>
+          <Link href="/whitepaper" className="px-3 py-2 rounded-md ttext-base font-medium hover:bg-green-600 hover:text-white transition-all duration-300 ease-in-out">
             Whitepaper
-          </a>
+          </Link>
           <button
             onClick={onHowToPlay}
             className="px-3 py-2 rounded-md text-base font-medium bg-green-600 hover:bg-green-700 text-white transition-all duration-300 ease-in-out"
@@ -61,10 +62,10 @@ const NavBar: React.FC<NavBarProps> = ({
 
         {/* Center Section: Title and Optional Scores */}
         <div className="flex flex-col items-center flex-grow">
-          <a href="/" className="flex items-center mb-1 md:mb-0">
+          <Link href="/" className="flex items-center mb-1 md:mb-0">
             {/* Optional: Add a smaller logo here if desired */}
             <span className="text-xl md:text-3xl">Bert</span>
-          </a>
+          </Link>
           {/* Conditionally Render Scores if Provided */}
           {(highScore !== undefined && currentScore !== undefined) && (
             <div className="flex space-x-4">
@@ -136,12 +137,19 @@ const NavBar: React.FC<NavBarProps> = ({
       {isMobileMenuOpen && (
         <div id="mobile-menu" className="md:hidden bg-gradient-to-r from-green-500 to-green-700 shadow-md">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <a href="/" onClick={toggleMobileMenu} className="block px-3 py-2 rounded-md text-base font-medium hover:bg-green-600 hover:text-white transition-all duration-300 ease-in-out">
+            <Link 
+              href="/"
+              onClick={toggleMobileMenu} 
+              className="block px-3 py-2 rounded-md text-base font-medium hover:bg-green-600 hover:text-white transition-all duration-300 ease-in-out">
               Home
-            </a>
-            <a href="/whitepaper" onClick={toggleMobileMenu} className="block px-3 py-2 rounded-md text-base font-medium hover:bg-green-600 hover:text-white transition-all duration-300 ease-in-out">
+            </Link>
+            <Link
+              href="/whitepaper"
+              onClick={toggleMobileMenu}
+              className="block px-3 py-2 rounded-md text-base font-medium hover:bg-green-600 hover:text-white transition-all duration-300 ease-in-out"
+            >
               Whitepaper
-            </a>
+            </Link>
             <button
               onClick={() => {
                 onHowToPlay();

@@ -34,6 +34,7 @@ const Home: NextPage = () => {
   const [highScore, setHighScore] = useState<number>(0);
   const [currentScore, setCurrentScore] = useState<number>(0);
   const [isConnected, setIsConnected] = useState(false);
+  const [claimedTokens, setClaimedTokens] = useState<number | undefined>(0);
 
   // Reconnect wallet on component mount
   useEffect(() => {
@@ -245,7 +246,7 @@ const Home: NextPage = () => {
                 <p>
                   <span className="font-semibold">TxId:</span>&nbsp;
                   <a
-                    href={`https://${network === "mainnet" ? "" : network + "."}cexplorer.io/tx/${tx.txId}`}
+                    href={`${network + "."}cexplorer.io/tx/${tx.txId}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-400 underline break-all"

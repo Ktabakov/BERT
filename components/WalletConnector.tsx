@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Image from 'next/image';
 
 /**
  * CIP-30: Provides the global "cardano" object if wallets are injecting it.
@@ -97,7 +98,7 @@ const WalletConnector: React.FC<WalletConnectorProps> = ({ onWalletAPI }) => {
                 isAvailable ? "" : "opacity-50 cursor-not-allowed"
               }`}
             >
-              <img
+              <Image
                 src={logo}
                 alt={label}
                 className="w-12 h-12 mb-2"
