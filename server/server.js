@@ -28,7 +28,7 @@ app.use(cors({
 
   // const policyId = "";
   // const name = Buffer.from("", 'utf8').toString('hex');
-
+  
   const mph = MintingPolicyHash.fromHex(policyId);
 
   const assetClass = new AssetClass({
