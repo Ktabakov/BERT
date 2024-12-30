@@ -101,6 +101,8 @@ const WalletConnector: React.FC<WalletConnectorProps> = ({ onWalletAPI }) => {
               <Image
                 src={logo}
                 alt={label}
+                width={12}
+                height={12}
                 className="w-12 h-12 mb-2"
                 style={{ objectFit: "contain" }}
               />

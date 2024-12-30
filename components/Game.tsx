@@ -36,8 +36,7 @@ const FlappyBirdGame: React.FC<FlappyBirdGameProps> = ({
   return (
     <div
       id="canvas-container"
-      onTouchStart={() => {
-        handleUserInput();
+      onTouchStart={() => {        handleUserInput();
         onUserInput();
       }}
  

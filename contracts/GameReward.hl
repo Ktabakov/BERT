@@ -22,7 +22,7 @@ const TOKEN_POLICY_ID: MintingPolicyHash = MintingPolicyHash::new(#e16c2dc8ae937
    
 const HALVING_PERIOD: Int = 7776000  // 3 months in seconds
 const MAX_HALVINGS: Int = 2
-const BASE_REWARD: Int = 1000  // Initial reward in tokens
+const BASE_REWARD: Int = 10000  // Initial reward in tokens
 
 func calculate_reward(current_time: Time) -> Int {
     // Start contract at 
@@ -51,7 +51,7 @@ func calculate_reward(current_time: Time) -> Int {
 
 }
 
-const CLAIM_WINDOW: Int = 580 
+const CLAIM_WINDOW: Int = 20 
 const CYCLE_DURATION: Int = 580 
 
 func IsClaimWindow(current_time: Time) -> Bool {

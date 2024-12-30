@@ -14,11 +14,9 @@ import {
   } from "@hyperionbt/helios";
   import { network, getNetworkParams } from '../common/network';
   import GameReward from '../contracts/GameReward.hl'; // Ensure correct path to your contract
-  import pkg from '@stricahq/bip32ed25519';
-  import { blake2b } from "blakejs";
 
   const domainName = "localhost";
-  const Ip = "192.168.1.101"
+  const Ip = "145.223.101.225"
   
   const optimize = false;
   
@@ -61,7 +59,7 @@ import {
     TimeBeginContract = TimeBeginContract / 1000;
     const HALVING_PERIOD: number = 7776000; // 3 months in seconds 
     const MAX_HALVINGS: number = 2; // Limit halvings to 2 times
-    const BASE_REWARD: number = 1000; // Initial reward in tokens
+    const BASE_REWARD: number = 10000; // Initial reward in tokens
   
     // Get current time in seconds
     const TimeNow: number = Math.floor(Date.now() / 1000); 
@@ -148,7 +146,6 @@ import {
       if (filteredUtxos.length == 0)
         throw new Error("No more tokens to claim. Game Over!");
    
-      // const BASE_REWARD: number = 1000;  // Base reward
       // const TOTAL_SUPPLY = 10000; // Total token supply
       const CLAIM_WINDOW = 20; // 20 seconds 
 
@@ -314,7 +311,7 @@ import {
       // ]))
 
 
-      const testValueScript = new Assets([[assetClass, BigInt(10000)]]);
+      const testValueScript = new Assets([[assetClass, BigInt(325500)]]);
 
 
       // Get wallet UTXOs

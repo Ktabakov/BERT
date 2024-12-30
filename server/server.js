@@ -11,7 +11,7 @@ const API_KEY = process.env.API_KEY;
 const NETWORK = process.env.NETWORK;
 
 const domainName = "localhost";
-const Ip = "192.168.1.101";
+const Ip = "145.223.101.225";
 
 const allowedOrigins = [
   `http://${domainName}:3000`,
