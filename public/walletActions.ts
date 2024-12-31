@@ -376,7 +376,7 @@ import {
   }
     
   async function fetchUtxos(scriptAddress: string): Promise<TxInput[]> {
-    const response = await fetch(`/getUtxos`, {
+    const response = await fetch(`/api/getUtxos`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ scriptAddress }),

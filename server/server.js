@@ -26,7 +26,7 @@ const NETWORK = process.env.NETWORK;
 // Middleware to parse JSON
 app.use(express.json());
 
-app.post('/getUtxos', async (req, res) => {
+app.post('/api/getUtxos', async (req, res) => {
     console.log('POST /getUtxos called');
 
   try {
