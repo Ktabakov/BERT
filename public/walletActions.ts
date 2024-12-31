@@ -82,7 +82,6 @@ import {
   export function calculateCountdown(): number {
   
     const TimeBeginContract = Math.floor(new Date(Date.UTC(2024, 11, 25, 13, 45, 0)).getTime());
-    console.log("TimeBeginContract" + TimeBeginContract)
 
     const TimeNow: number = Math.floor(Date.now()); 
     const CYCLE_DURATION = 580 // 9 minutes 
