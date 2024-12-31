@@ -27,7 +27,7 @@ const NETWORK = process.env.NETWORK;
 app.use(express.json());
 
 app.post('/api/getUtxos', async (req, res) => {
-    console.log('POST /getUtxos called');
+    console.log('POST /api/getUtxos called');
 
   try {
     const { scriptAddress } = req.body;
