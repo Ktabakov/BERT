@@ -14,9 +14,6 @@ import {
   } from "@hyperionbt/helios";
   import { network, getNetworkParams } from '../common/network';
   import GameReward from '../contracts/GameReward.hl'; // Ensure correct path to your contract
-
-  const domainName = "localhost";
-  const Ip = "145.223.101.225"
   
   const optimize = false;
   
@@ -379,7 +376,7 @@ import {
   }
     
   async function fetchUtxos(scriptAddress: string): Promise<TxInput[]> {
-    const response = await fetch(`/api/getUtxos`, {
+    const response = await fetch(`/getUtxos`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ scriptAddress }),
