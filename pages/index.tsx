@@ -15,11 +15,6 @@ import { network } from '../common/network';
 const CLAIM_WINDOW = 20; // 20 seconds claim window (adjust as needed)
 const CYCLE_DURATION = 580; // 580 seconds cycle duration
 
-// Example date/time in UTC: 25 Dec 2024, 13:45
-const TimeBeginContract = Math.floor(
-  new Date(Date.UTC(2024, 11, 25, 13, 45, 0)).getTime() / 1000
-);
-
 const Home: NextPage = () => {
   const [isInstructionsOpen, setIsInstructionsOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -61,7 +56,7 @@ const Home: NextPage = () => {
   // Manage Claim Window Status
   useEffect(() => {
     const updateClaimWindowStatus = () => {
-      const position = calculateCountdown(TimeBeginContract);
+      const position = calculateCountdown();
       const insideWindow = position < CLAIM_WINDOW;
       setIsInClaimWindow(insideWindow);
 

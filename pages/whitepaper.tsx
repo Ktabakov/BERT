@@ -9,7 +9,6 @@ import { network } from '../common/network';
 
 const CLAIM_WINDOW = 20; // 20 seconds claim window (adjust as needed)
 const CYCLE_DURATION = 580; // 580 seconds cycle duration
-const TimeBeginContract = Math.floor(new Date(Date.UTC(2024, 11, 25, 13, 45, 0)).getTime() / 1000); // Corrected to seconds
 
 const Whitepaper: React.FC = () => {
   const [isConnected, setIsConnected] = useState(false);
@@ -36,8 +35,7 @@ const Whitepaper: React.FC = () => {
           setWalletAddress(address);
 
           const updateClaimWindowStatus = () => {
-            const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
-            const positionInCycle = calculateCountdown(TimeBeginContract);
+            const positionInCycle = calculateCountdown();
             setIsInClaimWindow(positionInCycle < CLAIM_WINDOW);
             setCountdown(
               positionInCycle < CLAIM_WINDOW

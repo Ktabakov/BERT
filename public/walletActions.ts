@@ -52,8 +52,10 @@ import {
   }
   
   // Calculate the reward based on the time elapsed since contract deployment
-  function calculateRewardInTime(TimeBeginContract: number): number {
-    TimeBeginContract = TimeBeginContract / 1000;
+  function calculateRewardInTime(): number {
+    const TimeBeginContract = Math.floor(new Date(Date.UTC(2024, 11, 25, 13, 45, 0)).getTime()) / 1000;
+    console.log("TimeBeginContract" + TimeBeginContract)
+
     const HALVING_PERIOD: number = 7776000; // 3 months in seconds 
     const MAX_HALVINGS: number = 2; // Limit halvings to 2 times
     const BASE_REWARD: number = 10000; // Initial reward in tokens
@@ -77,8 +79,11 @@ import {
      return reward < 1 ? 1 : reward;
   }
   
-  export function calculateCountdown(TimeBeginContract: number): number {
+  export function calculateCountdown(): number {
   
+    const TimeBeginContract = Math.floor(new Date(Date.UTC(2024, 11, 25, 13, 45, 0)).getTime());
+    console.log("TimeBeginContract" + TimeBeginContract)
+
     const TimeNow: number = Math.floor(Date.now()); 
     const CYCLE_DURATION = 580 // 9 minutes 
     const offsetInMs = 89680;
@@ -147,11 +152,10 @@ import {
       const CLAIM_WINDOW = 20; // 20 seconds 
 
       console.log("filteredUtxos" + filteredUtxos)
-      const TimeBeginContract = Math.floor(new Date(Date.UTC(2024, 11, 25, 13, 45, 0)).getTime());
-      console.log("TimeBeginContract" + TimeBeginContract)
+
       //const remainingSupply = getTokenAmountFromUtxos(filteredUtxos, assetClass);
-      const dynamicReward = calculateRewardInTime(TimeBeginContract)
-      const positionInCycle = calculateCountdown(TimeBeginContract);
+      const dynamicReward = calculateRewardInTime()
+      const positionInCycle = calculateCountdown();
       console.log("positionInCycle" + positionInCycle);
       window.onerror = () => positionInCycle < CLAIM_WINDOW;
       //const dynamicReward = calculateReward(Number(remainingSupply), TOTAL_SUPPLY, BASE_REWARD);
