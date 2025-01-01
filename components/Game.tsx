@@ -49,7 +49,7 @@ const FlappyBirdGame: React.FC<FlappyBirdGameProps> = ({
           max-w-xs sm:max-w-sm md:max-w-[360px]
           max-h-xs sm:max-h-sm md:max-h-[640px]
           h-full
-          aspect-[9/14]
+          aspect-[9/13]
           mx-auto
         "
       >

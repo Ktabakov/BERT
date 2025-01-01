@@ -220,11 +220,10 @@ const Home: NextPage = () => {
           </div>
         </div>
       </main>
-
       {/* Footer */}
       <footer className="footer bg-gray-900 text-white p-2 md:p-4 text-xs md:text-sm flex-shrink-0">
-        <div className="flex flex-col md:flex-row justify-between items-center w-full px-2 md:px-4">
-        {/* Left: Transaction Success Message */}
+        <div className="flex flex-col md:flex-row items-center w-full px-2 md:px-4">
+          {/* Left: Transaction Success Message */}
           <div className="flex-1 text-left pl-2 md:pl-4">
             {tx.txId && walletAPI && (
               <>
@@ -243,8 +242,30 @@ const Home: NextPage = () => {
               </>
             )}
           </div>
+
+          {/* Middle: Twitter (X) Link */}
+          <div className="flex-none mx-auto mt-2 md:mt-0">
+            <a
+              href="https://x.com/CardanoBert" // Replace with your actual Twitter (X) URL
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center space-x-2"
+              aria-label="Follow us on Twitter"
+            >
+              {/* Using SVG directly for the Twitter (X) icon */}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 text-blue-500"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+              <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865z"/>
+              </svg>
+            </a>
+          </div>
+
           {/* Right: Donation Address */}
-          <div className="flex-none text-center md:text-right mt-2 md:mt-0 md:pr-4">
+          <div className="flex-1 text-center md:text-right mt-2 md:mt-0 md:pr-4">
             <p className="mb-1">ADA Donation Address:</p>
             <div className="flex items-center justify-center md:justify-end">
               <p className="break-all mr-2">
