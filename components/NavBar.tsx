@@ -1,5 +1,5 @@
 // components/NavBar.tsx
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Image from 'next/image';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'; 
 import Link from 'next/link';
@@ -26,6 +26,10 @@ const NavBar: React.FC<NavBarProps> = ({
   currentScore,
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
+  
+  // References for the mobile menu and the menu button
+  const menuRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -39,6 +43,37 @@ const NavBar: React.FC<NavBarProps> = ({
   };
 
   const isButtonDisabled = !isConnected || !isInClaimWindow;
+
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent | TouchEvent) => {
+      // If menu is not open, no need to do anything
+      if (!isMobileMenuOpen) return;
+
+      // If the click is on the button, toggle the menu (handled by button's onClick)
+      if (buttonRef.current && buttonRef.current.contains(event.target as Node)) {
+        return;
+      }
+
+      // If the click is inside the menu, do nothing
+      if (menuRef.current && menuRef.current.contains(event.target as Node)) {
+        return;
+      }
+
+      // Otherwise, close the menu
+      setIsMobileMenuOpen(false);
+    };
+
+    // Attach the listeners
+    document.addEventListener("mousedown", handleOutsideClick);
+    document.addEventListener("touchstart", handleOutsideClick);
+
+    // Cleanup the listeners on unmount
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+      document.removeEventListener("touchstart", handleOutsideClick);
+    };
+  }, [isMobileMenuOpen]);
 
   return (
     <nav className="bg-gradient-to-r from-green-500 to-green-700 text-white fixed top-0 left-0 w-full z-50 shadow-lg rounded-b-lg">
@@ -122,6 +157,7 @@ const NavBar: React.FC<NavBarProps> = ({
         <div className="flex md:hidden">
           <button
             onClick={toggleMobileMenu}
+            ref={buttonRef} // Attach the buttonRef to the menu button
             className="text-white hover:text-gray-200 focus:outline-none transition-all"
             aria-label="Toggle navigation menu"
             aria-expanded={isMobileMenuOpen}
@@ -138,18 +174,22 @@ const NavBar: React.FC<NavBarProps> = ({
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div id="mobile-menu" className="md:hidden bg-gradient-to-r from-green-500 to-green-700 shadow-md">
+        <div
+          ref={menuRef} // Attach the menuRef to the mobile menu container
+          id="mobile-menu"
+          className="absolute top-full left-0 w-full bg-gradient-to-r from-green-500 to-green-700 shadow-md"
+        >
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             <Link
               href="/"
-              onClick={toggleMobileMenu}
+              onClick={() => setIsMobileMenuOpen(false)}
               className="block px-3 py-2 rounded-md text-base font-medium hover:bg-green-600 transition-all"
             >
               Home
             </Link>
             <Link
               href="/whitepaper"
-              onClick={toggleMobileMenu}
+              onClick={() => setIsMobileMenuOpen(false)}
               className="block px-3 py-2 rounded-md text-base font-medium hover:bg-green-600 transition-all"
             >
               Whitepaper
@@ -157,7 +197,7 @@ const NavBar: React.FC<NavBarProps> = ({
             <button
               onClick={() => {
                 onHowToPlay();
-                toggleMobileMenu();
+                setIsMobileMenuOpen(false);
               }}
               className="w-full text-left px-3 py-2 rounded-md text-base font-medium bg-green-600 hover:bg-green-700 text-white transition-all"
             >
@@ -166,7 +206,7 @@ const NavBar: React.FC<NavBarProps> = ({
             <button
               onClick={() => {
                 onClaimTokens();
-                toggleMobileMenu();
+                setIsMobileMenuOpen(false);
               }}
               className={`w-full text-left px-3 py-2 rounded-md text-base font-medium ${
                 isButtonDisabled
@@ -181,7 +221,7 @@ const NavBar: React.FC<NavBarProps> = ({
               <button
                 onClick={() => {
                   onConnect();
-                  toggleMobileMenu();
+                  setIsMobileMenuOpen(false);
                 }}
                 className="w-full text-left px-3 py-2 rounded-md text-base font-medium bg-green-600 hover:bg-green-700 text-white transition-all"
               >
