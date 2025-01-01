@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss'
+import aspectRatio from '@tailwindcss/aspect-ratio';
 
 const config: Config = {
   content: [
@@ -13,6 +14,9 @@ const config: Config = {
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
+      plugins: [
+        aspectRatio,
+      ],
       colors: {
         primary: '#5c3c92', // Matching border color
         accent: '#61a3ba',  // Accent color
@@ -38,6 +42,5 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
 }
 export default config

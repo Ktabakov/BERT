@@ -1,8 +1,7 @@
 // components/NavBar.tsx
-
 import React, { useState } from "react";
 import Image from 'next/image';
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'; // Ensure Heroicons v2 is installed
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'; 
 import Link from 'next/link';
 
 interface NavBarProps {
@@ -12,8 +11,8 @@ interface NavBarProps {
   onClaimTokens: () => void;
   isInClaimWindow: boolean;
   onHowToPlay: () => void;
-  highScore?: number; // Optional High Score
-  currentScore?: number; // Optional Current Score
+  highScore?: number; // Optional
+  currentScore?: number; // Optional
 }
 
 const NavBar: React.FC<NavBarProps> = ({
@@ -22,7 +21,7 @@ const NavBar: React.FC<NavBarProps> = ({
   onConnect,
   onClaimTokens,
   isInClaimWindow,
-  onHowToPlay, 
+  onHowToPlay,
   highScore,
   currentScore,
 }) => {
@@ -44,42 +43,46 @@ const NavBar: React.FC<NavBarProps> = ({
   return (
     <nav className="bg-gradient-to-r from-green-500 to-green-700 text-white fixed top-0 left-0 w-full z-50 shadow-lg rounded-b-lg">
       <div className="flex justify-between items-center h-16 px-4 sm:px-6 lg:px-8">
-        {/* Left Section: Navigation Links (Hidden on Mobile) */}
+        {/* Left: Desktop links */}
         <div className="hidden md:flex items-center space-x-4">
-          <Link href="/" className="px-3 py-2 rounded-md text-base font-medium hover:bg-green-600 hover:text-white transition-all duration-300 ease-in-out">
+          <Link
+            href="/"
+            className="px-3 py-2 rounded-md text-base font-medium hover:bg-green-600 transition-all"
+          >
             Home
           </Link>
-          <Link href="/whitepaper" className="px-3 py-2 rounded-md ttext-base font-medium hover:bg-green-600 hover:text-white transition-all duration-300 ease-in-out">
+          <Link
+            href="/whitepaper"
+            className="px-3 py-2 rounded-md text-base font-medium hover:bg-green-600 transition-all"
+          >
             Whitepaper
           </Link>
           <button
             onClick={onHowToPlay}
-            className="px-3 py-2 rounded-md text-base font-medium bg-green-600 hover:bg-green-700 text-white transition-all duration-300 ease-in-out"
+            className="px-3 py-2 rounded-md text-base font-medium bg-green-600 hover:bg-green-700 transition-all"
           >
             How to Participate
           </button>
         </div>
 
-        {/* Center Section: Title and Optional Scores */}
+        {/* Center: Title + Optional Scores */}
         <div className="flex flex-col items-center flex-grow">
           <Link href="/" className="flex items-center mb-1 md:mb-0">
-            {/* Optional: Add a smaller logo here if desired */}
             <span className="text-xl md:text-3xl">Bert</span>
           </Link>
-          {/* Conditionally Render Scores if Provided */}
           {(highScore !== undefined && currentScore !== undefined) && (
             <div className="flex space-x-4">
-              <div className="text-base md:text-base">
+              <div className="text-base">
                 <span className="font-semibold">High Score:</span> {highScore}
               </div>
-              <div className="text-base md:text-base">
+              <div className="text-base">
                 <span className="font-semibold">Current Score:</span> {currentScore}
               </div>
             </div>
           )}
         </div>
 
-        {/* Right Section: Action Buttons (Hidden on Mobile) */}
+        {/* Right: Desktop Buttons */}
         <div className="hidden md:flex items-center space-x-3">
           <button
             onClick={onClaimTokens}
@@ -87,7 +90,7 @@ const NavBar: React.FC<NavBarProps> = ({
               isButtonDisabled
                 ? "bg-blue-500 cursor-not-allowed opacity-50"
                 : "bg-green-600 hover:bg-green-700"
-            } text-white transition-all duration-300 ease-in-out`}
+            } text-white transition-all`}
             disabled={isButtonDisabled}
           >
             Claim Tokens
@@ -95,14 +98,14 @@ const NavBar: React.FC<NavBarProps> = ({
           {!isConnected ? (
             <button
               onClick={onConnect}
-              className="px-4 py-2 rounded-md text-base font-medium bg-green-600 hover:bg-green-700 text-white transition-all duration-300 ease-in-out"
+              className="px-4 py-2 rounded-md text-base font-medium bg-green-600 hover:bg-green-700 text-white transition-all"
             >
               Connect Wallet
             </button>
           ) : (
-            <div className="flex items-center space-x-2 rounded-full border border-green-500 p-1 pr-2 shadow hover:bg-green-600 transition-all duration-300 ease-in-out">
+            <div className="flex items-center space-x-2 rounded-full border border-green-500 p-1 pr-2 shadow hover:bg-green-600 transition-all">
               <Image
-                src="/logos/transparentTestBertBubbleTiny(1).png" // Replace with your avatar path
+                src="/logos/transparentTestBertBubbleTiny(1).png" 
                 alt="Wallet Avatar"
                 className="rounded-full"
                 width={40}
@@ -119,7 +122,7 @@ const NavBar: React.FC<NavBarProps> = ({
         <div className="flex md:hidden">
           <button
             onClick={toggleMobileMenu}
-            className="text-white hover:text-gray-200 focus:outline-none focus:text-gray-200 transition-all duration-300 ease-in-out"
+            className="text-white hover:text-gray-200 focus:outline-none transition-all"
             aria-label="Toggle navigation menu"
             aria-expanded={isMobileMenuOpen}
             aria-controls="mobile-menu"
@@ -137,16 +140,17 @@ const NavBar: React.FC<NavBarProps> = ({
       {isMobileMenuOpen && (
         <div id="mobile-menu" className="md:hidden bg-gradient-to-r from-green-500 to-green-700 shadow-md">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <Link 
+            <Link
               href="/"
-              onClick={toggleMobileMenu} 
-              className="block px-3 py-2 rounded-md text-base font-medium hover:bg-green-600 hover:text-white transition-all duration-300 ease-in-out">
+              onClick={toggleMobileMenu}
+              className="block px-3 py-2 rounded-md text-base font-medium hover:bg-green-600 transition-all"
+            >
               Home
             </Link>
             <Link
               href="/whitepaper"
               onClick={toggleMobileMenu}
-              className="block px-3 py-2 rounded-md text-base font-medium hover:bg-green-600 hover:text-white transition-all duration-300 ease-in-out"
+              className="block px-3 py-2 rounded-md text-base font-medium hover:bg-green-600 transition-all"
             >
               Whitepaper
             </Link>
@@ -155,7 +159,7 @@ const NavBar: React.FC<NavBarProps> = ({
                 onHowToPlay();
                 toggleMobileMenu();
               }}
-              className="w-full text-left px-3 py-2 rounded-md text-base font-medium bg-green-600 hover:bg-green-700 text-white transition-all duration-300 ease-in-out"
+              className="w-full text-left px-3 py-2 rounded-md text-base font-medium bg-green-600 hover:bg-green-700 text-white transition-all"
             >
               How to Participate
             </button>
@@ -168,7 +172,7 @@ const NavBar: React.FC<NavBarProps> = ({
                 isButtonDisabled
                   ? "bg-blue-500 cursor-not-allowed opacity-50"
                   : "bg-green-600 hover:bg-green-700"
-              } text-white transition-all duration-300 ease-in-out`}
+              } text-white transition-all`}
               disabled={isButtonDisabled}
             >
               Claim Tokens
@@ -179,14 +183,14 @@ const NavBar: React.FC<NavBarProps> = ({
                   onConnect();
                   toggleMobileMenu();
                 }}
-                className="w-full text-left px-3 py-2 rounded-md text-base font-medium bg-green-600 hover:bg-green-700 text-white transition-all duration-300 ease-in-out"
-              > 
+                className="w-full text-left px-3 py-2 rounded-md text-base font-medium bg-green-600 hover:bg-green-700 text-white transition-all"
+              >
                 Connect Wallet
               </button>
             ) : (
-              <div className="flex items-center space-x-2 rounded-full border border-green-500 p-2 shadow hover:bg-green-600 transition-all duration-300 ease-in-out">
+              <div className="flex items-center space-x-2 rounded-full border border-green-500 p-2 shadow hover:bg-green-600 transition-all">
                 <Image
-                  src="/logos/transparentTestBertBubbleTiny(1).png" // Replace with your avatar path
+                  src="/logos/transparentTestBertBubbleTiny(1).png"
                   alt="Wallet Avatar"
                   className="rounded-full"
                   width={25}

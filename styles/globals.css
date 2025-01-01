@@ -102,15 +102,22 @@
 }
 
 .content-container {
-  height: calc(100vh - 4rem); /* Full viewport minus navbar height */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  overflow: hidden; /* Prevent scrollbars */
   box-sizing: border-box;
   background: url('/logos/backgroundCrypto4Tiny.webp') no-repeat center center;
   background-size: cover;
+  width: 100%;
+  flex-grow: 1;
+}
+
+/* Flappy Game Container */
+#canvas-container {
+  /* Ensures the canvas fits within the container without causing overflow */
+  width: 100%;
+  height: 100%;
 }
 
 .relative.mt-6.text-center {
@@ -228,9 +235,8 @@ html, body, #__next {
   flex-direction: column;
 }
 
+
 body {
-  display: flex;
-  flex-direction: column;
   font-family: "Orbitron", serif;
   font-weight: 500;
   font-style: normal;
@@ -250,14 +256,14 @@ body {
 }
 
 main {
-  flex: 1; /* Fill remaining space */
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
   padding-top: 4rem; /* Offset for navbar height */
-  overflow: hidden; /* Prevent scrollbars */
+  /* Removed overflow: hidden; */
   width: 100%;
 }
 
@@ -275,6 +281,25 @@ main {
   padding-inline: 0.5rem;
   font-weight: 900;
   border-radius: 1rem;
+}
+
+/* Footer Styling */
+.footer {
+  /* Ensure footer does not shrink and stays at the bottom */
+  flex-shrink: 0;
+}
+
+/* Responsive Padding for Main Content */
+@media (max-width: 640px) {
+  .content-container {
+    padding: 0.5rem;
+  }
+}
+
+@media (min-width: 641px) {
+  .content-container {
+    padding: 1rem;
+  }
 }
 
 .pausedModalContainer {
@@ -466,12 +491,9 @@ main {
   color: #4a4a4a; /* Neutral gray text */
 }
 
-html, body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  overflow-y: auto; /* Allow vertical scrolling */
+img {
+  max-width: 100%;
+  height: auto;
 }
 
 .game-container {
@@ -484,7 +506,7 @@ html, body {
   background-color: #ffffdd;
   overflow: hidden;
   padding-top: 4rem; /* Adjust based on NavBar height */
-  box-sizing: border-box; /* Ensure padding doesn't increase height */
+  box-sizing: border-box;
 }
 
 .blurred-button {
@@ -507,17 +529,6 @@ html, body {
 #root, #__next {
   height: 100%;
 }
-
-#canvas-container {
-  position: relative;
-  width: 360px;
-  height: 640px;
-  border: 1px solid #000;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  background-color: #ffffdd;
-}
-
 
 
 .content-container iframe {

@@ -1,24 +1,24 @@
 // pages/Home.tsx
-
 import type { NextPage } from 'next';
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import NavBar from '../components/NavBar';
-import FlappyBirdGame from "../components/Game"; // Updated import path
+import FlappyBirdGame from "../components/Game"; // Use correct path
 import InstructionsWindow from "../components/InstructionsWindow"; 
 import ClaimWindowStatus from '../components/ClaimWindowStatus';
 import ErrorPopup from '../components/ErrorPopup'; 
 import WalletConnector from '../components/WalletConnector';
-import { claimTokens, send, calculateCountdown } from '../public/walletActions';
+// Dummy placeholders for demonstration
+import { claimTokens, calculateCountdown } from '../public/walletActions';
 import { network } from '../common/network';
 
-const CLAIM_WINDOW = 20; // 20 seconds claim window (adjust as needed)
-const CYCLE_DURATION = 580; // 580 seconds cycle duration
+const CLAIM_WINDOW = 20; // 20 seconds claim window
+const CYCLE_DURATION = 580; // 580 seconds cycle
 
 const Home: NextPage = () => {
   const [isInstructionsOpen, setIsInstructionsOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [tx, setTx] = useState({ txId : '' });
+  const [tx, setTx] = useState({ txId: '' });
   const [walletAPI, setWalletAPI] = useState<any>(undefined);
   const [isWalletModalOpen, setIsWalletModalOpen] = useState(false);
   const [connectedWallet, setConnectedWallet] = useState<string | null>(null);
@@ -29,17 +29,16 @@ const Home: NextPage = () => {
   const [highScore, setHighScore] = useState<number>(0);
   const [currentScore, setCurrentScore] = useState<number>(0);
   const [isConnected, setIsConnected] = useState(false);
-  const [claimedTokens, setClaimedTokens] = useState<number | undefined>(0);
 
-  // Reconnect wallet on component mount
+  // Reconnect wallet on mount
   useEffect(() => {
     const reconnectWallet = async () => {
       const savedWallet = localStorage.getItem("connectedWallet");
-      if (savedWallet && window.cardano?.[savedWallet]) {
+      if (savedWallet && (window as any).cardano?.[savedWallet]) {
         try {
-          const walletAPI = await window.cardano[savedWallet].enable();
-          const address = await walletAPI.getChangeAddress();
-          setWalletAPI(walletAPI);
+          const api = await (window as any).cardano[savedWallet].enable();
+          const address = await api.getChangeAddress();
+          setWalletAPI(api);
           setWalletAddress(address);
           setConnectedWallet(savedWallet);
           setIsConnected(true);
@@ -67,9 +66,7 @@ const Home: NextPage = () => {
     };
 
     updateClaimWindowStatus();
-    // Set interval for real-time updates every second
     const interval = setInterval(updateClaimWindowStatus, 1000);
-
     return () => clearInterval(interval);
   }, []);
 
@@ -96,12 +93,12 @@ const Home: NextPage = () => {
   const handleClaimTokens = async () => {
     try {
       await claimTokens(walletAPI, setIsLoading, setTx);
-    } catch (err: any) { 
+    } catch (err: any) {
       if (err.info === 'User declined to sign the transaction.') {
         console.log("Transaction canceled by user.");
       } else if (err.message && err.message.includes('wallet returned 0 utxos')) {
         console.log("Insufficient ADA in the user's wallet.");
-        setError("Your wallet does not have enough ADA to claim tokens. Please add some ADA and try again.");
+        setError("Your wallet does not have enough ADA to claim tokens.");
       } else if (err.message && err.message.includes('Wallet API is not set.')) {
         console.log("No wallet connected");
         setError("Connect a wallet before claiming tokens.");
@@ -116,9 +113,7 @@ const Home: NextPage = () => {
   };
 
   // Close Error Popup
-  const closeErrorPopup = () => {
-    setError(null);
-  };
+  const closeErrorPopup = () => setError(null);
 
   // Open Wallet Modal
   const handleConnect = () => {
@@ -135,7 +130,6 @@ const Home: NextPage = () => {
     setCurrentScore(score);
     if (score > highScore) {
       setHighScore(score);
-      // Optionally, persist high score to localStorage or backend
       localStorage.setItem("highScore", score.toString());
     }
   };
@@ -149,10 +143,10 @@ const Home: NextPage = () => {
   }, []);
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-screen overflow-hidden">
       {/* Navigation Bar */}
       <NavBar
-        isConnected={!!walletAPI}
+        isConnected={isConnected}
         walletAddress={walletAddress || ""}
         onConnect={handleConnect}
         onClaimTokens={handleClaimTokens}
@@ -171,10 +165,8 @@ const Home: NextPage = () => {
       {isWalletModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-            <h3 className="text-lg font-bold text-center mb-4">
-              Select Your Wallet
-            </h3>
-            <p className="text-lg text-center">Currently, only CIP-30-compatible browser wallets are supported.</p>
+            <h3 className="text-lg font-bold text-center mb-4">Select Your Wallet</h3>
+            <p className="text-lg text-center">Only CIP-30-compatible browser wallets are supported.</p>
             <WalletConnector onWalletAPI={handleWalletConnect} />
             <button
               onClick={toggleWalletModal}
@@ -187,14 +179,12 @@ const Home: NextPage = () => {
       )}
 
       {/* Error Popup */}
-      {error && (
-        <ErrorPopup message={error} onClose={closeErrorPopup} />
-      )}
+      {error && <ErrorPopup message={error} onClose={closeErrorPopup} />}
 
       {/* Main Content */}
-      <main className="flex-grow content-container p-4 mt-16"> {/* Added mt-16 to account for fixed navbar height */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 h-full w-full">
-          {/* Left Column: BERT Mascot Image (Hidden on Mobile) */}
+      <main className="flex-grow content-container p-2 md:p-4 mt-16">
+         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 w-full h-full">
+           {/* Left Column: BERT Mascot (Hidden on Mobile) */}
           <div className="hidden md:flex items-center justify-center">
             <Image
               src="/logos/transparentTestBertBubbleTiny(1).png"
@@ -205,17 +195,12 @@ const Home: NextPage = () => {
             />
           </div>
 
-          {/* Middle Column: High Score, Current Score, and Game */}
-          <div className="flex flex-col">
-            {/* Flappy Bird Game */}
-            <div className="flex-grow flex items-center justify-center">
-              <FlappyBirdGame
-                onUserInput={() => {
-                  // Optional: handle user input if needed
-                }}
-                onScoreUpdate={updateCurrentScore} // Pass the callback
-              />
-            </div>
+          {/* Middle Column: Game */}
+          <div className="flex-grow flex justify-center items-center w-full">
+            <FlappyBirdGame
+              onUserInput={() => {/* optional */}}
+              onScoreUpdate={updateCurrentScore}
+            />
           </div>
 
           {/* Right Column: Claim Window Status (Hidden on Mobile) */}
@@ -228,20 +213,18 @@ const Home: NextPage = () => {
         </div>
       </main>
 
-      {/* Footer (Minimized on Mobile) */}
-      <footer className="footer bg-gray-900 text-white p-1 md:p-3 text-xs md:text-sm">
+      {/* Footer */}
+      <footer className="footer bg-gray-900 text-white p-2 md:p-4 text-xs md:text-sm flex-shrink-0">
         <div className="flex flex-col md:flex-row justify-between items-center w-full px-2 md:px-4">
-          {/* Left Container: Transaction Success Message */}
+        {/* Left: Transaction Success Message */}
           <div className="flex-1 text-left pl-2 md:pl-4">
             {tx.txId && walletAPI && (
               <>
-                <h4 className="font-bold text-green-400">
-                  Transaction Success!
-                </h4>
+                <h4 className="font-bold text-green-400">Transaction Success!</h4>
                 <p>
                   <span className="font-semibold">TxId:</span>&nbsp;
                   <a
-                    href={`https://${network + "."}cexplorer.io/tx/${tx.txId}`}
+                    href={`https://${network}.cexplorer.io/tx/${tx.txId}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-400 underline break-all"
@@ -252,7 +235,7 @@ const Home: NextPage = () => {
               </>
             )}
           </div>
-          {/* Right Container: ADA Donation Address */}
+          {/* Right: Donation Address */}
           <div className="flex-none text-center md:text-right mt-2 md:mt-0 md:pr-4">
             <p className="mb-1">ADA Donation Address:</p>
             <div className="flex items-center justify-center md:justify-end">

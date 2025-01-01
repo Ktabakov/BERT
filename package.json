@@ -24,6 +24,7 @@
   },
   "devDependencies": {
     "@hyperionbt/helios-loader": "^0.1.5",
+    "@tailwindcss/aspect-ratio": "^0.4.2",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
