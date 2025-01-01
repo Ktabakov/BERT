@@ -68,7 +68,7 @@ const Whitepaper: React.FC = () => {
       setWalletAPI(api);
       const address = await api.getChangeAddress(); // Get wallet address
       setWalletAddress(address);
-      setIsConnected(true); // IMPORTANT: Set isConnected to true after connecting
+      setIsConnected(true); 
       setConnectedWallet(walletName);
       setIsWalletModalOpen(false);
     }
@@ -77,6 +77,13 @@ const Whitepaper: React.FC = () => {
   const toggleWalletModal = () => {
     setIsWalletModalOpen(!isWalletModalOpen);
   };
+
+  const handleDisconnect = () => {
+    setIsConnected(false);
+    localStorage.removeItem("connectedWallet");
+    setWalletAddress('');
+  };
+
 
   const handleClaimTokens = async () => {
     try {
@@ -124,6 +131,7 @@ const Whitepaper: React.FC = () => {
         isConnected={isConnected}
         walletAddress={walletAddress || ""}
         onConnect={handleConnect}
+        onDisconnect={handleDisconnect} 
         onClaimTokens={handleClaimTokens}
         isInClaimWindow={isInClaimWindow}
         onHowToPlay={openInstructions}

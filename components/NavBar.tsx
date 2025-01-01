@@ -8,6 +8,7 @@ interface NavBarProps {
   isConnected: boolean;
   walletAddress?: string; // Optional wallet address
   onConnect: () => void;
+  onDisconnect: () => void; // New prop for disconnecting
   onClaimTokens: () => void;
   isInClaimWindow: boolean;
   onHowToPlay: () => void;
@@ -19,6 +20,7 @@ const NavBar: React.FC<NavBarProps> = ({
   isConnected,
   walletAddress,
   onConnect,
+  onDisconnect,
   onClaimTokens,
   isInClaimWindow,
   onHowToPlay,
@@ -138,7 +140,10 @@ const NavBar: React.FC<NavBarProps> = ({
               Connect Wallet
             </button>
           ) : (
-            <div className="flex items-center space-x-2 rounded-full border border-green-500 p-1 pr-2 shadow hover:bg-green-600 transition-all">
+            <button
+              onClick={onDisconnect}
+              className="flex items-center space-x-2 rounded-full border border-green-500 p-1 pr-2 shadow hover:bg-green-600 transition-all"
+            >
               <Image
                 src="/logos/transparentTestBertBubbleTiny(1).png" 
                 alt="Wallet Avatar"
@@ -149,7 +154,7 @@ const NavBar: React.FC<NavBarProps> = ({
               <span className="text-base text-white font-roboto">
                 {truncateAddress(walletAddress || "Unknown")}
               </span>
-            </div>
+            </button>
           )}
         </div>
 
@@ -228,7 +233,10 @@ const NavBar: React.FC<NavBarProps> = ({
                 Connect Wallet
               </button>
             ) : (
-              <div className="flex items-center space-x-2 rounded-full border border-green-500 p-2 shadow hover:bg-green-600 transition-all">
+              <button
+                onClick={onDisconnect}
+                className="w-full flex items-center space-x-2 rounded-full border border-green-500 p-2 shadow hover:bg-green-600 transition-all"
+              >
                 <Image
                   src="/logos/transparentTestBertBubbleTiny(1).png"
                   alt="Wallet Avatar"
@@ -239,7 +247,7 @@ const NavBar: React.FC<NavBarProps> = ({
                 <span className="text-sm text-white">
                   {truncateAddress(walletAddress || "Unknown")}
                 </span>
-              </div>
+              </button>
             )}
           </div>
         </div>

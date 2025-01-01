@@ -115,6 +115,13 @@ const Home: NextPage = () => {
   // Close Error Popup
   const closeErrorPopup = () => setError(null);
 
+
+  const handleDisconnect = () => {
+    setIsConnected(false);
+    localStorage.removeItem("connectedWallet"); 
+    setWalletAddress('');
+  };
+
   // Open Wallet Modal
   const handleConnect = () => {
     setIsWalletModalOpen(true);
@@ -149,6 +156,7 @@ const Home: NextPage = () => {
         isConnected={isConnected}
         walletAddress={walletAddress || ""}
         onConnect={handleConnect}
+        onDisconnect={handleDisconnect} 
         onClaimTokens={handleClaimTokens}
         isInClaimWindow={isInClaimWindow}
         onHowToPlay={openInstructions}
