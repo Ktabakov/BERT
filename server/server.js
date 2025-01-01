@@ -1,10 +1,23 @@
 import dotenv from 'dotenv';
 import express from 'express';
 import { BlockfrostV0, Address, AssetClass, MintingPolicyHash } from '@hyperionbt/helios';
+import cors from 'cors';
 
 dotenv.config();
 
 const app = express();
+const domainName = "localhost";
+const Ip = "192.168.1.101";
+
+const allowedOrigins = [
+  'http://localhost:3000',
+  `http://${Ip}:3000`
+];
+
+app.use(cors({
+  origin: allowedOrigins,
+  allowedHeaders: ['Content-Type']
+}));
 
 const API_KEY = process.env.API_KEY;
 const NETWORK = process.env.NETWORK;

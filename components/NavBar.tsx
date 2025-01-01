@@ -13,7 +13,8 @@ interface NavBarProps {
   isInClaimWindow: boolean;
   onHowToPlay: () => void;
   highScore?: number; // Optional
-  currentScore?: number; // Optional
+  currentScore?: number; 
+  isTransactionInProgress: boolean;
 }
 
 const NavBar: React.FC<NavBarProps> = ({
@@ -26,6 +27,7 @@ const NavBar: React.FC<NavBarProps> = ({
   onHowToPlay,
   highScore,
   currentScore,
+  isTransactionInProgress
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
   
@@ -44,7 +46,7 @@ const NavBar: React.FC<NavBarProps> = ({
     return address;
   };
 
-  const isButtonDisabled = !isConnected || !isInClaimWindow;
+  const isButtonDisabled = !isConnected || !isInClaimWindow || isTransactionInProgress;
 
   // Close mobile menu when clicking outside
   useEffect(() => {
@@ -219,8 +221,33 @@ const NavBar: React.FC<NavBarProps> = ({
                   : "bg-green-600 hover:bg-green-700"
               } text-white transition-all`}
               disabled={isButtonDisabled}
-            >
-              Claim Tokens
+            >  {isTransactionInProgress ? (
+              <>
+                <svg
+                  className="animate-spin h-5 w-5 mr-2 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v8H4z"
+                  ></path>
+                </svg>
+                Processing...
+              </>
+            ) : (
+              "Claim Tokens"
+            )}
             </button>
             {!isConnected ? (
               <button

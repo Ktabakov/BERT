@@ -84,7 +84,7 @@ import {
     const TimeBeginContract = Math.floor(new Date(Date.UTC(2024, 11, 25, 13, 45, 0)).getTime());
 
     const TimeNow: number = Math.floor(Date.now()); 
-    const CYCLE_DURATION = 580 // 9 minutes 
+    const CYCLE_DURATION = 600 // 10 minutes 
     const offsetInMs = 89680;
     const elapsedTime = TimeNow - (offsetInMs) - TimeBeginContract;
     const elapsedTimeInSeconds = elapsedTime / 1000;
@@ -314,7 +314,7 @@ import {
       // ]))
 
 
-      const testValueScript = new Assets([[assetClass, BigInt(325500)]]);
+      const testValueScript = new Assets([[assetClass, BigInt(125550)]]);
 
 
       // Get wallet UTXOs
@@ -382,7 +382,7 @@ import {
   }
     
   async function fetchUtxos(scriptAddress: string): Promise<TxInput[]> {
-    const response = await fetch(`/api/getUtxos`, {
+    const response = await fetch(`http://192.168.1.101:3001/api/getUtxos`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ scriptAddress }),

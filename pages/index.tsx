@@ -9,11 +9,11 @@ import ClaimWindowStatus from '../components/ClaimWindowStatus';
 import ErrorPopup from '../components/ErrorPopup'; 
 import WalletConnector from '../components/WalletConnector';
 // Dummy placeholders for demonstration
-import { claimTokens, calculateCountdown } from '../public/walletActions';
+import { claimTokens, send, calculateCountdown } from '../public/walletActions';
 import { network } from '../common/network';
 
 const CLAIM_WINDOW = 20; // 20 seconds claim window
-const CYCLE_DURATION = 580; // 580 seconds cycle
+const CYCLE_DURATION = 600; // 600 seconds cycle
 
 const Home: NextPage = () => {
   const [isInstructionsOpen, setIsInstructionsOpen] = useState<boolean>(false);
@@ -29,6 +29,7 @@ const Home: NextPage = () => {
   const [highScore, setHighScore] = useState<number>(0);
   const [currentScore, setCurrentScore] = useState<number>(0);
   const [isConnected, setIsConnected] = useState(false);
+  const [isTransactionInProgress, setIsTransactionInProgress] = useState<boolean>(false);
 
   // Reconnect wallet on mount
   useEffect(() => {
@@ -92,6 +93,7 @@ const Home: NextPage = () => {
   // Handle Claim Tokens
   const handleClaimTokens = async () => {
     try {
+      setIsTransactionInProgress(true);
       await claimTokens(walletAPI, setIsLoading, setTx);
     } catch (err: any) {
       if (err.info === 'User declined to sign the transaction.') {
@@ -109,6 +111,8 @@ const Home: NextPage = () => {
         setError("Something went wrong. Please try again.");
         console.log(err.message);
       }
+    } finally {
+       setIsTransactionInProgress(false);
     }
   };
 
@@ -162,6 +166,7 @@ const Home: NextPage = () => {
         onHowToPlay={openInstructions}
         highScore={highScore}
         currentScore={currentScore}
+        isTransactionInProgress={isTransactionInProgress}
       />
 
       {/* Instructions Window */}

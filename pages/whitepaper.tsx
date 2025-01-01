@@ -7,8 +7,8 @@ import ErrorPopup from '../components/ErrorPopup';
 import InstructionsWindow from "../components/InstructionsWindow"; 
 import { network } from '../common/network';
 
-const CLAIM_WINDOW = 20; // 20 seconds claim window (adjust as needed)
-const CYCLE_DURATION = 580; // 580 seconds cycle duration
+const CLAIM_WINDOW = 20; // 20 seconds claim window 
+const CYCLE_DURATION = 600; // 600 seconds cycle duration
 
 const Whitepaper: React.FC = () => {
   const [isConnected, setIsConnected] = useState(false);
@@ -22,6 +22,7 @@ const Whitepaper: React.FC = () => {
   const [countdown, setCountdown] = useState<number>(0);
   const [error, setError] = useState<string | null>(null); // New state for error messages
   const [isInstructionsOpen, setIsInstructionsOpen] = useState<boolean>(false);
+  const [isTransactionInProgress, setIsTransactionInProgress] = useState<boolean>(false);
 
   useEffect(() => {
     const reconnectWallet = async () => {
@@ -85,16 +86,17 @@ const Whitepaper: React.FC = () => {
   };
 
 
+  // Handle Claim Tokens
   const handleClaimTokens = async () => {
     try {
+      setIsTransactionInProgress(true);
       await claimTokens(walletAPI, setIsLoading, setTx);
-    } catch (err: any) { 
-      if (err.info === 'User declined to sign the transaction.') {
-        console.log("Transaction was canceled by user.");
-        // Optionally, show a toast notification here
+    } catch (err: any) {
+      if (err.info && err.info === 'User declined to sign the transaction.') {
+        console.log("Transaction canceled by user.");
       } else if (err.message && err.message.includes('wallet returned 0 utxos')) {
         console.log("Insufficient ADA in the user's wallet.");
-        setError("Your wallet does not have enough ADA to claim tokens. Please add some ADA to your wallet and try again.");
+        setError("Your wallet does not have enough ADA to claim tokens.");
       } else if (err.message && err.message.includes('Wallet API is not set.')) {
         console.log("No wallet connected");
         setError("Connect a wallet before claiming tokens.");
@@ -102,9 +104,11 @@ const Whitepaper: React.FC = () => {
         console.log("No more tokens to claim. Game Over!");
         setError("No more tokens to claim. Game Over!");
       } else {
-        // For all other errors, display the error popup
         setError("Something went wrong. Please try again.");
+        console.log(err.message);
       }
+    } finally {
+       setIsTransactionInProgress(false);
     }
   };
 
@@ -139,7 +143,7 @@ const Whitepaper: React.FC = () => {
         onClaimTokens={handleClaimTokens}
         isInClaimWindow={isInClaimWindow}
         onHowToPlay={openInstructions}
-        // highScore and currentScore are omitted as they're not tracked on this page
+        isTransactionInProgress={isTransactionInProgress}
       />
 
       {/* Instructions Window */}
