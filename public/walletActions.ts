@@ -174,8 +174,11 @@ import {
       const sortedUtxos = pickUtxos(filteredUtxos, BigInt(dynamicReward), assetClass); 
       
       sortedUtxos.selected.forEach(element => {
-          console.log(element)
+          console.dir("selected utxo" + element)
       });
+      sortedUtxos.selected.forEach(element => {
+        console.dir("selected utxo Id" + element.outputId)
+    });
       //const totalAmountUtxo = getTokenAmountFromUtxos(sortedUtxos.selected, assetClass);
       const amountToSendBack = BigInt(sortedUtxos.totalAmount) - BigInt(dynamicReward);
 
