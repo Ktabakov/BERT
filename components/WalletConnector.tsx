@@ -50,7 +50,7 @@ const walletDetails: WalletDetails = {
   typhon: {
     api: "typhon",
     label: "Typhon",
-    logo: "/logos/typhon.png",
+    logo: "/logos/Typhon.png",
     installLink: "https://chrome.google.com/webstore/detail/typhon-wallet/kfdniefadaanbjodldohaedphafoffoh",
   },
   gero: {
