@@ -17,68 +17,6 @@ import {
   
   const optimize = false;
   
-  function pickUtxos(utxos: TxInput[], targetAmount: bigint, assetClass: AssetClass): { selected: TxInput[]; totalAmount: bigint } {
-    const selected: TxInput[] = [];
-    let totalAmount: bigint = 0n;
-  
-    // Keep track of the indices we've already picked
-    const usedIndices = new Set<number>();
-  
-    while (totalAmount < targetAmount) {
-        // Generate a random index within the bounds of the UTXOs array
-        const randomIndex = Math.floor(Math.random() * utxos.length);
-  
-        // If we've already selected this index, skip it
-        if (usedIndices.has(randomIndex)) {
-            continue;
-        }
-  
-        // Mark the index as used
-        usedIndices.add(randomIndex);
-  
-        // Add the UTXO to the selected list
-        const selectedUtxo = utxos[randomIndex];
-        selected.push(selectedUtxo);
-        const tokens = selectedUtxo.value.assets.getTokens(assetClass.mintingPolicyHash);
-        tokens.forEach(([tokenName, amount]) => {
-          totalAmount += BigInt(amount.value); // Add the amount to the total
-          });
-    }
-  
-    return {
-        selected,
-        totalAmount,
-    };
-  }
-  
-  // Calculate the reward based on the time elapsed since contract deployment
-  function calculateRewardInTime(): number {
-    const TimeBeginContract = Math.floor(new Date(Date.UTC(2024, 11, 25, 13, 45, 0)).getTime()) / 1000;
-    console.log("TimeBeginContract" + TimeBeginContract)
-
-    const HALVING_PERIOD: number = 7776000; // 3 months in seconds 
-    const MAX_HALVINGS: number = 2; // Limit halvings to 2 times
-    const BASE_REWARD: number = 10000; // Initial reward in tokens
-  
-    // Get current time in seconds
-    const TimeNow: number = Math.floor(Date.now() / 1000); 
-  
-    // Calculate the elapsed time in seconds
-    const timeElapsed: number = TimeNow - TimeBeginContract;
-    // Determine halving steps based on elapsed time, but limit to MAX_HALVINGS
-    let halvingSteps: number = Math.floor(timeElapsed / HALVING_PERIOD);
-    halvingSteps = Math.min(halvingSteps, MAX_HALVINGS); // Cap halvings at MAX_HALVINGS
-  
-     // Ensure the number of halving steps doesn't exceed the maximum allowed
-     const effectiveHalvings: number = Math.min(halvingSteps, MAX_HALVINGS);
-    console.log("Halvings" + effectiveHalvings)
-     // Directly calculate reward based on halving steps using a bit shift
-     const reward: number = BASE_REWARD / (2 ** effectiveHalvings);
-   
-     // Return the reward, ensuring it doesn't fall below a minimum value
-     return reward < 1 ? 1 : reward;
-  }
-  
   export function calculateCountdown(): number {
   
     const TimeBeginContract = Math.floor(new Date(Date.UTC(2024, 11, 25, 13, 45, 0)).getTime());
@@ -110,20 +48,15 @@ import {
       const policyId = "e16c2dc8ae937e8d3790c7fd7168d7b994621ba14ca11415f39fed72";
       const name = Buffer.from("MIN", 'utf8').toString('hex');
 
-      // const policyId = "";
-      // const name = Buffer.from("", 'utf8').toString('hex');
-
       const mph = MintingPolicyHash.fromHex(policyId);
 
       const assetClass = new AssetClass({
-        mph: mph, // Your policy hash
-        tokenName: name// Convert to hex string
+        mph: mph, 
+        tokenName: name
       }); 
 
         console.log(assetClass)
 
-      // const tokenAmount = BigInt(3000000);
-      // const tokenVal = new Value(tokenAmount);
       const utxos = await walletHelper.getUtxos();
       console.log("utxos" + utxos);
 
@@ -142,51 +75,24 @@ import {
       
       console.dir(scriptAddress, { depth: null });
 
-      const filteredUtxos = await fetchUtxos(scriptAddress.toBech32())
+      const sortedUtxos = await fetchUtxos(scriptAddress.toBech32())
 
-      if (filteredUtxos.length == 0)
-        throw new Error("No more tokens to claim. Game Over!");
-   
-      // const TOTAL_SUPPLY = 10000; // Total token supply
       const CLAIM_WINDOW = 20; // 20 seconds 
 
-      console.log("filteredUtxos" + filteredUtxos)
-
-      //const remainingSupply = getTokenAmountFromUtxos(filteredUtxos, assetClass);
-      const dynamicReward = calculateRewardInTime()
       const positionInCycle = calculateCountdown();
       console.log("positionInCycle" + positionInCycle);
       window.onerror = () => positionInCycle < CLAIM_WINDOW;
       //const dynamicReward = calculateReward(Number(remainingSupply), TOTAL_SUPPLY, BASE_REWARD);
-      const testValueBenefitiary= new Assets([[assetClass, BigInt(dynamicReward)]]);
-
-      //const result = pickRandomTxInputWithSufficientValue(filteredUtxos, BigInt(dynamicReward), assetClass);
-      //console.log("randomUTXO:" + result.txInput)
-
-      //const amountToSendBack = result.tokenAmount - BigInt(dynamicReward);
-      // console.log("amountToSendBack" + amountToSendBack)
-      // console.log("UtxoAmount" + result.tokenAmount)
-      // console.log("The rest" + result.remainingUtxos)
+      const testValueBenefitiary= new Assets([[assetClass, BigInt(sortedUtxos.dynamicReward)]]);
       
-      //console.log(filteredUtxos)
-      // const remoteWallet = new RemoteWallet(false, [scriptAddress], [], txInputs);
-      // const walletHelperScript = new WalletHelper(remoteWallet);
-      const sortedUtxos = pickUtxos(filteredUtxos, BigInt(dynamicReward), assetClass); 
-      
-      sortedUtxos.selected.forEach(element => {
-          console.dir("selected utxo" + element)
-      });
-      sortedUtxos.selected.forEach(element => {
-        console.dir("selected utxo Id" + element.outputId)
-    });
       //const totalAmountUtxo = getTokenAmountFromUtxos(sortedUtxos.selected, assetClass);
-      const amountToSendBack = BigInt(sortedUtxos.totalAmount) - BigInt(dynamicReward);
+      const amountToSendBack = BigInt(sortedUtxos.totalAmount) - BigInt(sortedUtxos.dynamicReward);
 
       const firstPartToSendBack = amountToSendBack / 2n; // First part is half of the total amount
       const secondPartToSendBack = amountToSendBack - firstPartToSendBack; // Second part is the remainder
       console.log("First " + firstPartToSendBack)
       console.log("Sevond " + secondPartToSendBack)
-      console.log(dynamicReward	)
+      console.log(sortedUtxos.dynamicReward)
 
       const valueContract1= new Assets([[assetClass, firstPartToSendBack]]);
       const valueContract2= new Assets([[assetClass, secondPartToSendBack]]);
@@ -381,18 +287,27 @@ import {
     }
   }
     
-  async function fetchUtxos(scriptAddress: string): Promise<TxInput[]> {
-    const response = await fetch(`http://192.168.1.101:3001/api/getUtxos`, {
+  async function fetchUtxos(scriptAddress: string): Promise<{ selected: TxInput[]; totalAmount: bigint, dynamicReward: bigint }> {
+    const response = await fetch(`/api/getUtxos`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ scriptAddress }),
+      body: JSON.stringify({ scriptAddress}),
     });
   
     const data = await response.json(); // Raw JSON array from backend
   
     // `Convert JSON back to TxInput objects
-    const filteredUtxos = data.map((utxo: any) => TxInput.fromFullCbor(utxo));
+    const selectedUtxos = data.selected.map((utxo: any) => TxInput.fromFullCbor(utxo));
+    const dynamicReward: bigint = BigInt(data.dynamicReward);
+    const totalAmount: bigint = BigInt(data.totalAmount);
+    console.log("selectedUtxos"+ selectedUtxos);
+    console.log("dynamicReward" + dynamicReward);
+    console.log("totalAmount"+ totalAmount);
 
-    return filteredUtxos;
+    return {
+      selected: selectedUtxos,
+      totalAmount: totalAmount,
+      dynamicReward: dynamicReward,
+    };
   }
   
