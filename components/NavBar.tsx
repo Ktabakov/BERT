@@ -156,7 +156,7 @@ const NavBar: React.FC<NavBarProps> = ({
               <span className="text-base text-white font-roboto text-sm">
                 {truncateAddress(walletAddress || "Unknown")}
               </span>
-            </button>
+            </button> 
           )}
         </div>
 
