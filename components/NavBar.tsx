@@ -107,15 +107,15 @@ const NavBar: React.FC<NavBarProps> = ({
         {/* Center: Title + Optional Scores */}
         <div className="flex flex-col items-center flex-grow">
           <Link href="/" className="flex items-center mb-1 md:mb-0">
-            <span className="text-xl md:text-3xl">Bert</span>
+            <span className="text-xl md:text-4xl">Bert</span>
           </Link>
           {(highScore !== undefined && currentScore !== undefined) && (
             <div className="flex space-x-4">
               <div className="text-base">
-                <span className="font-semibold">High Score:</span> {highScore}
+                <span className="font-semibold text-xl">High Score:</span> {highScore}
               </div>
               <div className="text-base">
-                <span className="font-semibold">Current Score:</span> {currentScore}
+                <span className="font-semibold text-xl">Current Score:</span> {currentScore}
               </div>
             </div>
           )}
@@ -150,10 +150,10 @@ const NavBar: React.FC<NavBarProps> = ({
                 src="/logos/transparentTestBertBubbleTiny(1).png" 
                 alt="Wallet Avatar"
                 className="rounded-full"
-                width={40}
-                height={40}
+                width={35}
+                height={35}
               />
-              <span className="text-base text-white font-roboto">
+              <span className="text-base text-white font-roboto text-sm">
                 {truncateAddress(walletAddress || "Unknown")}
               </span>
             </button>
