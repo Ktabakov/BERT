@@ -6,6 +6,7 @@ import WalletConnector from '../components/WalletConnector';
 import ErrorPopup from '../components/ErrorPopup'; 
 import InstructionsWindow from "../components/InstructionsWindow"; 
 import { network } from '../common/network';
+import SuccessNotification from '../components/SuccessNotification';
 
 const CLAIM_WINDOW = 20; // 20 seconds claim window 
 const CYCLE_DURATION = 600; // 600 seconds cycle duration
@@ -23,6 +24,7 @@ const Whitepaper: React.FC = () => {
   const [error, setError] = useState<string | null>(null); // New state for error messages
   const [isInstructionsOpen, setIsInstructionsOpen] = useState<boolean>(false);
   const [isTransactionInProgress, setIsTransactionInProgress] = useState<boolean>(false);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   useEffect(() => {
     const reconnectWallet = async () => {
@@ -91,6 +93,8 @@ const Whitepaper: React.FC = () => {
     try {
       setIsTransactionInProgress(true);
       await claimTokens(walletAPI, setIsLoading, setTx);
+      setShowSuccess(false);
+      setTimeout(() => setShowSuccess(true), 0);
     } catch (err: any) {
       if (err.info && err.info === 'User declined to sign the transaction.') {
         console.log("Transaction canceled by user.");
@@ -114,6 +118,10 @@ const Whitepaper: React.FC = () => {
 
   const closeErrorPopup = () => {
     setError(null);
+  };
+
+  const handleCloseSuccess = () => {
+    setShowSuccess(false);
   };
 
   const handleConnect = () => {
@@ -151,6 +159,12 @@ const Whitepaper: React.FC = () => {
         <InstructionsWindow onClose={() => setIsInstructionsOpen(false)} />
       )}
 
+        {showSuccess && (
+           <SuccessNotification
+          message="Transaction Successful!"
+          onClose={handleCloseSuccess}
+           />
+           )}
       {/* Wallet Modal */}
       {isWalletModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

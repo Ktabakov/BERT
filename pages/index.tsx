@@ -11,6 +11,7 @@ import WalletConnector from '../components/WalletConnector';
 // Dummy placeholders for demonstration
 import { claimTokens, send, calculateCountdown } from '../public/walletActions';
 import { network } from '../common/network';
+import SuccessNotification from '../components/SuccessNotification';
 
 const CLAIM_WINDOW = 20; // 20 seconds claim window
 const CYCLE_DURATION = 600; // 600 seconds cycle
@@ -30,6 +31,7 @@ const Home: NextPage = () => {
   const [currentScore, setCurrentScore] = useState<number>(0);
   const [isConnected, setIsConnected] = useState(false);
   const [isTransactionInProgress, setIsTransactionInProgress] = useState<boolean>(false);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   // Reconnect wallet on mount
   useEffect(() => {
@@ -95,6 +97,8 @@ const Home: NextPage = () => {
     try {
       setIsTransactionInProgress(true);
       await claimTokens(walletAPI, setIsLoading, setTx);
+      setShowSuccess(false);
+      setTimeout(() => setShowSuccess(true), 0);
     } catch (err: any) {
       if (err.info === 'User declined to sign the transaction.') {
         console.log("Transaction canceled by user.");
@@ -119,6 +123,9 @@ const Home: NextPage = () => {
   // Close Error Popup
   const closeErrorPopup = () => setError(null);
 
+  const handleCloseSuccess = () => {
+    setShowSuccess(false);
+  };
 
   const handleDisconnect = () => {
     setIsConnected(false);
@@ -208,6 +215,12 @@ const Home: NextPage = () => {
             />
           </div>
 
+          {showSuccess && (
+           <SuccessNotification
+          message="Transaction Successful!"
+          onClose={handleCloseSuccess}
+           />
+           )}
           {/* Middle Column: Game */}
           <div className="flex-grow flex justify-center items-center w-full">
             <FlappyBirdGame

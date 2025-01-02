@@ -130,7 +130,7 @@ const NavBar: React.FC<NavBarProps> = ({
                 ? "bg-blue-500 cursor-not-allowed opacity-50"
                 : "bg-green-600 hover:bg-green-700"
             } text-white transition-all`}
-            disabled={isButtonDisabled}
+            disabled={false}
           >
             Claim Tokens
           </button>
