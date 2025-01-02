@@ -41,15 +41,6 @@ const InstructionsWindow: React.FC<InstructionsWindowProps> = ({ onClose }) => {
             </a>
             ,{' '}
             <a
-              href="https://atomicwallet.io/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-500 hover:underline"
-            >
-              Atomic
-            </a>
-            , or{' '}
-            <a
               href="https://eternl.io/"
               target="_blank"
               rel="noopener noreferrer"
@@ -57,6 +48,24 @@ const InstructionsWindow: React.FC<InstructionsWindowProps> = ({ onClose }) => {
             >
               Eternl
             </a>
+             ,{' '}
+             <a
+              href="https://typhonwallet.io/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 hover:underline"
+              >
+              Typhon Wallet
+             </a>
+             , or{' '}
+             <a
+             href="https://www.gerowallet.io/"
+             target="_blank"
+             rel="noopener noreferrer"
+             className="text-blue-500 hover:underline"
+             >
+              Gero Wallet
+             </a>
             .
           </li>
           <li>Create and secure your wallet.</li>
