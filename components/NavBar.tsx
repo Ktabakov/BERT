@@ -111,11 +111,11 @@ const NavBar: React.FC<NavBarProps> = ({
           </Link>
           {(highScore !== undefined && currentScore !== undefined) && (
             <div className="flex space-x-4">
-              <div className="text-base">
-                <span className="font-semibold text-xl">High Score:</span> {highScore}
+              <div className="text-sm md:text-base">
+                <span className="font-semibold text-sm md:text-xl">High Score:</span> {highScore}
               </div>
-              <div className="text-base">
-                <span className="font-semibold text-xl">Current Score:</span> {currentScore}
+              <div className="text-sm md:text-base">
+                <span className="font-semibold text-sm md:text-xl">Current Score:</span> {currentScore}
               </div>
             </div>
           )}
