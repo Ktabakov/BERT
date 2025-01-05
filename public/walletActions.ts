@@ -48,7 +48,7 @@ import {
     __tag: "Claim";
     recepiant: string; // The same pubKeyHash in hex
   }
-  import GAME_REWARD_CBOR_JSON from '../contracts/GameRewardCbor.json'; // { cborHex: "4e4d010000..." }
+  import GAME_REWARD_CBOR_JSON from '../contracts/GameRewardCbor1.json'; // { cborHex: "4e4d010000..." }
 
   export async function claimTokens(walletAPI: any, setIsLoading: (val: boolean) => void, setTx: (val: {txId: string}) => void) {
     setIsLoading(true);
@@ -64,7 +64,7 @@ import {
       const networkParamsJson = await getNetworkParams(network);
       const networkParams = new NetworkParams(networkParamsJson);
 
-      const policyId = "a3879594925e2ab170ed0c34204d84765411ad23e43e98771dd5a6d2";
+      const policyId = "14e7b7007657c191963cc016425fdca02b397b5b31784ba2637ecad3";
       const name = Buffer.from("BERT", 'utf8').toString('hex');
 
       const mph = MintingPolicyHash.fromHex(policyId);
@@ -94,7 +94,7 @@ import {
       // Compile the vesting validator
       //const compiledProgram = gameReward.compile(optimize);
       console.log("Wallet address: " + benefitiary)
-      const scriptAddress = Address.fromBech32("addr1w98mjg5u7zq0puw33v3xd2y6q5s24xvu3lnhcc7z6lncn6s70fwnm")
+      const scriptAddress = Address.fromBech32("addr1wyqnajaxfvkt3juwkem5zdsgxm49etza5chhx6ys4ac6lkcu5ngh4")
     
       console.log(scriptAddress.toBech32());
       console.log("Script Address:" + scriptAddress)
@@ -239,7 +239,7 @@ import {
 
       const walletHelper = new WalletHelper(cip30WalletAPI);
 
-      const policyId = "a3879594925e2ab170ed0c34204d84765411ad23e43e98771dd5a6d2";
+      const policyId = "14e7b7007657c191963cc016425fdca02b397b5b31784ba2637ecad3";
       const name = Buffer.from("BERT", 'utf8').toString('hex');
 
       const mph = MintingPolicyHash.fromHex(policyId);

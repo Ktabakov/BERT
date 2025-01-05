@@ -9,7 +9,7 @@ const app = express();
 const API_KEY = process.env.API_KEY;
 const NETWORK = process.env.NETWORK;
 
-  const policyId = "a3879594925e2ab170ed0c34204d84765411ad23e43e98771dd5a6d2";
+  const policyId = "14e7b7007657c191963cc016425fdca02b397b5b31784ba2637ecad3";
   const name = Buffer.from("BERT", 'utf8').toString('hex');
 
 
