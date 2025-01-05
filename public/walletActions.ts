@@ -9,7 +9,7 @@ import {
     Assets,
     WalletHelper,
     MintingPolicyHash,
-    Program,
+    UplcProgram,
     Redeemer,
     AssetClass,
     PubKeyHash,
@@ -85,7 +85,9 @@ import {
       
       const cborHex = GAME_REWARD_CBOR_JSON.cborHex; 
       //const compiledProgram = Program.new(cborHex); 
-      const uplcProgram = new NativeScript(cborHex as unknown as number);
+      //const uplcProgram = new NativeScript(cborHex as unknown as number);
+      const uplcProgram = UplcProgram.fromCbor(cborHex);
+
       //console.log("compiledProgram" + compiledProgram);
       console.log("benefitiary.pubKeyHash?.hex!)" + benefitiary.pubKeyHash?.hex!)
 
