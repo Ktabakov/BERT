@@ -14,8 +14,8 @@ import {
     AssetClass,
     PubKeyHash,
     Address,
-    UplcData,
     ConstrData,
+    NativeScript,
     ByteArrayData,
     hexToBytes,
   } from "@hyperionbt/helios";
@@ -83,20 +83,43 @@ import {
       const benefitiary = await walletHelper.changeAddress;
       // Load in the vesting validator script (program)
       
-      const cborHex = GAME_REWARD_CBOR_JSON.cborHex; // or a string directly
-      const compiledProgram = Program.new(cborHex).compile(optimize); 
+      const cborHex = GAME_REWARD_CBOR_JSON.cborHex; 
+      //const compiledProgram = Program.new(cborHex); 
+      const uplcProgram = new NativeScript(cborHex as unknown as number);
+      //console.log("compiledProgram" + compiledProgram);
       
       //const gameReward = new GameReward();
 
       // Compile the vesting validator
       //const compiledProgram = gameReward.compile(optimize);
       console.log("Wallet address: " + benefitiary)
-      const scriptAddress = Address.fromHashes(compiledProgram.validatorHash)
+      const scriptAddress = Address.fromBech32("addr1w98mjg5u7zq0puw33v3xd2y6q5s24xvu3lnhcc7z6lncn6s70fwnm")
     
       console.log(scriptAddress.toBech32());
       console.log("Script Address:" + scriptAddress)
       
       console.dir(scriptAddress, { depth: null });
+
+      const datumObject: GameDatum = {
+        benefitiary: benefitiary.pubKeyHash!
+      };
+
+      const gameDatum = createGameDatum(benefitiary.pubKeyHash!.hex);
+      console.log("gameDatum" + gameDatum)
+
+      // const gameDatum = new gameReward.types.Datum(
+      //   benefitiary.pubKeyHash,
+      // )
+
+       // Create the vesting claim redeemer
+      //  const redeember = (new gameReward.types.Redeemer.Claim(benefitiary.pubKeyHash))
+      //  ._toUplcData();
+
+      const claimRedeemer = createClaimRedeemer(benefitiary.pubKeyHash!.hex);
+      console.log("claimRedeemerData" + claimRedeemer.data)
+      console.log("claimRedeemer" + claimRedeemer)
+      //console.log(filteredUtxos);
+      const tx = new Tx();
 
       const sortedUtxos = await fetchUtxos(scriptAddress.toBech32())
 
@@ -120,29 +143,9 @@ import {
       const valueContract1= new Assets([[assetClass, firstPartToSendBack]]);
       const valueContract2= new Assets([[assetClass, secondPartToSendBack]]);
 
-
-      const datumObject: GameDatum = {
-        benefitiary: benefitiary.pubKeyHash!
-      };
-
-      const gameDatum = createGameDatum(benefitiary.pubKeyHash!.hex);
-
-      // const gameDatum = new gameReward.types.Datum(
-      //   benefitiary.pubKeyHash,
-      // )
-
-       // Create the vesting claim redeemer
-      //  const redeember = (new gameReward.types.Redeemer.Claim(benefitiary.pubKeyHash))
-      //  ._toUplcData();
-
-      const claimRedeemer = createClaimRedeemer(benefitiary.pubKeyHash!.hex);
-    
-      //console.log(filteredUtxos);
-      const tx = new Tx();
-
       //tx.addInputs(utxos[0]);
       tx.addInputs(sortedUtxos.selected, claimRedeemer.data);
-      tx.attachScript(compiledProgram);
+      tx.attachScript(uplcProgram);
 
       var userClaimOutput = new TxOutput(
         benefitiary,
