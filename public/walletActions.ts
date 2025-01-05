@@ -105,7 +105,7 @@ import {
       };
 
       const gameDatum = createGameDatum(benefitiary.pubKeyHash!.hex);
-      console.log("gameDatum" + gameDatum)
+      console.log("gameDatum" + JSON.stringify(gameDatum))
 
       // const gameDatum = new gameReward.types.Datum(
       //   benefitiary.pubKeyHash,
@@ -175,7 +175,9 @@ import {
       var scriptUtxo1 =new TxOutput(
         scriptAddress,
         new Value(adaPerScriptOutput, valueContract1),  // Remaining treasury tokens
-        gameDatum // Contract requires datum
+        Datum.inline(
+          new ConstrData(0, [ new ByteArrayData(hexToBytes(benefitiary.pubKeyHash?.hex!)) ])
+        )
        );
 
        tx.addOutput(scriptUtxo1);
@@ -183,7 +185,9 @@ import {
       var scriptUtxo2 = new TxOutput(
         scriptAddress,
         new Value(totalAdaInInputs - adaPerScriptOutput, valueContract2),  // Remaining treasury tokens
-        gameDatum // Contract requires datum
+        Datum.inline(
+          new ConstrData(0, [ new ByteArrayData(hexToBytes(benefitiary.pubKeyHash?.hex!)) ])
+        )
        );
     
        tx.addOutput(scriptUtxo2);
