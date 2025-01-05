@@ -9,8 +9,8 @@ const app = express();
 const API_KEY = process.env.API_KEY;
 const NETWORK = process.env.NETWORK;
 
-  const policyId = "e16c2dc8ae937e8d3790c7fd7168d7b994621ba14ca11415f39fed72";
-  const name = Buffer.from("MIN", 'utf8').toString('hex');
+  const policyId = "a3879594925e2ab170ed0c34204d84765411ad23e43e98771dd5a6d2";
+  const name = Buffer.from("BERT", 'utf8').toString('hex');
 
 
   const mph = MintingPolicyHash.fromHex(policyId);
@@ -105,7 +105,7 @@ function pickUtxos(utxos, targetAmount, assetClass) {
 function calculateRewardInTime() {
   // Define the contract start time (UTC)
   // Note: Months are 0-based in JavaScript Date.UTC (0 = January, 11 = December)
-  const TimeBeginContract = Math.floor(new Date(Date.UTC(2024, 11, 25, 13, 45, 0)).getTime() / 1000);
+  const TimeBeginContract = 1736073600000 / 1000;
   console.log("TimeBeginContract:", TimeBeginContract);
 
   const HALVING_PERIOD = 7776000; // 3 months in seconds

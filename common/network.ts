@@ -9,7 +9,7 @@ export {
 }
 
 // Define Cardano network
-const network = "preprod"
+const network = "mainnet"
 config.set({ ...config, IS_TESTNET: true });
 
 async function getNetworkParams(network: string) {

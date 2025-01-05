@@ -18,7 +18,7 @@ enum Redeemer {
     }
 }
 
-const TOKEN_POLICY_ID: MintingPolicyHash = MintingPolicyHash::new(#e16c2dc8ae937e8d3790c7fd7168d7b994621ba14ca11415f39fed72)
+const TOKEN_POLICY_ID: MintingPolicyHash = MintingPolicyHash::new(#a3879594925e2ab170ed0c34204d84765411ad23e43e98771dd5a6d2)
    
 const HALVING_PERIOD: Int = 7776000  // 3 months in seconds
 const MAX_HALVINGS: Int = 2
@@ -26,7 +26,7 @@ const BASE_REWARD: Int = 10000  // Initial reward in tokens
 
 func calculate_reward(current_time: Time) -> Int {
     // Start contract at 
-    TimeBeginContract: Time = Time::new(1735134300000);  
+    TimeBeginContract: Time = Time::new(1736073600000);  
 
     // Calculate time elapsed in seconds
     time_elapsed: Duration = current_time - TimeBeginContract;
@@ -56,7 +56,7 @@ const CYCLE_DURATION: Int = 600
 
 func IsClaimWindow(current_time: Time) -> Bool {
     // Start contract 
-    TimeBeginContract: Time = Time::new(1735134300000);  
+    TimeBeginContract: Time = Time::new(1736073600000);  
 
      // Calculate the offset from the deployment start
      elapsed_time: Duration = current_time - TimeBeginContract;
@@ -76,7 +76,7 @@ func main(datum: Datum, redeemer: Redeemer, ctx: ScriptContext) -> Bool {
         // AssetClass for the treasury tokens
         asset_class: AssetClass = AssetClass::new(
             TOKEN_POLICY_ID,  
-            "MIN".encode_utf8()
+            "BERT".encode_utf8()
         );
 
        validator_hash: ValidatorHash = ctx.get_current_validator_hash();

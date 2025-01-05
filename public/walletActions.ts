@@ -9,6 +9,7 @@ import {
     Assets,
     WalletHelper,
     MintingPolicyHash,
+    Program,
     AssetClass,
     Address,
   } from "@hyperionbt/helios";
@@ -19,7 +20,7 @@ import {
   
   export function calculateCountdown(): number {
   
-    const TimeBeginContract = Math.floor(new Date(Date.UTC(2024, 11, 25, 13, 45, 0)).getTime());
+    const TimeBeginContract = 1736073600000;
 
     const TimeNow: number = Math.floor(Date.now()); 
     const CYCLE_DURATION = 600 // 10 minutes 
@@ -31,6 +32,8 @@ import {
     return positionInCycle;
   } 
   
+  //import GAME_REWARD_CBOR_JSON from '../contracts/GameRewardCbor.json'; // { cborHex: "4e4d010000..." }
+
   export async function claimTokens(walletAPI: any, setIsLoading: (val: boolean) => void, setTx: (val: {txId: string}) => void) {
     setIsLoading(true);
 
@@ -45,8 +48,8 @@ import {
       const networkParamsJson = await getNetworkParams(network);
       const networkParams = new NetworkParams(networkParamsJson);
 
-      const policyId = "e16c2dc8ae937e8d3790c7fd7168d7b994621ba14ca11415f39fed72";
-      const name = Buffer.from("MIN", 'utf8').toString('hex');
+      const policyId = "a3879594925e2ab170ed0c34204d84765411ad23e43e98771dd5a6d2";
+      const name = Buffer.from("BERT", 'utf8').toString('hex');
 
       const mph = MintingPolicyHash.fromHex(policyId);
 
@@ -63,6 +66,10 @@ import {
       // Get change address
       const benefitiary = await walletHelper.changeAddress;
       // Load in the vesting validator script (program)
+      
+      //const cborHex = GAME_REWARD_CBOR_JSON.cborHex; // or a string directly
+      //const program = Program.new(cborHex); 
+
       const gameReward = new GameReward();
 
       // Compile the vesting validator
@@ -197,11 +204,8 @@ import {
 
       const walletHelper = new WalletHelper(cip30WalletAPI);
 
-      const policyId = "e16c2dc8ae937e8d3790c7fd7168d7b994621ba14ca11415f39fed72";
-      const name = Buffer.from("MIN", 'utf8').toString('hex');
-
-      // const policyId = "";
-      // const name = Buffer.from("", 'utf8').toString('hex');
+      const policyId = "a3879594925e2ab170ed0c34204d84765411ad23e43e98771dd5a6d2";
+      const name = Buffer.from("BERT", 'utf8').toString('hex');
 
       const mph = MintingPolicyHash.fromHex(policyId);
 
@@ -215,13 +219,7 @@ import {
       const minAda : number = 1_000_000; // minimum lovelace to send
       const minAdaVal = new Value(BigInt(minAda));
 
-      //  const benefitiaryValue = new Value(BigInt(10000), new Assets([
-      //   [mph, [[name, BigInt(10000)]]]
-      // ]))
-
-
       const testValueScript = new Assets([[assetClass, BigInt(125550)]]);
-
 
       // Get wallet UTXOs
       const utxos = await walletHelper.pickUtxos(new Value(undefined, testValueScript));
@@ -230,6 +228,7 @@ import {
       // Get change address
       const benefitiary = await walletHelper.changeAddress;
       // Load in the vesting validator script (program)
+
       const gameReward = new GameReward();
 
       // Compile the vesting validator
@@ -311,3 +310,4 @@ import {
     };
   }
   
+
