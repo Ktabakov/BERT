@@ -87,7 +87,8 @@ import {
       //const compiledProgram = Program.new(cborHex); 
       const uplcProgram = new NativeScript(cborHex as unknown as number);
       //console.log("compiledProgram" + compiledProgram);
-      
+      console.log("benefitiary.pubKeyHash?.hex!)" + benefitiary.pubKeyHash?.hex!)
+
       //const gameReward = new GameReward();
 
       // Compile the vesting validator
@@ -149,7 +150,10 @@ import {
 
       var userClaimOutput = new TxOutput(
         benefitiary,
-        new Value(undefined, testValueBenefitiary));
+        new Value(undefined, testValueBenefitiary),
+        Datum.inline(
+          new ConstrData(0, [ new ByteArrayData(hexToBytes(benefitiary.pubKeyHash?.hex!)) ])
+        ));
 
       tx.addOutput(userClaimOutput);
 
@@ -169,7 +173,7 @@ import {
     });
 
     // Distribute ADA equally (or as required) among script outputs
-    const adaPerScriptOutput = totalAdaInInputs / 2n; // Assuming two script outputs
+    const adaPerScriptOutput = totalAdaInInputs / 2n; // Assuming two script outputs\
 
     if (amountToSendBack != BigInt(0)){
       var scriptUtxo1 =new TxOutput(
