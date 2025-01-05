@@ -10,8 +10,14 @@ import {
     WalletHelper,
     MintingPolicyHash,
     Program,
+    Redeemer,
     AssetClass,
+    PubKeyHash,
     Address,
+    UplcData,
+    ConstrData,
+    ByteArrayData,
+    hexToBytes,
   } from "@hyperionbt/helios";
   import { network, getNetworkParams } from '../common/network';
   import GameReward from '../contracts/GameReward.hl'; // Ensure correct path to your contract
@@ -32,7 +38,17 @@ import {
     return positionInCycle;
   } 
   
-  //import GAME_REWARD_CBOR_JSON from '../contracts/GameRewardCbor.json'; // { cborHex: "4e4d010000..." }
+  // The Helios contract says: struct Datum { benefitiary: PubKeyHash }
+  export interface GameDatum {
+    benefitiary: PubKeyHash; // The pubKeyHash as a hex string
+  }
+
+  // The Helios contract says: enum Redeemer { Cancel, Claim { recepiant: PubKeyHash } }
+  export interface GameRedeemerClaim {
+    __tag: "Claim";
+    recepiant: string; // The same pubKeyHash in hex
+  }
+  import GAME_REWARD_CBOR_JSON from '../contracts/GameRewardCbor.json'; // { cborHex: "4e4d010000..." }
 
   export async function claimTokens(walletAPI: any, setIsLoading: (val: boolean) => void, setTx: (val: {txId: string}) => void) {
     setIsLoading(true);
@@ -67,13 +83,13 @@ import {
       const benefitiary = await walletHelper.changeAddress;
       // Load in the vesting validator script (program)
       
-      //const cborHex = GAME_REWARD_CBOR_JSON.cborHex; // or a string directly
-      //const program = Program.new(cborHex); 
-
-      const gameReward = new GameReward();
+      const cborHex = GAME_REWARD_CBOR_JSON.cborHex; // or a string directly
+      const compiledProgram = Program.new(cborHex).compile(optimize); 
+      
+      //const gameReward = new GameReward();
 
       // Compile the vesting validator
-      const compiledProgram = gameReward.compile(optimize);
+      //const compiledProgram = gameReward.compile(optimize);
       console.log("Wallet address: " + benefitiary)
       const scriptAddress = Address.fromHashes(compiledProgram.validatorHash)
     
@@ -105,19 +121,27 @@ import {
       const valueContract2= new Assets([[assetClass, secondPartToSendBack]]);
 
 
-      const gameDatum = new gameReward.types.Datum(
-        benefitiary.pubKeyHash,
-      )
+      const datumObject: GameDatum = {
+        benefitiary: benefitiary.pubKeyHash!
+      };
+
+      const gameDatum = createGameDatum(benefitiary.pubKeyHash!.hex);
+
+      // const gameDatum = new gameReward.types.Datum(
+      //   benefitiary.pubKeyHash,
+      // )
 
        // Create the vesting claim redeemer
-       const redeember = (new gameReward.types.Redeemer.Claim(benefitiary.pubKeyHash))
-       ._toUplcData();
+      //  const redeember = (new gameReward.types.Redeemer.Claim(benefitiary.pubKeyHash))
+      //  ._toUplcData();
+
+      const claimRedeemer = createClaimRedeemer(benefitiary.pubKeyHash!.hex);
     
       //console.log(filteredUtxos);
       const tx = new Tx();
 
       //tx.addInputs(utxos[0]);
-      tx.addInputs(sortedUtxos.selected, redeember);
+      tx.addInputs(sortedUtxos.selected, claimRedeemer.data);
       tx.attachScript(compiledProgram);
 
       var userClaimOutput = new TxOutput(
@@ -148,7 +172,7 @@ import {
       var scriptUtxo1 =new TxOutput(
         scriptAddress,
         new Value(adaPerScriptOutput, valueContract1),  // Remaining treasury tokens
-        Datum.inline(gameDatum) // Contract requires datum
+        gameDatum // Contract requires datum
        );
 
        tx.addOutput(scriptUtxo1);
@@ -156,7 +180,7 @@ import {
       var scriptUtxo2 = new TxOutput(
         scriptAddress,
         new Value(totalAdaInInputs - adaPerScriptOutput, valueContract2),  // Remaining treasury tokens
-        Datum.inline(gameDatum) // Contract requires datum
+        gameDatum // Contract requires datum
        );
     
        tx.addOutput(scriptUtxo2);
@@ -311,3 +335,18 @@ import {
   }
   
 
+  function createClaimRedeemer(pubKeyHashHex: string): Redeemer {
+    // The "Claim" constructor might be tag=1 if it's the second in the enum
+    const tag = 1;
+    const field = [new ByteArrayData(hexToBytes(pubKeyHashHex))];
+    const constr = new ConstrData(tag, field);
+    return new Redeemer(constr);
+  }
+  
+  function createGameDatum(benefitiaryHashHex: string): Datum {
+    // If this struct has only one field, typically it's tag=0
+    const tag = 0;
+    const field = [new ByteArrayData(hexToBytes(benefitiaryHashHex))];
+    const cd = new ConstrData(tag, field);
+    return Datum.inline(cd);
+  }
