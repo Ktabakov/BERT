@@ -91,6 +91,7 @@ import {
       //console.log("compiledProgram" + compiledProgram);
       console.log("benefitiary.pubKeyHash?.hex!)" + benefitiary.pubKeyHash?.hex!)
 
+    
       //const gameReward = new GameReward();
 
       // Compile the vesting validator
@@ -108,8 +109,11 @@ import {
       };
 
       const gameDatum = createGameDatum(benefitiary.pubKeyHash!.hex);
-      console.log("gameDatum" + JSON.stringify(gameDatum))
-
+      console.log("MethodDatum", gameDatum)
+      console.log("Datum",  Datum.inline(
+        new ConstrData(0, [ new ByteArrayData(hexToBytes(benefitiary.pubKeyHash?.hex!)) ])
+      ))
+      console.log("Datum2",new ConstrData(0, [ new ByteArrayData(hexToBytes(benefitiary.pubKeyHash?.hex!)) ]))
       // const gameDatum = new gameReward.types.Datum(
       //   benefitiary.pubKeyHash,
       // )
@@ -119,7 +123,7 @@ import {
       //  ._toUplcData();
 
       const claimRedeemer = createClaimRedeemer(benefitiary.pubKeyHash!.hex);
-      console.log("claimRedeemerData" + claimRedeemer.data)
+      console.log("claimRedeemerData" + claimRedeemer)
       console.log("claimRedeemer" + claimRedeemer)
       //console.log(filteredUtxos);
       const tx = new Tx();
@@ -178,9 +182,7 @@ import {
       var scriptUtxo1 =new TxOutput(
         scriptAddress,
         new Value(adaPerScriptOutput, valueContract1),  // Remaining treasury tokens
-        Datum.inline(
-          new ConstrData(0, [ new ByteArrayData(hexToBytes(benefitiary.pubKeyHash?.hex!)) ])
-        )
+        gameDatum
        );
 
        tx.addOutput(scriptUtxo1);
@@ -188,9 +190,7 @@ import {
       var scriptUtxo2 = new TxOutput(
         scriptAddress,
         new Value(totalAdaInInputs - adaPerScriptOutput, valueContract2),  // Remaining treasury tokens
-        Datum.inline(
-          new ConstrData(0, [ new ByteArrayData(hexToBytes(benefitiary.pubKeyHash?.hex!)) ])
-        )
+        gameDatum
        );
     
        tx.addOutput(scriptUtxo2);
@@ -346,17 +346,13 @@ import {
   
 
   function createClaimRedeemer(pubKeyHashHex: string): Redeemer {
-    // The "Claim" constructor might be tag=1 if it's the second in the enum
-    const tag = 1;
-    const field = [new ByteArrayData(hexToBytes(pubKeyHashHex))];
-    const constr = new ConstrData(tag, field);
-    return new Redeemer(constr);
+    const bytes = hexToBytes(pubKeyHashHex);
+    const constrData = new ConstrData(1, [new ByteArrayData(bytes)]);
+    return new Redeemer(constrData);
   }
   
   function createGameDatum(benefitiaryHashHex: string): Datum {
-    // If this struct has only one field, typically it's tag=0
-    const tag = 0;
-    const field = [new ByteArrayData(hexToBytes(benefitiaryHashHex))];
-    const cd = new ConstrData(tag, field);
-    return Datum.inline(cd);
+    const bytes = hexToBytes(benefitiaryHashHex);
+    const constrData = new ConstrData(0, [new ByteArrayData(bytes)]);
+    return Datum.inline(constrData);
   }
