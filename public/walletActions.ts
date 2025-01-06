@@ -64,7 +64,7 @@ import {
       const networkParamsJson = await getNetworkParams(network);
       const networkParams = new NetworkParams(networkParamsJson);
 
-      const policyId = "3a8d42fbc0e40b1c72d3ba204651ffbc3e4d4afb116605e6599523d2";
+      const policyId = "5b9006e5051296968c46a3e9206f2f02c8157ff041871290960d6adf";
       const name = Buffer.from("BERT", 'utf8').toString('hex');
 
       const mph = MintingPolicyHash.fromHex(policyId);
@@ -87,7 +87,7 @@ import {
       //const compiledProgram = Program.new(cborHex); 
       //const uplcProgram = new NativeScript(cborHex as unknown as number);
       const uplcProgram = UplcProgram.fromCbor(cborHex);
-
+  
       //console.log("compiledProgram" + compiledProgram);
       console.log("benefitiary.pubKeyHash?.hex!)" + benefitiary.pubKeyHash?.hex!)
 
@@ -97,7 +97,7 @@ import {
       // Compile the vesting validator
       //const compiledProgram = gameReward.compile(optimize);
       console.log("Wallet address: " + benefitiary)
-      const scriptAddress = Address.fromBech32("addr1w8ts9k76vfj5fx856s0ytzgr92q5nsdn4kzm2dgn07ndzncq08zq9")
+      const scriptAddress = Address.fromBech32("addr1wygd2q56lc098fn0yrx9n6ngrjfjylxefxqztas6fffz7dsl4y9kn")
     
       console.log(scriptAddress.toBech32());
       console.log("Script Address:" + scriptAddress)
@@ -109,7 +109,7 @@ import {
       };
 
       console.log("benefitiary.pubKeyHash!.hex", benefitiary.pubKeyHash!.hex)
-      const gameDatum = createGameDatum("b9e2c61ce129745ee65cde82019ed978ee9509bc01278381f16cf41a");
+      const gameDatum = createGameDatum(benefitiary.pubKeyHash!.hex);
       console.log("MethodDatum", gameDatum)
       console.log("Datum",  Datum.inline(
         new ConstrData(0, [ new ByteArrayData(hexToBytes(benefitiary.pubKeyHash?.hex!)) ])
@@ -124,8 +124,8 @@ import {
       //  ._toUplcData();
 
       const claimRedeemer = createClaimRedeemer(benefitiary.pubKeyHash!.hex);
-      console.log("claimRedeemerData" + claimRedeemer)
-      console.log("claimRedeemer" + claimRedeemer)
+      console.log("claimRedeemerData", claimRedeemer.data)
+      console.log("claimRedeemer", claimRedeemer)
       //console.log(filteredUtxos);
       const tx = new Tx();
 
@@ -239,7 +239,7 @@ import {
 
       const walletHelper = new WalletHelper(cip30WalletAPI);
 
-      const policyId = "3a8d42fbc0e40b1c72d3ba204651ffbc3e4d4afb116605e6599523d2";
+      const policyId = "5b9006e5051296968c46a3e9206f2f02c8157ff041871290960d6adf";
       const name = Buffer.from("BERT", 'utf8').toString('hex');
 
       const mph = MintingPolicyHash.fromHex(policyId);
@@ -353,7 +353,8 @@ import {
   }
   
   function createGameDatum(beneficiaryHashHex: string): Datum {
-    const beneficiaryPkh = PubKeyHash.fromHex(beneficiaryHashHex);
-    const constrData = new ConstrData(0, [UplcData.fromCbor(beneficiaryPkh.toCbor())]);
+    const bytes = hexToBytes(beneficiaryHashHex);
+    const byteArrayData = new ByteArrayData(bytes);
+    const constrData = new ConstrData(0, [byteArrayData]);
     return Datum.inline(constrData);
 }

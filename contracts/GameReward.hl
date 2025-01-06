@@ -18,7 +18,7 @@ enum Redeemer {
     }
 }
 
-const TOKEN_POLICY_ID: MintingPolicyHash = MintingPolicyHash::new(#3a8d42fbc0e40b1c72d3ba204651ffbc3e4d4afb116605e6599523d2)
+const TOKEN_POLICY_ID: MintingPolicyHash = MintingPolicyHash::new(#5b9006e5051296968c46a3e9206f2f02c8157ff041871290960d6adf)
    
 const HALVING_PERIOD: Int = 7776000  // 3 months in seconds
 const MAX_HALVINGS: Int = 2
