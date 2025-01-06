@@ -352,8 +352,8 @@ import {
     return new Redeemer(constrData);
   }
   
-  function createGameDatum(benefitiaryHashHex: string): Datum {
-    const bytes = hexToBytes(benefitiaryHashHex);
-    const constrData = new ConstrData(0, [new ByteArrayData(bytes)]);
-    return Datum.inline(constrData);
-  }
+  function createGameDatum(beneficiaryHashHex: string): Datum {
+    const beneficiaryPkh = PubKeyHash.fromHex(beneficiaryHashHex);
+    //const constrData = new ConstrData(0, [beneficiaryPkh]);
+    return Datum.inline(beneficiaryPkh);
+}
