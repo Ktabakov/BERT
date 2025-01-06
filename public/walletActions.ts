@@ -64,7 +64,7 @@ import {
       const networkParamsJson = await getNetworkParams(network);
       const networkParams = new NetworkParams(networkParamsJson);
 
-      const policyId = "14e7b7007657c191963cc016425fdca02b397b5b31784ba2637ecad3";
+      const policyId = "3a8d42fbc0e40b1c72d3ba204651ffbc3e4d4afb116605e6599523d2";
       const name = Buffer.from("BERT", 'utf8').toString('hex');
 
       const mph = MintingPolicyHash.fromHex(policyId);
@@ -96,7 +96,7 @@ import {
       // Compile the vesting validator
       //const compiledProgram = gameReward.compile(optimize);
       console.log("Wallet address: " + benefitiary)
-      const scriptAddress = Address.fromBech32("addr1wyqnajaxfvkt3juwkem5zdsgxm49etza5chhx6ys4ac6lkcu5ngh4")
+      const scriptAddress = Address.fromBech32("addr1w8ts9k76vfj5fx856s0ytzgr92q5nsdn4kzm2dgn07ndzncq08zq9")
     
       console.log(scriptAddress.toBech32());
       console.log("Script Address:" + scriptAddress)
@@ -241,7 +241,7 @@ import {
 
       const walletHelper = new WalletHelper(cip30WalletAPI);
 
-      const policyId = "14e7b7007657c191963cc016425fdca02b397b5b31784ba2637ecad3";
+      const policyId = "3a8d42fbc0e40b1c72d3ba204651ffbc3e4d4afb116605e6599523d2";
       const name = Buffer.from("BERT", 'utf8').toString('hex');
 
       const mph = MintingPolicyHash.fromHex(policyId);
