@@ -125,10 +125,10 @@ import {
       const recepiantPkh = makePubKeyHash(recepiantBytes);
       
       // Convert PubKeyHash to UplcData
-      const dataRedeemer = recepiantPkh.toUplcData();
-      const claimRedeemer = makeTxSpendingRedeemer(RedeemerVariant.Claim, dataRedeemer).toCbor();
+      //const dataRedeemer = recepiantPkh.toUplcData();
+      //const claimRedeemer = makeTxSpendingRedeemer(RedeemerVariant.Claim, dataRedeemer).toCbor();
 
-      //const claimRedeemer = createClaimRedeemer(benefitiary.pubKeyHash!.hex);
+      const claimRedeemer = createClaimRedeemer(benefitiary.pubKeyHash!.hex);
       console.log("claimRedeemerData", claimRedeemer)
       console.log("claimRedeemer", claimRedeemer)
       //console.log(filteredUtxos);
@@ -157,7 +157,7 @@ import {
       const valueContract2= new Assets([[assetClass, secondPartToSendBack]]);
 
       //tx.addInputs(utxos[0]);
-      tx.addInputs(sortedUtxos.selected, UplcData.fromCbor(claimRedeemer));
+      tx.addInputs(sortedUtxos.selected, claimRedeemer);
       tx.attachScript(uplcProgram);
 
       var userClaimOutput = new TxOutput(
@@ -351,24 +351,18 @@ import {
   }
   
 
-//   function createClaimRedeemer(recepiantHashHex: string): UplcData {
-//     // Convert the hex string to bytes
-//     const recepiantBytes = hexToBytes(recepiantHashHex);
+  function createClaimRedeemer(recepiantHashHex: string): UplcData {
+    // Convert hex string to byte array
+    const bytes = hexToBytes(recepiantHashHex);
     
-//     // Create a PubKeyHash object
-//     const recepiantPkh = makePubKeyHash(recepiantBytes);
+    // Wrap the byte array in ByteArrayData
+    const byteArrayData = new ByteArrayData(bytes);
     
-//     // Convert PubKeyHash to UplcData
-//     const recepiantUplcData = recepiantPkh.toUplcData();
+    // Construct ConstrData with constructor index 1 for Claim
+    const constrData = new ConstrData(1, [byteArrayData]);
     
-//     // Constructor index for 'Claim' is 1 (assuming 'Cancel' is 0)
-//     const claimConstrData = makeConstrData(1, [recepiantUplcData]);
-    
-//     // Convert ConstrData to UplcDataValue
-//     const claimUplcData = UplcDataValue.fromConstrData(claimConstrData);
-    
-//     return claimUplcData;
-// }
+    return constrData;
+}
 
   function createGameDatum(beneficiaryHashHex: string): Datum {
     // Convert hex string to byte array
