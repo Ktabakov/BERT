@@ -152,12 +152,9 @@ import {
 
       var userClaimOutput = new TxOutput(
         benefitiary,
-        new Value(undefined, testValueBenefitiary),
-        Datum.inline(
-          new ConstrData(0, [ new ByteArrayData(hexToBytes(benefitiary.pubKeyHash?.hex!)) ])
-        ));
+        new Value(undefined, testValueBenefitiary));
 
-      tx.addOutput(userClaimOutput);
+      tx.addOutput(userClaimOutput)
 
     
     //Shiiit, fix. Someone could rediredt the rest of the tokens
