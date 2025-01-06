@@ -108,7 +108,8 @@ import {
         benefitiary: benefitiary.pubKeyHash!
       };
 
-      const gameDatum = createGameDatum(benefitiary.pubKeyHash!.hex);
+      console.log("benefitiary.pubKeyHash!.hex", benefitiary.pubKeyHash!.hex)
+      const gameDatum = createGameDatum("b9e2c61ce129745ee65cde82019ed978ee9509bc01278381f16cf41a");
       console.log("MethodDatum", gameDatum)
       console.log("Datum",  Datum.inline(
         new ConstrData(0, [ new ByteArrayData(hexToBytes(benefitiary.pubKeyHash?.hex!)) ])
