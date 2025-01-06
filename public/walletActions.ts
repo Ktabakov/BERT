@@ -354,6 +354,6 @@ import {
   
   function createGameDatum(beneficiaryHashHex: string): Datum {
     const beneficiaryPkh = PubKeyHash.fromHex(beneficiaryHashHex);
-    const constrData = new ConstrData(0, [UplcData.fromCbor(beneficiaryHashHex)]);
+    const constrData = new ConstrData(0, [UplcData.fromCbor(beneficiaryPkh.toCbor())]);
     return Datum.inline(constrData);
 }
