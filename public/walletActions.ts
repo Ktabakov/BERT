@@ -77,7 +77,7 @@ import {
         console.log(assetClass)
 
       const utxos = await walletHelper.getUtxos();
-      console.log("utxos" + utxos);
+      console.log("utxos",  utxos);
 
       // Get change address
       const benefitiary = await walletHelper.changeAddress;
@@ -124,13 +124,13 @@ import {
       //  ._toUplcData();
 
       const claimRedeemer = createClaimRedeemer(benefitiary.pubKeyHash!.hex);
-      console.log("claimRedeemerData", claimRedeemer.data)
+      console.log("claimRedeemerData", claimRedeemer)
       console.log("claimRedeemer", claimRedeemer)
       //console.log(filteredUtxos);
       const tx = new Tx();
 
       const sortedUtxos = await fetchUtxos(scriptAddress.toBech32())
-
+      console.log("sortedUtxos", sortedUtxos)
       const CLAIM_WINDOW = 20; // 20 seconds 
 
       const positionInCycle = calculateCountdown();
@@ -152,7 +152,7 @@ import {
       const valueContract2= new Assets([[assetClass, secondPartToSendBack]]);
 
       //tx.addInputs(utxos[0]);
-      tx.addInputs(sortedUtxos.selected, claimRedeemer.data);
+      tx.addInputs(sortedUtxos.selected, claimRedeemer);
       tx.attachScript(uplcProgram);
 
       var userClaimOutput = new TxOutput(
@@ -346,15 +346,26 @@ import {
   }
   
 
-  function createClaimRedeemer(pubKeyHashHex: string): Redeemer {
-    const bytes = hexToBytes(pubKeyHashHex);
-    const constrData = new ConstrData(1, [new ByteArrayData(bytes)]);
-    return new Redeemer(constrData);
-  }
-  
-  function createGameDatum(beneficiaryHashHex: string): Datum {
-    const bytes = hexToBytes(beneficiaryHashHex);
+  function createClaimRedeemer(recepiantHashHex: string): UplcData {
+    // Convert hex string to byte array
+    const bytes = hexToBytes(recepiantHashHex);
+    
+    // Wrap the byte array in ByteArrayData
     const byteArrayData = new ByteArrayData(bytes);
-    const constrData = new ConstrData(0, [byteArrayData]);
-    return Datum.inline(constrData);
+    
+    // Construct ConstrData with constructor index 1 for Claim
+    const constrData = new ConstrData(1, [byteArrayData]);
+    
+    return constrData;
+}
+
+  function createGameDatum(beneficiaryHashHex: string): Datum {
+    // Convert hex string to byte array
+    const bytes = hexToBytes(beneficiaryHashHex);
+    
+    // Wrap the byte array in ByteArrayData
+    const byteArrayData = new ByteArrayData(bytes);
+    
+    // Create inline Datum without constructor indices
+    return Datum.inline(byteArrayData);
 }
