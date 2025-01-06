@@ -10,7 +10,7 @@ import {
     WalletHelper,
     MintingPolicyHash,
     UplcProgram,
-    Redeemer,
+    UplcDataValue,
     AssetClass,
     PubKeyHash,
     Address,
@@ -21,7 +21,9 @@ import {
   } from "@hyperionbt/helios";
   import { network, getNetworkParams } from '../common/network';
   import GameReward from '../contracts/GameReward.hl'; // Ensure correct path to your contract
-  
+  import { makePubKeyHash, makeTxSpendingRedeemer } from "@helios-lang/ledger";
+  import { makeConstrData } from "@helios-lang/uplc";
+
   const optimize = false;
   
   export function calculateCountdown(): number {
@@ -38,16 +40,11 @@ import {
     return positionInCycle;
   } 
   
-  // The Helios contract says: struct Datum { benefitiary: PubKeyHash }
-  export interface GameDatum {
-    benefitiary: PubKeyHash; // The pubKeyHash as a hex string
-  }
+  export enum RedeemerVariant {
+    Cancel = 0, // Corresponds to 'Cancel' variant
+    Claim = 1   // Corresponds to 'Claim' variant
+}
 
-  // The Helios contract says: enum Redeemer { Cancel, Claim { recepiant: PubKeyHash } }
-  export interface GameRedeemerClaim {
-    __tag: "Claim";
-    recepiant: string; // The same pubKeyHash in hex
-  }
   import GAME_REWARD_CBOR_JSON from '../contracts/GameRewardCbor1.json'; // { cborHex: "4e4d010000..." }
 
   export async function claimTokens(walletAPI: any, setIsLoading: (val: boolean) => void, setTx: (val: {txId: string}) => void) {
@@ -104,10 +101,7 @@ import {
       
       console.dir(scriptAddress, { depth: null });
 
-      const datumObject: GameDatum = {
-        benefitiary: benefitiary.pubKeyHash!
-      };
-
+  
       console.log("benefitiary.pubKeyHash!.hex", benefitiary.pubKeyHash!.hex)
       const gameDatum = createGameDatum(benefitiary.pubKeyHash!.hex);
       console.log("MethodDatum", gameDatum)
@@ -123,7 +117,18 @@ import {
       //  const redeember = (new gameReward.types.Redeemer.Claim(benefitiary.pubKeyHash))
       //  ._toUplcData();
 
-      const claimRedeemer = createClaimRedeemer(benefitiary.pubKeyHash!.hex);
+      
+      // Convert the hex string to bytes
+      const recepiantBytes = hexToBytes(benefitiary.hex);
+      
+      // Create a PubKeyHash object
+      const recepiantPkh = makePubKeyHash(recepiantBytes);
+      
+      // Convert PubKeyHash to UplcData
+      const dataRedeemer = recepiantPkh.toUplcData();
+      const claimRedeemer = makeTxSpendingRedeemer(RedeemerVariant.Claim, dataRedeemer).toCbor();
+
+      //const claimRedeemer = createClaimRedeemer(benefitiary.pubKeyHash!.hex);
       console.log("claimRedeemerData", claimRedeemer)
       console.log("claimRedeemer", claimRedeemer)
       //console.log(filteredUtxos);
@@ -152,7 +157,7 @@ import {
       const valueContract2= new Assets([[assetClass, secondPartToSendBack]]);
 
       //tx.addInputs(utxos[0]);
-      tx.addInputs(sortedUtxos.selected, claimRedeemer);
+      tx.addInputs(sortedUtxos.selected, UplcData.fromCbor(claimRedeemer));
       tx.attachScript(uplcProgram);
 
       var userClaimOutput = new TxOutput(
@@ -346,18 +351,24 @@ import {
   }
   
 
-  function createClaimRedeemer(recepiantHashHex: string): UplcData {
-    // Convert hex string to byte array
-    const bytes = hexToBytes(recepiantHashHex);
+//   function createClaimRedeemer(recepiantHashHex: string): UplcData {
+//     // Convert the hex string to bytes
+//     const recepiantBytes = hexToBytes(recepiantHashHex);
     
-    // Wrap the byte array in ByteArrayData
-    const byteArrayData = new ByteArrayData(bytes);
+//     // Create a PubKeyHash object
+//     const recepiantPkh = makePubKeyHash(recepiantBytes);
     
-    // Construct ConstrData with constructor index 1 for Claim
-    const constrData = new ConstrData(1, [byteArrayData]);
+//     // Convert PubKeyHash to UplcData
+//     const recepiantUplcData = recepiantPkh.toUplcData();
     
-    return constrData;
-}
+//     // Constructor index for 'Claim' is 1 (assuming 'Cancel' is 0)
+//     const claimConstrData = makeConstrData(1, [recepiantUplcData]);
+    
+//     // Convert ConstrData to UplcDataValue
+//     const claimUplcData = UplcDataValue.fromConstrData(claimConstrData);
+    
+//     return claimUplcData;
+// }
 
   function createGameDatum(beneficiaryHashHex: string): Datum {
     // Convert hex string to byte array
