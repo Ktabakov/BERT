@@ -15,7 +15,7 @@ import {
     PubKeyHash,
     Address,
     ConstrData,
-    NativeScript,
+    UplcData,
     ByteArrayData,
     hexToBytes,
   } from "@hyperionbt/helios";
@@ -354,6 +354,6 @@ import {
   
   function createGameDatum(beneficiaryHashHex: string): Datum {
     const beneficiaryPkh = PubKeyHash.fromHex(beneficiaryHashHex);
-    //const constrData = new ConstrData(0, [beneficiaryPkh]);
-    return Datum.inline(beneficiaryPkh);
+    const constrData = new ConstrData(0, [UplcData.fromCbor(beneficiaryHashHex)]);
+    return Datum.inline(constrData);
 }
