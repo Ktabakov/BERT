@@ -131,6 +131,7 @@ import {
 
       const claimRedeemer = createClaimRedeemer(benefitiary.pubKeyHash!.hex);
       console.log("claimRedeemer", claimRedeemer)
+
       console.log("benefitiary.pubKeyHash", benefitiary.pubKeyHash)
       console.log("benefitiary.pubKeyHash!.hex", benefitiary.pubKeyHash!.hex)
 
@@ -211,7 +212,6 @@ import {
       console.log("We attatched everything!")
 
       
-
       await tx.finalize(networkParams, benefitiary, utxos);
       console.log("dali finalizirahme?")
       // Sign the unsigned tx to get the witness
@@ -363,8 +363,18 @@ import {
 
 
 function createGameDatum(beneficiaryHashHex: string): Datum {
+  // Convert hex string to byte array
   const bytes = hexToBytes(beneficiaryHashHex);
+  console.log("Datum bytes length:", bytes.length);
+  
+  // Validate the length of PubKeyHash
+  if (bytes.length !== 28) {
+      throw new Error(`Invalid PubKeyHash length for Datum: expected 28 bytes, got ${bytes.length} bytes`);
+  }
+  
+  // Wrap the byte array in ByteArrayData
   const byteArrayData = new ByteArrayData(bytes);
-  const constrData = new ConstrData(0, [byteArrayData]); // 0 is the constructor index for Datum
-  return Datum.inline(constrData);
+  
+  // Return Datum as ByteArrayData without using ConstrData
+  return Datum.inline(byteArrayData);
 }
