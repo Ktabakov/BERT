@@ -42,8 +42,8 @@ const Whitepaper: React.FC = () => {
             setIsInClaimWindow(positionInCycle < CLAIM_WINDOW);
             setCountdown(
               positionInCycle < CLAIM_WINDOW
-                ? CLAIM_WINDOW - positionInCycle // Remaining time inside the claim window
-                : CYCLE_DURATION - positionInCycle // Time until the next claim window
+                ? CLAIM_WINDOW - positionInCycle 
+                : CYCLE_DURATION - positionInCycle 
             );
           };
 
@@ -57,7 +57,7 @@ const Whitepaper: React.FC = () => {
           return () => clearInterval(interval); 
         } catch (err) {
           console.error("Failed to reconnect wallet:", err);
-          localStorage.removeItem("connectedWallet"); // Clear invalid wallet data
+          localStorage.removeItem("connectedWallet"); 
         }
       }
     };

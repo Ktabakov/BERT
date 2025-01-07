@@ -1,4 +1,3 @@
-// pages/Home.tsx
 import type { NextPage } from 'next';
 import { useState, useEffect } from "react";
 import Image from "next/image";
@@ -8,13 +7,12 @@ import InstructionsWindow from "../components/InstructionsWindow";
 import ClaimWindowStatus from '../components/ClaimWindowStatus';
 import ErrorPopup from '../components/ErrorPopup'; 
 import WalletConnector from '../components/WalletConnector';
-// Dummy placeholders for demonstration
-import { claimTokens, send, calculateCountdown } from '../public/walletActions';
+import { claimTokens, calculateCountdown } from '../public/walletActions';
 import { network } from '../common/network';
 import SuccessNotification from '../components/SuccessNotification';
 
-const CLAIM_WINDOW = 20; // 20 seconds claim window
-const CYCLE_DURATION = 600; // 600 seconds cycle
+const CLAIM_WINDOW = 20; 
+const CYCLE_DURATION = 600; 
 
 const Home: NextPage = () => {
   const [isInstructionsOpen, setIsInstructionsOpen] = useState<boolean>(false);

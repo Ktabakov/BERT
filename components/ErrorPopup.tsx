@@ -1,5 +1,3 @@
-// components/ErrorPopup.tsx
-
 import React, { useEffect } from 'react';
 
 interface ErrorPopupProps {

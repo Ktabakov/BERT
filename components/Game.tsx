@@ -1,6 +1,6 @@
 // components/FlappyBirdGame.tsx
 import React, { useRef, useEffect } from "react";
-import { useFlappyBirdGame } from "../public/useFlappyBirdGame";
+import { Game } from "../public/Game";
 
 interface FlappyBirdGameProps {
   autoStart?: boolean;
@@ -16,7 +16,7 @@ const FlappyBirdGame: React.FC<FlappyBirdGameProps> = ({
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   // Our custom hook
-  const { handleUserInput, currentScore } = useFlappyBirdGame(
+  const { handleUserInput, currentScore } = Game(
     canvasRef,
     false, // isPaused
     autoStart
