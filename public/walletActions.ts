@@ -83,9 +83,13 @@ import {
       const cborHex = GAME_REWARD_CBOR_JSON.cborHex; 
       //const compiledProgram = Program.new(cborHex); 
       //const uplcProgram = new NativeScript(cborHex as unknown as number);
-      const uplcProgram = UplcProgram.fromCbor(cborHex);
-      const validatorHash = uplcProgram.validatorHash;
-      const scriptAddress = Address.fromHashes(validatorHash, null, false)
+      const gameReward = new GameReward();
+      const compiledProgram = gameReward.compile(optimize);
+      const scriptAddress = Address.fromHashes(compiledProgram.validatorHash, null, false)
+
+      // const uplcProgram = UplcProgram.fromCbor(cborHex);
+      // const validatorHash = uplcProgram.validatorHash;
+      // const scriptAddress = Address.fromHashes(validatorHash, null, false)
       //console.log("compiledProgram" + compiledProgram);
       console.log("benefitiary.pubKeyHash?.hex!)" + benefitiary.pubKeyHash?.hex!)
 
@@ -98,14 +102,17 @@ import {
       //const scriptAddress = Address.fromBech32("addr1wygd2q56lc098fn0yrx9n6ngrjfjylxefxqztas6fffz7dsl4y9kn")
     
       console.log(scriptAddress.toBech32());
-      console.log("Script Address:" + scriptAddress)
+      console.log("Script Address:", scriptAddress)
       
       console.dir(scriptAddress, { depth: null });
 
   
       console.log("benefitiary.pubKeyHash!.hex", benefitiary.pubKeyHash!.hex)
-      const gameDatum = createGameDatum(benefitiary.pubKeyHash!.hex);
-      console.log("gameDatum", gameDatum)
+      const gameDatum = new gameReward.types.Datum(
+        benefitiary.pubKeyHash,
+      )
+      // const gameDatum = createGameDatum(benefitiary.pubKeyHash!.hex);
+      // console.log("gameDatum", gameDatum)
       // console.log("Datum",  Datum.inline(
       //   new ConstrData(0, [ new ByteArrayData(hexToBytes(benefitiary.pubKeyHash?.hex!)) ])
       // ))
@@ -129,8 +136,12 @@ import {
       //const dataRedeemer = recepiantPkh.toUplcData();
       //const claimRedeemer = makeTxSpendingRedeemer(RedeemerVariant.Claim, dataRedeemer).toCbor();
 
-      const claimRedeemer = createClaimRedeemer(benefitiary.pubKeyHash!.hex);
-      console.log("claimRedeemer", claimRedeemer)
+      // const claimRedeemer = createClaimRedeemer(benefitiary.pubKeyHash!.hex);
+      // console.log("claimRedeemer", claimRedeemer)
+
+      const claimRedeemer = (new gameReward.types.Redeemer.Claim(benefitiary.pubKeyHash))
+      ._toUplcData();
+     console.log("redeemer", claimRedeemer)
 
       console.log("benefitiary.pubKeyHash", benefitiary.pubKeyHash)
       console.log("benefitiary.pubKeyHash!.hex", benefitiary.pubKeyHash!.hex)
@@ -162,7 +173,7 @@ import {
 
       //tx.addInputs(utxos[0]);
       tx.addInputs(sortedUtxos.selected, claimRedeemer);
-      tx.attachScript(uplcProgram);
+      tx.attachScript(compiledProgram);
 
       var userClaimOutput = new TxOutput(
         benefitiary,
@@ -192,7 +203,7 @@ import {
       var scriptUtxo1 =new TxOutput(
         scriptAddress,
         new Value(adaPerScriptOutput, valueContract1),  // Remaining treasury tokens
-        gameDatum
+        Datum.inline(gameDatum)
        );
 
        tx.addOutput(scriptUtxo1);
@@ -200,7 +211,7 @@ import {
       var scriptUtxo2 = new TxOutput(
         scriptAddress,
         new Value(totalAdaInInputs - adaPerScriptOutput, valueContract2),  // Remaining treasury tokens
-        gameDatum
+        Datum.inline(gameDatum)
        );
     
        tx.addOutput(scriptUtxo2);
@@ -354,13 +365,11 @@ import {
   }
   
 
-// Corrected function to create Redeemer for Claim
-function createClaimRedeemer(recipientHashHex: string): UplcData {
-  const bytes = hexToBytes(recipientHashHex);
-  const pkh = makePubKeyHash(bytes);
-  // Create ConstrData with constructor index 1 and the recepiant PubKeyHash field
-  const constrData = makeConstrData(RedeemerVariant.Claim, [pkh.toUplcData()]);
-  return constrData as unknown as UplcData; // Type assertion
+  function createClaimRedeemer(recepiantHashHex: string): UplcData {
+    const bytes = hexToBytes(recepiantHashHex);
+    const byteArrayData = new ByteArrayData(bytes);
+    const constrData = new ConstrData(1, [byteArrayData]); 
+    return constrData;
 }
 
 
