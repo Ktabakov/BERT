@@ -355,26 +355,26 @@ import {
   
 
   function createClaimRedeemer(recepiantHashHex: string): UplcData {
+    // Convert hex string to byte array
     const bytes = hexToBytes(recepiantHashHex);
-    const byteArrayData = new ByteArrayData(bytes);
-    const constrData = new ConstrData(1, [byteArrayData]); // 1 is the constructor index for Claim
-    return constrData;
+    
+    // Validate the length of PubKeyHash
+    if (bytes.length !== 28) {
+        throw new Error(`Invalid PubKeyHash length: expected 28 bytes, got ${bytes.length} bytes`);
+    }
+    
+    // Create PubKeyHash object
+    const pkh = makePubKeyHash(bytes);
+    
+    // Construct Redeemer using makeConstrData with constructor index 1 for Claim
+    const redeemerData = makeConstrData(1, [pkh.toUplcData()]) as unknown as UplcData; // Note the array brackets
+    
+    return redeemerData;
 }
 
 
 function createGameDatum(beneficiaryHashHex: string): Datum {
-  // Convert hex string to byte array
   const bytes = hexToBytes(beneficiaryHashHex);
-  console.log("Datum bytes length:", bytes.length);
-  
-  // Validate the length of PubKeyHash
-  if (bytes.length !== 28) {
-      throw new Error(`Invalid PubKeyHash length for Datum: expected 28 bytes, got ${bytes.length} bytes`);
-  }
-  
-  // Wrap the byte array in ByteArrayData
   const byteArrayData = new ByteArrayData(bytes);
-  
-  // Return Datum as ByteArrayData without using ConstrData
   return Datum.inline(byteArrayData);
 }
