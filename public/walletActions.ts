@@ -129,7 +129,6 @@ import {
       //const claimRedeemer = makeTxSpendingRedeemer(RedeemerVariant.Claim, dataRedeemer).toCbor();
 
       const claimRedeemer = createClaimRedeemer(benefitiary.pubKeyHash!.hex);
-
       console.log("claimRedeemer", claimRedeemer)
       console.log("benefitiary.pubKeyHash", benefitiary.pubKeyHash)
       console.log("benefitiary.pubKeyHash!.hex", benefitiary.pubKeyHash!.hex)
@@ -374,7 +373,6 @@ import {
 }
 
 
-
 function createGameDatum(beneficiaryHashHex: string): Datum {
   // Convert hex string to byte array
   const bytes = hexToBytes(beneficiaryHashHex);
@@ -391,5 +389,5 @@ function createGameDatum(beneficiaryHashHex: string): Datum {
   // Construct ConstrData with constructor index 0 for Datum
   const constrData = new ConstrData(0, [byteArrayData]);
   
-  return Datum.inline(constrData);
+  return Datum.inline(byteArrayData);
 }
