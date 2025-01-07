@@ -85,7 +85,7 @@ import {
       //const uplcProgram = new NativeScript(cborHex as unknown as number);
       const uplcProgram = UplcProgram.fromCbor(cborHex);
       const validatorHash = uplcProgram.validatorHash;
-  
+      const scriptAddress = Address.fromHashes(validatorHash, null, false)
       //console.log("compiledProgram" + compiledProgram);
       console.log("benefitiary.pubKeyHash?.hex!)" + benefitiary.pubKeyHash?.hex!)
 
@@ -95,7 +95,7 @@ import {
       // Compile the vesting validator
       //const compiledProgram = gameReward.compile(optimize);
       console.log("Wallet address: " + benefitiary)
-      const scriptAddress = Address.fromBech32("addr1wygd2q56lc098fn0yrx9n6ngrjfjylxefxqztas6fffz7dsl4y9kn")
+      //const scriptAddress = Address.fromBech32("addr1wygd2q56lc098fn0yrx9n6ngrjfjylxefxqztas6fffz7dsl4y9kn")
     
       console.log(scriptAddress.toBech32());
       console.log("Script Address:" + scriptAddress)
@@ -358,7 +358,7 @@ import {
     const bytes = hexToBytes(recepiantHashHex);
     const byteArrayData = new ByteArrayData(bytes);
     const constrData = new ConstrData(1, [byteArrayData]); // 1 is the constructor index for Claim
-    return byteArrayData;
+    return constrData;
 }
 
 
@@ -366,5 +366,5 @@ function createGameDatum(beneficiaryHashHex: string): Datum {
   const bytes = hexToBytes(beneficiaryHashHex);
   const byteArrayData = new ByteArrayData(bytes);
   const constrData = new ConstrData(0, [byteArrayData]); // 0 is the constructor index for Datum
-  return Datum.inline(byteArrayData);
+  return Datum.inline(constrData);
 }
