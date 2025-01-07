@@ -354,6 +354,10 @@ import {
   function createClaimRedeemer(recepiantHashHex: string): UplcData {
     // Convert hex string to byte array
     const bytes = hexToBytes(recepiantHashHex);
+    console.log("Redeemer bytes length:", bytes.length);
+    if (bytes.length !== 28) {
+        throw new Error(`Invalid PubKeyHash length: expected 28 bytes, got ${bytes.length} bytes`);
+    }
     
     // Wrap the byte array in ByteArrayData
     const byteArrayData = new ByteArrayData(bytes);
@@ -364,9 +368,14 @@ import {
     return constrData;
 }
 
-  function createGameDatum(beneficiaryHashHex: string): Datum {
+
+function createGameDatum(beneficiaryHashHex: string): Datum {
     // Convert hex string to byte array
     const bytes = hexToBytes(beneficiaryHashHex);
+    console.log("Datum bytes length:", bytes.length);
+    if (bytes.length !== 28) {
+        throw new Error(`Invalid PubKeyHash length for Datum: expected 28 bytes, got ${bytes.length} bytes`);
+    }
     
     // Wrap the byte array in ByteArrayData
     const byteArrayData = new ByteArrayData(bytes);
