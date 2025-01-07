@@ -84,7 +84,9 @@ import {
       //const compiledProgram = Program.new(cborHex); 
       //const uplcProgram = new NativeScript(cborHex as unknown as number);
       const uplcProgram = UplcProgram.fromCbor(cborHex);
-  
+      const validatorHash = uplcProgram.validatorHash;
+      const scriptAddress = Address.fromHashes(validatorHash);
+
       //console.log("compiledProgram" + compiledProgram);
       console.log("benefitiary.pubKeyHash?.hex!)" + benefitiary.pubKeyHash?.hex!)
 
@@ -94,7 +96,7 @@ import {
       // Compile the vesting validator
       //const compiledProgram = gameReward.compile(optimize);
       console.log("Wallet address: " + benefitiary)
-      const scriptAddress = Address.fromBech32("addr1wygd2q56lc098fn0yrx9n6ngrjfjylxefxqztas6fffz7dsl4y9kn")
+      //const scriptAddress = Address.fromBech32("addr1wygd2q56lc098fn0yrx9n6ngrjfjylxefxqztas6fffz7dsl4y9kn")
     
       console.log(scriptAddress.toBech32());
       console.log("Script Address:" + scriptAddress)
@@ -354,40 +356,16 @@ import {
   
 
   function createClaimRedeemer(recepiantHashHex: string): UplcData {
-    // Convert hex string to byte array
     const bytes = hexToBytes(recepiantHashHex);
-    console.log("Redeemer bytes length:", bytes.length);
-    
-    // Validate the length of PubKeyHash
-    if (bytes.length !== 28) {
-        throw new Error(`Invalid PubKeyHash length: expected 28 bytes, got ${bytes.length} bytes`);
-    }
-    
-    // Wrap the byte array in ByteArrayData
     const byteArrayData = new ByteArrayData(bytes);
-    
-    // Construct ConstrData with constructor index 1 for Claim
-    const constrData = new ConstrData(1, [byteArrayData]);
-    
+    const constrData = new ConstrData(1, [byteArrayData]); // 1 is the constructor index for Claim
     return constrData;
 }
 
 
 function createGameDatum(beneficiaryHashHex: string): Datum {
-  // Convert hex string to byte array
   const bytes = hexToBytes(beneficiaryHashHex);
-  console.log("Datum bytes length:", bytes.length);
-  
-  // Validate the length of PubKeyHash
-  if (bytes.length !== 28) {
-      throw new Error(`Invalid PubKeyHash length for Datum: expected 28 bytes, got ${bytes.length} bytes`);
-  }
-  
-  // Wrap the byte array in ByteArrayData
   const byteArrayData = new ByteArrayData(bytes);
-  
-  // Construct ConstrData with constructor index 0 for Datum
-  const constrData = new ConstrData(0, [byteArrayData]);
-  
-  return Datum.inline(byteArrayData);
+  const constrData = new ConstrData(0, [byteArrayData]); // 0 is the constructor index for Datum
+  return Datum.inline(constrData);
 }
