@@ -354,22 +354,13 @@ import {
   }
   
 
-  function createClaimRedeemer(recepiantHashHex: string): UplcData {
-    // Convert hex string to byte array
-    const bytes = hexToBytes(recepiantHashHex);
-    
-    // Validate the length of PubKeyHash
-    if (bytes.length !== 28) {
-        throw new Error(`Invalid PubKeyHash length: expected 28 bytes, got ${bytes.length} bytes`);
-    }
-    
-    // Create PubKeyHash object
-    const pkh = makePubKeyHash(bytes);
-    
-    // Construct Redeemer using makeConstrData with constructor index 1 for Claim
-    const redeemerData = makeConstrData(1, [pkh.toUplcData()]) as unknown as UplcData; // Note the array brackets
-    
-    return redeemerData;
+// Corrected function to create Redeemer for Claim
+function createClaimRedeemer(recipientHashHex: string): UplcData {
+  const bytes = hexToBytes(recipientHashHex);
+  const pkh = makePubKeyHash(bytes);
+  // Create ConstrData with constructor index 1 and the recepiant PubKeyHash field
+  const constrData = makeConstrData(RedeemerVariant.Claim, [pkh.toUplcData()]);
+  return constrData as unknown as UplcData; // Type assertion
 }
 
 
