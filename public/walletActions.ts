@@ -104,7 +104,7 @@ import {
   
       console.log("benefitiary.pubKeyHash!.hex", benefitiary.pubKeyHash!.hex)
       const gameDatum = createGameDatum(benefitiary.pubKeyHash!.hex);
-      console.log("MethodDatum", gameDatum)
+      console.log("gameDatum", gameDatum)
       // console.log("Datum",  Datum.inline(
       //   new ConstrData(0, [ new ByteArrayData(hexToBytes(benefitiary.pubKeyHash?.hex!)) ])
       // ))
@@ -130,8 +130,10 @@ import {
 
       const claimRedeemer = createClaimRedeemer(benefitiary.pubKeyHash!.hex);
 
-      console.log("claimRedeemerData", claimRedeemer)
       console.log("claimRedeemer", claimRedeemer)
+      console.log("benefitiary.pubKeyHash", benefitiary.pubKeyHash)
+      console.log("benefitiary.pubKeyHash!.hex", benefitiary.pubKeyHash!.hex)
+
       //console.log(filteredUtxos);
       const tx = new Tx();
 
@@ -386,6 +388,8 @@ function createGameDatum(beneficiaryHashHex: string): Datum {
   // Wrap the byte array in ByteArrayData
   const byteArrayData = new ByteArrayData(bytes);
   
-  // Create inline Datum without constructor indices
-  return Datum.inline(byteArrayData);
+  // Construct ConstrData with constructor index 0 for Datum
+  const constrData = new ConstrData(0, [byteArrayData]);
+  
+  return Datum.inline(constrData);
 }
