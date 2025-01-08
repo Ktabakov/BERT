@@ -52,10 +52,10 @@ const NavBar: React.FC<NavBarProps> = ({
   // Close mobile menu when clicking outside
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent | TouchEvent) => {
-      // If menu is not open, no need to do anything
+      // If menu is not open, do nothing
       if (!isMobileMenuOpen) return;
 
-      // If the click is on the button, toggle the menu (handled by button's onClick)
+      // If the click is on the menu button, do nothing
       if (buttonRef.current && buttonRef.current.contains(event.target as Node)) {
         return;
       }
@@ -82,31 +82,33 @@ const NavBar: React.FC<NavBarProps> = ({
 
   return (
     <nav className="bg-gradient-to-r from-green-500 to-green-700 text-white fixed top-0 left-0 w-full z-50 shadow-lg rounded-b-lg">
-      <div className="flex justify-between items-center h-16 px-4 sm:px-6 lg:px-8 relative"> {/* Added 'relative' */}
+      <div className="flex justify-between items-center h-16 px-4 sm:px-6 lg:px-8">
         {/* Left: Desktop links */}
-        <div className="hidden md:flex items-center space-x-4">
-          <Link
-            href="/"
-            className="px-3 py-2 rounded-md text-base font-medium hover:bg-green-600 transition-all"
-          >
-            Home
-          </Link>
-          <Link
-            href="/whitepaper"
-            className="px-3 py-2 rounded-md text-base font-medium hover:bg-green-600 transition-all"
-          >
-            Whitepaper
-          </Link>
-          <button
-            onClick={onHowToPlay}
-            className="px-3 py-2 rounded-md text-base font-medium bg-green-600 hover:bg-green-700 transition-all"
-          >
-            How to Participate
-          </button>
+        <div className="flex-1 flex items-center">
+          <div className="hidden md:flex space-x-4">
+            <Link
+              href="/"
+              className="px-3 py-2 rounded-md text-base font-medium hover:bg-green-600 transition-all"
+            >
+              Home
+            </Link>
+            <Link
+              href="/whitepaper"
+              className="px-3 py-2 rounded-md text-base font-medium hover:bg-green-600 transition-all"
+            >
+              Whitepaper
+            </Link>
+            <button
+              onClick={onHowToPlay}
+              className="px-3 py-2 rounded-md text-base font-medium bg-green-600 hover:bg-green-700 transition-all"
+            >
+              How to Participate
+            </button>
+          </div>
         </div>
 
-        {/* Center: Bert Title + Optional Scores */}
-        <div className="absolute left-1/2 transform -translate-x-1/2 flex flex-col items-center"> {/* Positioned absolutely */}
+        {/* Center: Title + Optional Scores */}
+        <div className="flex flex-col items-center">
           <Link href="/" className="flex items-center mb-1 md:mb-0">
             <span className="text-xl md:text-4xl">Bert</span>
           </Link>
@@ -122,61 +124,64 @@ const NavBar: React.FC<NavBarProps> = ({
           )}
         </div>
 
-        {/* Right: Desktop Buttons */}
-        <div className="hidden md:flex items-center space-x-3">
-          <button
-            onClick={onClaimTokens}
-            className={`px-4 py-2 rounded-md text-base font-medium ${
-              isButtonDisabled
-                ? "bg-blue-500 cursor-not-allowed opacity-50"
-                : "bg-green-600 hover:bg-green-700"
-            } text-white transition-all`}
-            disabled={isButtonDisabled}
-          >
-            Claim Tokens
-          </button>
-          {!isConnected ? (
+        {/* Right: Desktop Buttons and Mobile Menu Button */}
+        <div className="flex-1 flex items-center justify-end space-x-3">
+          {/* Desktop Buttons */}
+          <div className="hidden md:flex space-x-3">
             <button
-              onClick={onConnect}
-              className="px-4 py-2 rounded-md text-base font-medium bg-green-600 hover:bg-green-700 text-white transition-all"
+              onClick={onClaimTokens}
+              className={`px-4 py-2 rounded-md text-base font-medium ${
+                isButtonDisabled
+                  ? "bg-blue-500 cursor-not-allowed opacity-50"
+                  : "bg-green-600 hover:bg-green-700"
+              } text-white transition-all`}
+              disabled={isButtonDisabled}
             >
-              Connect Wallet
+              Claim Tokens
             </button>
-          ) : (
-            <button
-              onClick={onDisconnect}
-              className="flex items-center space-x-2 rounded-full border border-green-500 p-1 pr-2 shadow hover:bg-green-600 transition-all"
-            >
-              <Image
-                src="/logos/transparentTestBertBubbleTiny(1).png" 
-                alt="Wallet Avatar"
-                className="rounded-full"
-                width={35}
-                height={35}
-              />
-              <span className="text-base text-white font-roboto text-sm">
-                {truncateAddress(walletAddress || "Unknown")}
-              </span>
-            </button> 
-          )}
-        </div>
-
-        {/* Mobile Menu Button */}
-        <div className="flex md:hidden">
-          <button
-            onClick={toggleMobileMenu}
-            ref={buttonRef} // Attach the buttonRef to the menu button
-            className="text-white hover:text-gray-200 focus:outline-none transition-all"
-            aria-label="Toggle navigation menu"
-            aria-expanded={isMobileMenuOpen}
-            aria-controls="mobile-menu"
-          >
-            {isMobileMenuOpen ? (
-              <XMarkIcon className="h-6 w-6" />
+            {!isConnected ? (
+              <button
+                onClick={onConnect}
+                className="px-4 py-2 rounded-md text-base font-medium bg-green-600 hover:bg-green-700 text-white transition-all"
+              >
+                Connect Wallet
+              </button>
             ) : (
-              <Bars3Icon className="h-6 w-6" />
+              <button
+                onClick={onDisconnect}
+                className="flex items-center space-x-2 rounded-full border border-green-500 p-1 pr-2 shadow hover:bg-green-600 transition-all"
+              >
+                <Image
+                  src="/logos/transparentTestBertBubbleTiny(1).png" 
+                  alt="Wallet Avatar"
+                  className="rounded-full"
+                  width={35}
+                  height={35}
+                />
+                <span className="text-base text-white font-roboto text-sm">
+                  {truncateAddress(walletAddress || "Unknown")}
+                </span>
+              </button> 
             )}
-          </button>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <div className="flex md:hidden">
+            <button
+              onClick={toggleMobileMenu}
+              ref={buttonRef} // Attach the buttonRef to the menu button
+              className="text-white hover:text-gray-200 focus:outline-none transition-all"
+              aria-label="Toggle navigation menu"
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-menu"
+            >
+              {isMobileMenuOpen ? (
+                <XMarkIcon className="h-6 w-6" />
+              ) : (
+                <Bars3Icon className="h-6 w-6" />
+              )}
+            </button>
+          </div>
         </div>
       </div>
 
