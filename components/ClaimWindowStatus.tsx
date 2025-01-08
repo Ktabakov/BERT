@@ -66,13 +66,6 @@ const ClaimWindowStatus: React.FC<ClaimWindowStatusProps> = ({
         {isInClaimWindow ? "Inside Claim Window" : "Outside Claim Window"}
       </h2>
       <p
-        className={`claim-window-status-time text-lg md:text-3xl mb-4 font-bold ${
-          isInClaimWindow ? "inside-window text-green-500" : "outside-window text-red-500"
-        }`}
-      >
-        Current Reward: {currentReward} BERT
-      </p>
-      <p
         className={`claim-window-status-time text-lg md:text-3xl font-bold ${
           isInClaimWindow ? "inside-window text-green-700" : "outside-window text-red-700"
         }`}
@@ -80,6 +73,13 @@ const ClaimWindowStatus: React.FC<ClaimWindowStatusProps> = ({
         {isInClaimWindow
           ? `${formattedTime} remaining`
           : `${formattedTime} until next window`}
+      </p>
+      <p
+        className={`claim-window-status-time text-lg md:text-2xl mb-4 font-bold ${
+          isInClaimWindow ? "inside-window text-green-500" : "outside-window text-red-500"
+        }`}
+      >
+        Current Reward: {currentReward} BERT
       </p>
     </div>
   );

@@ -1,4 +1,5 @@
 // components/NavBar.tsx
+
 import React, { useState, useRef, useEffect } from "react";
 import Image from 'next/image';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'; 
@@ -81,7 +82,7 @@ const NavBar: React.FC<NavBarProps> = ({
 
   return (
     <nav className="bg-gradient-to-r from-green-500 to-green-700 text-white fixed top-0 left-0 w-full z-50 shadow-lg rounded-b-lg">
-      <div className="flex justify-between items-center h-16 px-4 sm:px-6 lg:px-8">
+      <div className="flex justify-between items-center h-16 px-4 sm:px-6 lg:px-8 relative"> {/* Added 'relative' */}
         {/* Left: Desktop links */}
         <div className="hidden md:flex items-center space-x-4">
           <Link
@@ -104,8 +105,8 @@ const NavBar: React.FC<NavBarProps> = ({
           </button>
         </div>
 
-        {/* Center: Title + Optional Scores */}
-        <div className="flex flex-col items-center flex-grow">
+        {/* Center: Bert Title + Optional Scores */}
+        <div className="absolute left-1/2 transform -translate-x-1/2 flex flex-col items-center"> {/* Positioned absolutely */}
           <Link href="/" className="flex items-center mb-1 md:mb-0">
             <span className="text-xl md:text-4xl">Bert</span>
           </Link>
@@ -221,33 +222,34 @@ const NavBar: React.FC<NavBarProps> = ({
                   : "bg-green-600 hover:bg-green-700"
               } text-white transition-all`}
               disabled={isButtonDisabled}
-            >  {isTransactionInProgress ? (
-              <>
-                <svg
-                  className="animate-spin h-5 w-5 mr-2 text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8v8H4z"
-                  ></path>
-                </svg>
-                Processing...
-              </>
-            ) : (
-              "Claim Tokens"
-            )}
+            >  
+              {isTransactionInProgress ? (
+                <>
+                  <svg
+                    className="animate-spin h-5 w-5 mr-2 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v8H4z"
+                    ></path>
+                  </svg>
+                  Processing...
+                </>
+              ) : (
+                "Claim Tokens"
+              )}
             </button>
             {!isConnected ? (
               <button
