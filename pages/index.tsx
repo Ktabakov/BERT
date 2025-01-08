@@ -8,7 +8,6 @@ import ClaimWindowStatus from '../components/ClaimWindowStatus';
 import ErrorPopup from '../components/ErrorPopup'; 
 import WalletConnector from '../components/WalletConnector';
 import { claimTokens, calculateCountdown } from '../public/walletActions';
-import { network } from '../common/network';
 import SuccessNotification from '../components/SuccessNotification';
 
 const CLAIM_WINDOW = 20; 
