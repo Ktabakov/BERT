@@ -247,7 +247,7 @@ const Home: NextPage = () => {
                 <p>
                   <span className="font-semibold">TxId:</span>&nbsp;
                   <a
-                    href={`https://${network}.cexplorer.io/tx/${tx.txId}`}
+                    href={`https://cexplorer.io/tx/${tx.txId}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-400 underline break-all"
