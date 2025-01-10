@@ -9,6 +9,7 @@ import ErrorPopup from '../components/ErrorPopup';
 import WalletConnector from '../components/WalletConnector';
 import { claimTokens, calculateCountdown } from '../public/walletActions';
 import SuccessNotification from '../components/SuccessNotification';
+import Head from 'next/head'; // Import Head here
 
 const CLAIM_WINDOW = 20; 
 const CYCLE_DURATION = 600; 
@@ -159,6 +160,12 @@ const Home: NextPage = () => {
 
   return (
     <div className="flex flex-col h-screen overflow-hidden">
+       <Head>
+        <meta name="google-site-verification" content="6qh6JJAzgsLcv_FRkHdlqG_vLeMGl0xwKl2FQFILeMM" />
+        <title>Bert</title> 
+        <meta name="Claim Free Crypto" content="Claim free Cardano tokens" /> 
+        {/* Add any other meta tags you need */}
+      </Head>
       {/* Navigation Bar */}
       <NavBar
         isConnected={isConnected}
