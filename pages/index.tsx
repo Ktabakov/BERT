@@ -160,12 +160,27 @@ const Home: NextPage = () => {
 
   return (
     <div className="flex flex-col h-screen overflow-hidden">
-       <Head>
-        <meta name="google-site-verification" content="6qh6JJAzgsLcv_FRkHdlqG_vLeMGl0xwKl2FQFILeMM" />
-        <title>Bert</title> 
-        <meta name="Claim Free Crypto" content="Claim free Cardano tokens" /> 
-        {/* Add any other meta tags you need */}
-      </Head>
+   <Head>
+    <meta name="google-site-verification" content="6qh6JJAzgsLcv_FRkHdlqG_vLeMGl0xwKl2FQFILeMM" />
+    <title>Bert - Play-to-Earn Crypto Game</title>
+    <meta name="description" content="Join Bert, the ultimate play-to-earn crypto game. Claim free Cardano tokens, compete with players worldwide, and enhance your crypto portfolio today!" />
+
+    <meta property="og:title" content="Bert - Play-to-Earn Crypto Game" />
+    <meta property="og:description" content="Claim free Cardano tokens by playing Bert, the exciting blockchain-based game. Join now and boost your crypto portfolio!" />
+    <meta property="og:url" content="https://www.claimbert.com/" />
+    <meta property="og:type" content="website" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Bert - Play-to-Earn Crypto Game" />
+    <meta name="twitter:description" content="Claim free Cardano tokens by playing Bert, the exciting blockchain-based game. Join now and boost your crypto portfolio!" />
+    <meta name="twitter:site" content="@CardanoBert" />
+    <meta name="twitter:creator" content="@CardanoBert" />
+
+    <link rel="canonical" href="https://www.claimbert.com/" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </Head>
+
       {/* Navigation Bar */}
       <NavBar
         isConnected={isConnected}
@@ -212,7 +227,7 @@ const Home: NextPage = () => {
           <div className="hidden md:flex items-center justify-center">
             <Image
               src="/logos/transparentTestBertBubbleTiny(1).png"
-              alt="BERT Mascot"
+              alt="BERT Mascot in Crypto Game"
               className="w-512 h-512 md:w-512 md:h-512 object-contain"
               width={512}
               height={512}

@@ -153,7 +153,7 @@ const NavBar: React.FC<NavBarProps> = ({
               >
                 <Image
                   src="/logos/transparentTestBertBubbleTiny(1).png" 
-                  alt="Wallet Avatar"
+                  alt="BERT free crypto Wallet Avatar"
                   className="rounded-full"
                   width={35}
                   height={35}
@@ -273,7 +273,7 @@ const NavBar: React.FC<NavBarProps> = ({
               >
                 <Image
                   src="/logos/transparentTestBertBubbleTiny(1).png"
-                  alt="Wallet Avatar"
+                  alt="BERT free Crypto Wallet Avatar"
                   className="rounded-full"
                   width={25}
                   height={25}
