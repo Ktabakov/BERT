@@ -163,7 +163,7 @@ const Home: NextPage = () => {
    <Head>
     <meta name="google-site-verification" content="6qh6JJAzgsLcv_FRkHdlqG_vLeMGl0xwKl2FQFILeMM" />
     <title>Claim Bert - The Bitcoin Envisioned Reward Token - Get Free Crypto</title>
-    <meta name="description" content="Join Bert, the ultimate play-to-earn crypto game. Get free Cardano tokens, compete with players worldwide, and enhance your crypto portfolio today!" />
+    <meta name="description" content="Claim Bert, the Bitcoin Envisioned Reward Token - ultimate play-to-earn crypto game. Get free Cardano tokens, compete with players worldwide, and enhance your crypto portfolio today!" />
     <h1 hidden>Claim Bert - Bitcoin Envisioned Reward Token - Get Free Crypto</h1>
     <meta property="og:title" content="Bert - Play-to-Earn Crypto Game" />
     <meta property="og:url" content="https://www.claimbert.com/" />
