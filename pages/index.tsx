@@ -162,7 +162,7 @@ const Home: NextPage = () => {
     <div className="flex flex-col h-screen overflow-hidden">
    <Head>
     <meta name="google-site-verification" content="6qh6JJAzgsLcv_FRkHdlqG_vLeMGl0xwKl2FQFILeMM" />
-    <title>Bert - Play-to-Earn Crypto Game</title>
+    <title>Claim Bert - Play to Earn Crypto Game</title>
     <meta name="description" content="Join Bert, the ultimate play-to-earn crypto game. Claim free Cardano tokens, compete with players worldwide, and enhance your crypto portfolio today!" />
 
     <meta property="og:title" content="Bert - Play-to-Earn Crypto Game" />
@@ -170,7 +170,7 @@ const Home: NextPage = () => {
     <meta property="og:url" content="https://www.claimbert.com/" />
     <meta property="og:type" content="website" />
 
-    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="Bert - Play-to-Earn Crypto Game" />
     <meta name="twitter:description" content="Claim free Cardano tokens by playing Bert, the exciting blockchain-based game. Join now and boost your crypto portfolio!" />
     <meta name="twitter:site" content="@CardanoBert" />
