@@ -35,6 +35,12 @@ const walletDetails: WalletDetails = {
     logo: "/logos/nami.svg",
     installLink: "https://chrome.google.com/webstore/detail/nami/lpfcbjknijpeeillifnkikgncikgfhdo",
   },
+  lace: {
+    api: "lace",
+    label: "Lace",
+    logo: "/logos/lace.png",
+    installLink: "https://chromewebstore.google.com/detail/lace/gafhhkghbfjjkeiendhlofajokpaflmk?hl=en",
+  },
   eternl: {
     api: "eternl",
     label: "Eternl",
