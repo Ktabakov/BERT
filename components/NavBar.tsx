@@ -98,6 +98,12 @@ const NavBar: React.FC<NavBarProps> = ({
             >
               Whitepaper
             </Link>
+            <Link
+              href="/code" // New Code page link
+              className="px-3 py-2 rounded-md text-base font-medium hover:bg-green-600 transition-all"
+            >
+              Code
+            </Link>
             <button
               onClick={onHowToPlay}
               className="px-3 py-2 rounded-md text-base font-medium bg-green-600 hover:bg-green-700 transition-all"
@@ -206,6 +212,13 @@ const NavBar: React.FC<NavBarProps> = ({
               className="block px-3 py-2 rounded-md text-base font-medium hover:bg-green-600 transition-all"
             >
               Whitepaper
+            </Link>
+            <Link
+              href="/code" // New Code page link in mobile menu
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="block px-3 py-2 rounded-md text-base font-medium hover:bg-green-600 transition-all"
+            >
+              Code
             </Link>
             <button
               onClick={() => {
