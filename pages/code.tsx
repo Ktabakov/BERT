@@ -211,11 +211,11 @@ const CodePage: React.FC<CodePageProps> = () => {
       />
 
       {/* Main Content */}
-      <main className="flex-grow mt-16 p-5"> {/* Added overflow-auto */}
-        <div className="relative w-full max-w-screen-xl mx-auto flex-grow h-auto bg-white shadow-lg border rounded-lg overflow-auto p-6">
+      <main className="flex-grow mt-16 p-5 overflow-auto">
+        <div className="relative w-full max-w-screen-xl mx-auto h-auto bg-white shadow-lg border rounded-lg overflow-auto p-6">
           <h1 className="text-3xl font-bold mb-6 text-center">Code is law</h1>
           <p className="text-2xl font-bold text-center">Smart Contract Address: addr1wygd2q56lc098fn0yrx9n6ngrjfjylxefxqztas6fffz7dsl4y9kn</p>
-          <div className="overflow-auto max-h-[70vh]"> {/* Container for scrollable code */}
+          <div className="overflow-auto max-h-[65vh]"> {/* Container for scrollable code */}
             <pre className="bg-gray-800 text-gray-100 p-4 rounded font-mono whitespace-pre-wrap break-words">
               <code>
                 {heliosCode}
