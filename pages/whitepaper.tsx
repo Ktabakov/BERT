@@ -152,9 +152,6 @@ const Whitepaper: React.FC = () => {
     <meta name="twitter:description" content="Claim free Cardano tokens by playing Bert, the exciting blockchain-based game. Join now and boost your crypto portfolio!" />
     <meta name="twitter:site" content="@CardanoBert" />
     <meta name="twitter:creator" content="@CardanoBert" />
-
-    <link rel="canonical" href="https://www.claimbert.com/" />
-
     <meta name="viewport" content="width=device-width, initial-scale=1" />
   </Head>
 
