@@ -144,7 +144,7 @@ const Whitepaper: React.FC = () => {
     <meta name="description" content="Claim Bert, the Bitcoin Envisioned Reward Token - ultimate play-to-earn crypto game. Get free Cardano tokens, compete with players worldwide, and enhance your crypto portfolio today!" />
     <h1 hidden>Claim Bert - Bitcoin Envisioned Reward Token - Get Free Crypto</h1>
     <meta property="og:title" content="Bert - Play-to-Earn Crypto Game" />
-    <meta property="og:url" content="https://www.claimbert.com/" />
+    <meta property="og:url" content="https://www.claimbert.com/whitepaper" />
     <meta property="og:type" content="website" />
 
     <meta name="twitter:card" content="summary" />
@@ -152,6 +152,9 @@ const Whitepaper: React.FC = () => {
     <meta name="twitter:description" content="Claim free Cardano tokens by playing Bert, the exciting blockchain-based game. Join now and boost your crypto portfolio!" />
     <meta name="twitter:site" content="@CardanoBert" />
     <meta name="twitter:creator" content="@CardanoBert" />
+
+    <link rel="canonical" href="https://www.claimbert.com/whitepaper" />
+
     <meta name="viewport" content="width=device-width, initial-scale=1" />
   </Head>
 
